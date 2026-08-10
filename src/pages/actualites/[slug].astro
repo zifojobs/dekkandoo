@@ -1,0 +1,137 @@
+---
+import Base from '../../layouts/Base.astro';
+import Photo from '../../components/Photo.astro';
+import { ACTUALITES } from '../../actualites';
+
+// Une page par actualite, avec sa propre adresse. C'est la moitie de
+// l'architecture arretee le 01/08 : sans URL propre, une actualite ne peut pas
+// etre partagee sur Facebook ou WhatsApp — or c'est la que vit leur audience.
+export function getStaticPaths() {
+  return ACTUALITES.map((a) => ({ params: { slug: a.slug }, props: { a } }));
+}
+
+const { a } = Astro.props;
+const url = new URL(`/actualites/${a.slug}/`, Astro.site).href;
+
+// La carte de partage propre a l'article est produite par scripts/gen_partage.py.
+const carte = `/partage/${a.slug}.png`;
+
+const schema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'NewsArticle',
+  headline: a.titre,
+  description: a.chapo,
+  datePublished: a.dateIso,
+  image: new URL(carte, Astro.site).href,
+  mainEntityOfPage: url,
+  author: { '@type': 'NGO', name: 'Consortium Dëkkandoo' },
+  publisher: {
+    '@type': 'NGO',
+    name: 'Consortium Dëkkandoo',
+    logo: {
+      '@type': 'ImageObject',
+      url: new URL('/logo/logo-dekkandoo-512.png', Astro.site).href,
+    },
+  },
+});
+
+const partageWhatsApp = `https://wa.me/?text=${encodeURIComponent(`${a.titre} — ${url}`)}`;
+const partageFacebook = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+---
+
+<Base
+  titre={a.titre}
+  description={a.chapo}
+  image={carte}
+  ogType="article"
+  schemaSupplementaire={schema}
+>
+  <article class="mx-auto max-w-3xl px-5 py-12 sm:py-16">
+    <nav aria-label="Fil d'Ariane" class="font-mono text-xs text-ink-3">
+      <a href="/" class="hover:text-forest">Accueil</a>
+      <span class="mx-2">›</span>
+      <a href="/actualites/" class="hover:text-forest">Actualités</a>
+    </nav>
+
+    <p class="mt-8 font-mono text-xs uppercase tracking-[0.2em] text-leaf">Actualité</p>
+    <h1 class="mt-4 font-serif text-3xl leading-tight text-forest sm:text-4xl">
+      {a.titre}
+    </h1>
+    <p class="mt-4 font-mono text-xs uppercase tracking-wider text-ink-3">
+      <time datetime={a.dateIso}>{a.date}</time> · Consortium Dëkkandoo
+    </p>
+
+    <Photo
+      cle={a.photo}
+      tailles="(min-width: 768px) 48rem, 100vw"
+      prioritaire
+      class={`mt-9 aspect-[16/9] w-full rounded-xl object-cover ${a.cadrage}`}
+    />
+
+    <p class="mt-9 font-serif text-xl leading-relaxed text-forest sm:text-2xl">
+      {a.chapo}
+    </p>
+
+    <div class="mt-8 space-y-6">
+      {
+        a.corps.map((bloc) =>
+          bloc.type === 'citation' ? (
+            <blockquote class="border-l-2 border-gold py-1 pl-6 font-serif text-xl leading-relaxed text-forest">
+              « {bloc.texte} »
+            </blockquote>
+          ) : (
+            <p class="leading-relaxed text-ink-2">{bloc.texte}</p>
+          )
+        )
+      }
+    </div>
+
+    {/* Partage : WhatsApp d'abord, c'est le canal reel. Les deux premiers liens
+        sont de simples <a> et fonctionnent sans JavaScript. Le bouton « copier »,
+        lui, en depend — il n'apparait donc que si JavaScript est actif, plutot
+        que de proposer une action qui ne se passerait pas. */}
+    <div class="mt-12 flex flex-wrap items-center gap-3 border-t border-line pt-8">
+      <span class="font-mono text-xs uppercase tracking-wider text-ink-3">Partager</span>
+      <a
+        href={partageWhatsApp}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="rounded-full border border-line px-4 py-2 text-sm text-ink-2 transition-colors hover:border-forest hover:bg-forest hover:text-paper"
+      >
+        WhatsApp
+      </a>
+      <a
+        href={partageFacebook}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="rounded-full border border-line px-4 py-2 text-sm text-ink-2 transition-colors hover:border-forest hover:bg-forest hover:text-paper"
+      >
+        Facebook
+      </a>
+      <button
+        type="button"
+        data-copier={url}
+        class="hidden rounded-full border border-line px-4 py-2 text-sm text-ink-2 transition-colors hover:border-forest hover:bg-forest hover:text-paper"
+      >
+        Copier le lien
+      </button>
+    </div>
+
+    <p class="mt-10">
+      <a href="/actualites/" class="text-leaf hover:underline">← Retour aux actualités</a>
+    </p>
+  </article>
+
+  <script is:inline>
+    const bouton = document.querySelector('[data-copier]');
+    if (bouton && navigator.clipboard) {
+      bouton.classList.remove('hidden');
+      bouton.addEventListener('click', async () => {
+        await navigator.clipboard.writeText(bouton.dataset.copier);
+        const avant = bouton.textContent;
+        bouton.textContent = 'Lien copié';
+        setTimeout(() => (bouton.textContent = avant), 2000);
+      });
+    }
+  </script>
+</Base>

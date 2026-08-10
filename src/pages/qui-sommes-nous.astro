@@ -1,0 +1,163 @@
+---
+import Base from '../layouts/Base.astro';
+import EnTetePage from '../components/EnTetePage.astro';
+import Photo from '../components/Photo.astro';
+
+const axes = [
+  {
+    rang: 'AXE 01',
+    titre: 'Nutrition infantile',
+    texte:
+      'Suivi nutritionnel communautaire des enfants de 0 à 59 mois : pesées mensuelles, dépistage de la malnutrition aiguë modérée et sévère, causeries avec les familles et visites à domicile.',
+    detail:
+      'Le suivi est assuré au plus près des ménages, par des relais qui vivent dans les mêmes quartiers que les familles accompagnées.',
+  },
+  {
+    rang: 'AXE 02',
+    titre: 'Accès aux soins',
+    texte:
+      'Rapprocher les familles vulnérables des postes de santé, avec l’initiative Diapalanté Fadju et la mutuelle de santé, en appui aux Comités de Développement de Santé.',
+    detail:
+      'La difficulté n’est presque jamais l’absence de structure de santé : c’est la distance, le coût et le moment où l’on décide d’y aller.',
+  },
+  {
+    rang: 'AXE 03',
+    titre: 'Autonomisation des femmes',
+    texte:
+      'Financement d’activités génératrices de revenus pour les femmes de 18 à 35 ans, principalement en agriculture et en élevage, via les associations villageoises d’épargne et de crédit.',
+    detail:
+      'Les associations existaient avant nous. Elles collectent l’épargne, accordent les crédits et en suivent les remboursements — le financement amplifie une mécanique qui fonctionne déjà.',
+  },
+];
+---
+
+<Base
+  titre="Qui sommes-nous"
+  description="Dëkkandoo signifie « le voisinage ». Consortium d'organisations de Saint-Louis, nous agissons sur la nutrition infantile, l'accès aux soins et l'autonomisation économique des femmes dans les six communes du département."
+>
+  <EnTetePage
+    rubrique="Qui sommes-nous"
+    titre="Le développement se construit avec les communautés"
+    intro="Dëkkandoo signifie « le voisinage », le vivre-ensemble. Ce nom dit notre méthode : les communautés ne sont pas les bénéficiaires de nos projets, elles en sont les actrices."
+  />
+
+  <section class="mx-auto max-w-6xl px-5 py-16">
+    <div class="grid gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-7">
+        <h2 class="font-serif text-2xl text-forest sm:text-3xl">Un consortium, pas une organisation de plus</h2>
+        <div class="mt-6 space-y-5 leading-relaxed text-ink-2">
+          <p>
+            Le Consortium Dëkkandoo réunit des organisations qui travaillaient
+            déjà dans le département de Saint-Louis, chacune avec son ancrage et
+            son métier. Se regrouper ne visait pas à créer une structure de plus,
+            mais à cesser de traiter séparément des problèmes qui n’en font qu’un :
+            un enfant mal nourri est presque toujours l’enfant d’un ménage sans
+            revenu stable, éloigné d’un poste de santé.
+          </p>
+          <p>
+            Notre action s’organise donc autour de trois axes indissociables.
+            Aucun ne fonctionne seul, et c’est la raison d’être du regroupement.
+          </p>
+        </div>
+      </div>
+
+      <div class="lg:col-span-5">
+        <div class="rounded-xl border border-line bg-card p-7">
+          <p class="font-mono text-xs uppercase tracking-[0.2em] text-leaf">
+            Zone d’intervention
+          </p>
+          <p class="mt-4 font-mono text-4xl text-forest">6</p>
+          <p class="mt-2 text-sm text-ink-2">
+            communes du département de Saint-Louis
+          </p>
+          <ul class="mt-6 space-y-2 border-t border-line pt-5 text-sm text-ink-2">
+            <li>Saint-Louis</li>
+            <li>Gandon</li>
+            <li>Rao</li>
+            <li>Ndiébène Gandiole</li>
+          </ul>
+          {/* Quatre communes seulement sont nommees : ce sont les seules
+              documentees (maquette validee + Sud Quotidien du 28/02/2026).
+              Les deux autres seront ajoutees des que le client les confirmera —
+              on ne comble pas une liste par deduction. */}
+          <p class="mt-5 text-xs text-ink-3">
+            Liste des communes nommées à ce jour.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="revele mt-16 grid gap-6 md:grid-cols-3">
+      {
+        axes.map(({ rang, titre, texte, detail }) => (
+          <article class="flex flex-col rounded-xl border border-line bg-card p-7">
+            <p class="font-mono text-xs tracking-[0.18em] text-earth-2">{rang}</p>
+            <h3 class="mt-3 font-serif text-xl text-forest">{titre}</h3>
+            <p class="mt-3 flex-1 text-sm leading-relaxed text-ink-2">{texte}</p>
+            <p class="mt-5 border-t border-line pt-5 text-sm italic leading-relaxed text-ink-3">
+              {detail}
+            </p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  {/* Le mot du coordonnateur — citations parues dans Sud Quotidien le
+      28/02/2026, source affichee. Rien n'est ecrit a sa place. */}
+  <section class="bg-forest py-16 text-paper sm:py-20">
+    <div class="mx-auto grid max-w-6xl items-center gap-10 px-5 lg:grid-cols-12">
+      <div class="lg:col-span-5">
+        <Photo
+          cle="khaly"
+          tailles="(min-width: 1024px) 40vw, 100vw"
+          class="aspect-[4/5] w-full rounded-xl object-cover object-[52%_26%]"
+        />
+      </div>
+      <figure class="lg:col-span-7">
+        <p class="font-mono text-xs uppercase tracking-[0.2em] text-gold">
+          Le mot du coordonnateur
+        </p>
+        <blockquote class="mt-6 font-serif text-2xl leading-snug sm:text-4xl">
+          « Ici, le taux de remboursement du crédit est de 100 %. Parce que pour
+          nous, il est hors de question de ne pas rembourser un crédit. »
+        </blockquote>
+        <p class="mt-6 max-w-xl leading-relaxed text-paper/80">
+          « On a juste sélectionné 400 femmes bénéficiaires, mais on a
+          8 000 femmes dans notre base de données. »
+        </p>
+        <figcaption class="mt-7 border-t border-paper/20 pt-5">
+          <span class="block font-serif text-lg">Abdou Khaly Mbodj</span>
+          <span class="mt-1 block text-sm text-paper/70">
+            Coordonnateur global du Consortium Dëkkandoo
+          </span>
+          <a
+            href="https://fr.allafrica.com/stories/202602280036.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mt-3 inline-block font-mono text-xs text-gold hover:underline"
+          >
+            Sud Quotidien, 28 février 2026 ↗
+          </a>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-5 py-16">
+    <div class="flex flex-wrap gap-3">
+      <a
+        href="/programmes/"
+        class="rounded-full bg-forest px-7 py-3 font-medium text-paper transition-colors hover:bg-forest-2"
+      >
+        Nos programmes
+      </a>
+      <a
+        href="/impact/"
+        class="rounded-full border border-line px-7 py-3 font-medium text-forest transition-colors hover:border-forest hover:bg-forest hover:text-paper"
+      >
+        Notre impact
+      </a>
+    </div>
+  </section>
+</Base>

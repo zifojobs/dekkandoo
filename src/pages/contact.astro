@@ -1,0 +1,104 @@
+---
+import Base from '../layouts/Base.astro';
+import EnTetePage from '../components/EnTetePage.astro';
+import Reseaux from '../components/Reseaux.astro';
+import {
+  CONSORTIUM as CONSORTIUM_RESEAUX,
+  NDIEUMBEUTT as NDIEUMBEUTT_RESEAUX,
+} from '../reseaux';
+
+// Coordonnees officielles : FICHE-CLIENT.md. Source unique, jamais de saisie
+// approximative — un numero faux sur une page contact est une panne, pas une
+// coquille.
+const entites = [
+  {
+    nom: 'Consortium Dëkkandoo',
+    role: 'Siège',
+    tel: '+221 77 267 25 10',
+    telUrl: '+221772672510',
+    email: 'consortiumdekkandoo@gmail.com',
+    adresse: 'Saint-Louis, Sénégal',
+    reseaux: CONSORTIUM_RESEAUX,
+  },
+  {
+    nom: 'Projet Ndieumbeutt',
+    role: 'Antenne',
+    tel: '+221 70 923 69 70',
+    telUrl: '+221709236970',
+    email: 'ndieumbeutt.dekkandoo@gmail.com',
+    adresse: 'Rao, Saint-Louis',
+    reseaux: NDIEUMBEUTT_RESEAUX,
+  },
+];
+---
+
+<Base
+  titre="Contact"
+  description="Consortium Dëkkandoo, Saint-Louis : +221 77 267 25 10 · consortiumdekkandoo@gmail.com. Projet Ndieumbeutt, Rao : +221 70 923 69 70."
+>
+  <EnTetePage
+    rubrique="Contact"
+    titre="Parlons de ce que nous pouvons construire"
+    intro="Que vous soyez un partenaire potentiel, une institution ou un membre de la communauté, nos équipes sont joignables."
+  />
+
+  <section class="mx-auto max-w-6xl px-5 py-16">
+    <div class="grid gap-6 lg:grid-cols-2">
+      {
+        entites.map((e) => (
+          <div class="rounded-xl border border-line bg-card p-8">
+            <h2 class="font-serif text-xl text-forest">{e.nom}</h2>
+            <p class="mt-1 font-mono text-xs uppercase tracking-wider text-ink-3">
+              {e.role} · {e.adresse}
+            </p>
+
+            {/* Le telephone en premier et cliquable : au Senegal l'appel et
+                WhatsApp passent avant l'e-mail, et la page se consulte depuis
+                un telephone. */}
+            <dl class="mt-7 space-y-4 text-sm">
+              <div class="flex gap-4">
+                <dt class="w-24 shrink-0 text-ink-3">Téléphone</dt>
+                <dd>
+                  <a href={`tel:${e.telUrl}`} class="text-forest hover:underline">
+                    {e.tel}
+                  </a>
+                </dd>
+              </div>
+              <div class="flex gap-4">
+                <dt class="w-24 shrink-0 text-ink-3">E-mail</dt>
+                <dd>
+                  <a
+                    href={`mailto:${e.email}`}
+                    class="break-all text-forest hover:underline"
+                  >
+                    {e.email}
+                  </a>
+                </dd>
+              </div>
+              <div class="flex gap-4">
+                <dt class="w-24 shrink-0 text-ink-3">Adresse</dt>
+                <dd class="text-ink-2">{e.adresse}</dd>
+              </div>
+            </dl>
+
+            <div class="mt-7 border-t border-line pt-6">
+              <p class="font-mono text-xs uppercase tracking-wider text-ink-3">
+                Nous suivre
+              </p>
+              <Reseaux comptes={e.reseaux} entite={e.nom} class="mt-3" />
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="mt-12 rounded-xl border border-line bg-card p-8">
+      <h2 class="font-serif text-xl text-forest">Où nous intervenons</h2>
+      <p class="mt-4 max-w-2xl leading-relaxed text-ink-2">
+        Le Consortium Dëkkandoo agit dans les six communes du département de
+        Saint-Louis. Nos équipes de terrain sont présentes à Saint-Louis, Gandon,
+        Rao et Ndiébène Gandiole.
+      </p>
+    </div>
+  </section>
+</Base>

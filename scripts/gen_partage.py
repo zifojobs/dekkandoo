@@ -62,3 +62,84 @@ d.text((72, 556), "dekkandoo.com", font=mono(24), fill=(160, 195, 175))
 
 img.save(str(RACINE / "public" / "partage.png"), optimize=True)
 print(str(RACINE / "public" / "partage.png"), img.size)
+
+
+# --------------------------------------------------------------------------
+# Cartes de partage des actualites — une par article.
+#
+# Meme raison que la carte du site : le lien circulera sur WhatsApp, et c'est
+# la carte qui se voit avant le texte. Ici la photo de l'article sert de fond,
+# avec un voile vert qui monte du bas pour porter le titre : le texte ne repose
+# jamais sur une zone claire de l'image.
+#
+# Les titres sont LUS dans src/actualites.ts plutot que recopies ici : deux
+# copies d'un meme titre finissent toujours par diverger.
+# --------------------------------------------------------------------------
+import json
+import re
+
+ts = (RACINE / "src" / "actualites.ts").read_text(encoding="utf-8")
+articles = list(zip(re.findall(r"slug:\s*'([^']+)'", ts),
+                    re.findall(r"titre:\s*'([^']+)'", ts),
+                    re.findall(r"photo:\s*'([^']+)'", ts),
+                    re.findall(r"date:\s*'([^']+)'", ts)))
+assert articles, "aucune actualite lue dans actualites.ts"
+
+manifeste = json.loads((RACINE / "src" / "photos.json").read_text(encoding="utf-8"))
+dossier = RACINE / "public" / "partage"
+dossier.mkdir(exist_ok=True)
+
+
+def coupe(d, texte, font, largeur):
+    """Retourne les lignes de `texte` tenant dans `largeur`."""
+    lignes, courante = [], ""
+    for mot in texte.split():
+        essai = f"{courante} {mot}".strip()
+        if d.textlength(essai, font=font) <= largeur:
+            courante = essai
+        else:
+            lignes.append(courante)
+            courante = mot
+    if courante:
+        lignes.append(courante)
+    return lignes
+
+
+for slug, titre, cle, date in articles:
+    src = RACINE / "public" / manifeste[cle]["variantes"][0]["url"].lstrip("/")
+    fond = Image.open(src).convert("RGB")
+
+    # Recadrage centre au format 1200x630, apres mise a l'echelle par le cote
+    # le plus contraignant — l'equivalent de object-fit: cover.
+    e = max(W / fond.width, H / fond.height)
+    fond = fond.resize((round(fond.width * e), round(fond.height * e)), Image.LANCZOS)
+    g = (fond.width - W) // 2
+    h = round((fond.height - H) * 0.30)   # legerement vers le haut : les visages
+    carte = fond.crop((g, h, g + W, h + H))
+
+    # Voile vert montant du bas. Il doit devenir OPAQUE bien avant le texte :
+    # une premiere version s'arretait a mi-hauteur et le titre se posait sur un
+    # cheque blanc — illisible. La zone de texte se lit donc sur du vert plein,
+    # jamais sur l'image, meme si la photo est claire a cet endroit.
+    voile = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    vd = ImageDraw.Draw(voile)
+    for y in range(H):
+        t = min(1.0, max(0.0, (y - H * 0.10) / (H * 0.42)))
+        vd.line([(0, y), (W, y)], fill=FOREST + (int(255 * t ** 1.2),))
+    carte = Image.alpha_composite(carte.convert("RGBA"), voile).convert("RGB")
+
+    d = ImageDraw.Draw(carte)
+    logo = Image.open(RACINE / "public" / "logo" / "logo-dekkandoo-blanc-512.png").convert("RGBA")
+    r = 62 / logo.height
+    logo = logo.resize((round(logo.width * r), 62), Image.LANCZOS)
+    carte.paste(logo, (64, 42), logo)
+
+    lignes = coupe(d, titre, serif_g(50), W - 128)[:3]
+    y = H - 78 - len(lignes) * 62
+    d.text((64, y - 46), date.upper(), font=mono(22), fill=GOLD)
+    for ligne in lignes:
+        d.text((64, y), ligne, font=serif_g(50), fill=PAPER)
+        y += 62
+
+    carte.save(dossier / f"{slug}.png", optimize=True)
+    print("partage/" + slug + ".png")

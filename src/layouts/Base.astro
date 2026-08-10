@@ -32,18 +32,22 @@ const {
 const url = new URL(Astro.url.pathname, Astro.site);
 const partage = new URL(image, Astro.site);
 
-// Le site est pour l'instant une page unique, comme la maquette validee le
-// 01/08. La navigation pointe donc vers des ancres et non vers des URL : aucun
-// lien mort tant que les six rubriques ne sont pas des pages a part entiere.
-// Quand elles le seront, seule cette liste change.
+// Les six rubriques sont de vraies pages depuis le 10/08. L'accueil garde son
+// defilement complet et sert de resume : chaque section s'y termine par un lien
+// vers sa page. C'est ainsi que fonctionnent Farm Africa et One Acre Fund.
 const rubriques = [
-  { url: '/#qui', nom: 'Qui sommes-nous' },
-  { url: '/#programmes', nom: 'Nos programmes' },
-  { url: '/#impact', nom: 'Notre impact' },
-  { url: '/#actualites', nom: 'Actualités' },
-  { url: '/#partenaires', nom: 'Partenaires' },
-  { url: '/#contact', nom: 'Contact' },
+  { url: '/qui-sommes-nous/', nom: 'Qui sommes-nous' },
+  { url: '/programmes/', nom: 'Nos programmes' },
+  { url: '/impact/', nom: 'Notre impact' },
+  { url: '/actualites/', nom: 'Actualités' },
+  { url: '/partenaires/', nom: 'Partenaires' },
+  { url: '/contact/', nom: 'Contact' },
 ];
+
+// Marque la rubrique courante. `startsWith` et non egalite stricte : /actualites/
+// doit rester active pendant la lecture de /actualites/un-article/.
+const ici = Astro.url.pathname;
+const estActive = (url: string) => ici.startsWith(url);
 
 // Coordonnees officielles : FICHE-CLIENT.md, section « Coordonnees officielles ».
 // C'est la seule source. Le squelette portait un numero errone (77 236 81 62).
@@ -165,7 +169,11 @@ const schema = {
             {
               rubriques.map(({ url: lien, nom }) => (
                 <li>
-                  <a href={lien} class="text-ink-2 transition-colors hover:text-forest">
+                  <a
+                    href={lien}
+                    aria-current={estActive(lien) ? 'page' : undefined}
+                    class="text-ink-2 transition-colors hover:text-forest aria-[current=page]:font-semibold aria-[current=page]:text-forest"
+                  >
                     {nom}
                   </a>
                 </li>

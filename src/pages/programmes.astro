@@ -1,0 +1,163 @@
+---
+import Base from '../layouts/Base.astro';
+import EnTetePage from '../components/EnTetePage.astro';
+import Photo from '../components/Photo.astro';
+---
+
+<Base
+  titre="Nos programmes"
+  description="PRN2S, renforcement nutritionnel et sanitaire des enfants de 0 à 59 mois avec Plan International Sénégal. Ndieumbeutt, accompagnement de 400 femmes vers une activité durable."
+>
+  <EnTetePage
+    rubrique="Nos programmes"
+    titre="Deux programmes, une même conviction"
+    intro="Nos actions s'inscrivent dans la durée, avec des partenaires qui partagent notre exigence de résultats mesurables."
+  />
+
+  {/* PRN2S */}
+  <section class="mx-auto max-w-6xl px-5 py-16">
+    <span class="inline-block rounded-full bg-forest px-3 py-1 font-mono text-xs text-paper">
+      En cours · 2024-2027
+    </span>
+    <h2 class="mt-5 font-serif text-3xl text-forest sm:text-4xl">PRN2S</h2>
+    <p class="mt-2 text-lg text-ink-3">
+      Projet de Renforcement de la Nutrition à Saint-Louis du Sénégal
+    </p>
+
+    <div class="mt-9 grid gap-10 lg:grid-cols-12">
+      <div class="space-y-5 leading-relaxed text-ink-2 lg:col-span-7">
+        <p>
+          Conduit avec <strong class="text-forest">Plan International Sénégal</strong>,
+          le PRN2S est un programme de trois ans qui vise à améliorer l’état
+          nutritionnel et sanitaire des enfants de 0 à 59 mois, en renforçant
+          simultanément les capacités productives des ménages et l’accès effectif
+          aux soins.
+        </p>
+        <p>
+          Le suivi est communautaire : les enfants sont pesés chaque mois sur des
+          sites répartis dans les zones d’intervention, la malnutrition aiguë est
+          dépistée sur place, et les familles concernées sont accompagnées
+          individuellement. Les données remontent ensuite dans le rapport
+          semestriel remis au bailleur.
+        </p>
+        <p>
+          Ce dispositif s’appuie sur les <strong class="text-forest">Comités de
+          Développement de Santé</strong> et sur l’initiative Diapalanté Fadju,
+          qui rapproche les familles vulnérables des postes de santé existants.
+        </p>
+      </div>
+
+      <dl class="grid gap-px self-start overflow-hidden rounded-xl border border-line bg-line lg:col-span-5">
+        <div class="bg-card p-7">
+          <dt class="font-mono text-2xl text-earth">36 mois</dt>
+          <dd class="mt-1 text-sm text-ink-3">décembre 2024 → novembre 2027</dd>
+        </div>
+        <div class="bg-card p-7">
+          <dt class="font-mono text-2xl text-earth">20 sites</dt>
+          <dd class="mt-1 text-sm text-ink-3">de suivi communautaire</dd>
+        </div>
+        <div class="bg-card p-7">
+          <dt class="font-mono text-2xl text-earth">0 à 59 mois</dt>
+          <dd class="mt-1 text-sm text-ink-3">tranche d’âge suivie</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  {/* Bandeau photo — dispositif One Acre Fund : le texte vit dans un panneau
+      opaque qui chevauche l'image, jamais sur l'image. */}
+  <div class="revele relative">
+    <Photo
+      cle="champ-recolte"
+      tailles="100vw"
+      class="h-[20rem] w-full object-cover object-[50%_14%] sm:h-[26rem]"
+    />
+    <div class="mx-auto max-w-6xl px-5">
+      <div class="relative -mt-20 max-w-xl bg-forest p-8 text-paper sm:-mt-24 sm:p-10">
+        <p class="font-mono text-xs uppercase tracking-[0.2em] text-gold">Sur le terrain</p>
+        <p class="mt-4 font-serif text-2xl leading-snug sm:text-3xl">
+          Les femmes accompagnées ne reçoivent pas une aide : elles conduisent
+          une activité.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  {/* NDIEUMBEUTT */}
+  <section class="bg-paper-2">
+    <div class="mx-auto max-w-6xl px-5 py-16">
+      <span class="inline-block rounded-full bg-gold px-3 py-1 font-mono text-xs text-ink">
+        Lancé en 2026
+      </span>
+      <h2 class="mt-5 font-serif text-3xl text-forest sm:text-4xl">Ndieumbeutt</h2>
+      <p class="mt-2 text-lg text-ink-3">
+        Un financement au service de l’autonomisation féminine
+      </p>
+
+      <div class="mt-9 grid gap-10 lg:grid-cols-12">
+        <div class="space-y-5 leading-relaxed text-ink-2 lg:col-span-7">
+          <p>
+            Ndieumbeutt accompagne <strong class="text-forest">400 femmes de 18
+            à 35 ans</strong> dans la construction d’activités durables, de la
+            production agricole à l’élevage, avec formation, financement et suivi
+            sur la durée. Le programme est conduit dans le cadre de
+            <strong class="text-forest"> E4Y</strong>, avec le soutien de la
+            Fondation Roi Baudouin et de Nous Cims.
+          </p>
+          <p>
+            Le financement passe par les associations villageoises d’épargne et
+            de crédit, qui décident elles-mêmes de l’affectation des montants
+            selon les besoins de leurs membres. La formation, elle, est assurée
+            en partenariat avec l’École Supérieure Polytechnique.
+          </p>
+          <p>
+            Le nombre de bénéficiaires n’est pas une limite de la demande, mais
+            du financement disponible : le Consortium compte
+            <strong class="text-forest"> 8 000 femmes</strong> dans sa base de
+            données.
+          </p>
+        </div>
+
+        <dl class="grid gap-px self-start overflow-hidden rounded-xl border border-line bg-line lg:col-span-5">
+          <div class="bg-card p-7">
+            <dt class="font-mono text-2xl text-earth">400</dt>
+            <dd class="mt-1 text-sm text-ink-3">femmes accompagnées</dd>
+          </div>
+          <div class="bg-card p-7">
+            <dt class="font-mono text-2xl text-earth">18-35 ans</dt>
+            <dd class="mt-1 text-sm text-ink-3">public visé</dd>
+          </div>
+          <div class="bg-card p-7">
+            <dt class="font-mono text-2xl text-earth">100 %</dt>
+            <dd class="mt-1 text-sm text-ink-3">
+              taux de remboursement des crédits
+              <a
+                href="https://fr.allafrica.com/stories/202602280036.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="ml-1 text-leaf hover:underline"
+              >
+                (source)
+              </a>
+            </dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="mt-12 flex flex-wrap gap-3">
+        <a
+          href="/impact/"
+          class="rounded-full bg-forest px-7 py-3 font-medium text-paper transition-colors hover:bg-forest-2"
+        >
+          Voir les résultats
+        </a>
+        <a
+          href="/actualites/"
+          class="rounded-full border border-line px-7 py-3 font-medium text-forest transition-colors hover:border-forest hover:bg-forest hover:text-paper"
+        >
+          Actualités du terrain
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>

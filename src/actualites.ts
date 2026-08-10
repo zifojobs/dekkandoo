@@ -46,8 +46,13 @@ export const ACTUALITES: Actualite[] = [
     titre: '18,75 millions FCFA remis à 75 associations de Gandon',
     date: '4 juillet 2026',
     dateIso: '2026-07-04',
-    photo: 'remise-financement',
-    cadrage: 'object-[50%_38%]',
+    // 🔑 Pas la photo de remise de cheque : celle-ci porte « 3.000.000 CFA —
+    // FAVEC de RAO » en gros, alors que l'article parle de 18,75 M a Gandon.
+    // Deux chiffres qui se contredisent dans la meme image ruinent la
+    // credibilite de l'ensemble. Celle-ci montre la mise a l'honneur des
+    // beneficiaires, ce que raconte le 2e paragraphe, et n'affiche aucun montant.
+    photo: 'beneficiaires-honorees',
+    cadrage: 'object-[50%_42%]',
     chapo:
       "Une soirée consacrée aux femmes qui font vivre l'épargne communautaire dans la commune de Gandon, et à celles et ceux que la formation a menés jusqu'à leur propre activité.",
     corps: [

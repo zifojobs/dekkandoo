@@ -1,0 +1,101 @@
+---
+import Base from '../layouts/Base.astro';
+import EnTetePage from '../components/EnTetePage.astro';
+
+// Trois familles, et l'ordre raconte la chaine : l'argent arrive, la competence
+// se transmet, le terrain execute. C'est plus parlant qu'une grille de six
+// cases equivalentes — et c'est vrai.
+const familles = [
+  {
+    titre: 'Bailleurs et partenaires techniques',
+    texte:
+      'Ils financent les programmes et en vérifient l’exécution. C’est devant eux que nous rendons compte, deux fois par an.',
+    membres: [
+      {
+        nom: 'Plan International Sénégal',
+        role: 'Partenaire technique et bailleur du programme PRN2S',
+      },
+      { nom: 'Fondation Roi Baudouin', role: 'Soutien au programme E4Y' },
+      { nom: 'Nous Cims', role: 'Soutien au programme E4Y' },
+    ],
+  },
+  {
+    titre: 'Transmission et formation',
+    texte:
+      'Une compétence transmise reste après le programme. C’est la seule partie de notre action qui ne s’arrête pas avec le financement.',
+    membres: [
+      {
+        nom: 'École Supérieure Polytechnique',
+        role: 'Formation des bénéficiaires',
+      },
+    ],
+  },
+  {
+    titre: 'Relais de terrain',
+    texte:
+      'Ils existaient avant nous et existeront après. Notre rôle n’est pas de les remplacer, mais de leur donner les moyens de faire ce qu’ils font déjà.',
+    membres: [
+      {
+        nom: 'Comités de Développement de Santé',
+        role: 'Relais communautaires auprès des postes de santé',
+      },
+      {
+        nom: 'Associations villageoises d’épargne et de crédit',
+        role: 'Collecte de l’épargne, octroi et suivi des crédits',
+      },
+    ],
+  },
+];
+---
+
+<Base
+  titre="Partenaires"
+  description="Plan International Sénégal, Fondation Roi Baudouin, Nous Cims, École Supérieure Polytechnique, Comités de Développement de Santé et associations villageoises d'épargne et de crédit."
+>
+  <EnTetePage
+    rubrique="Partenaires"
+    titre="Nous n'avançons jamais seuls"
+    intro="Bailleurs, institutions et relais communautaires : chacun tient un maillon de la chaîne qui relie une décision de financement à un enfant correctement nourri."
+  />
+
+  <section class="mx-auto max-w-6xl space-y-14 px-5 py-16">
+    {
+      familles.map(({ titre, texte, membres }) => (
+        <div class="revele grid gap-8 lg:grid-cols-12">
+          <div class="lg:col-span-4">
+            <h2 class="font-serif text-2xl text-forest">{titre}</h2>
+            <p class="mt-4 leading-relaxed text-ink-2">{texte}</p>
+          </div>
+          <ul class="grid gap-px self-start overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-2 lg:col-span-8">
+            {membres.map(({ nom, role }) => (
+              <li class="bg-card p-7">
+                <p class="font-serif text-lg text-forest">{nom}</p>
+                <p class="mt-2 text-sm leading-relaxed text-ink-3">{role}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </section>
+
+  <section class="bg-forest py-16 text-paper">
+    <div class="mx-auto max-w-6xl px-5">
+      <h2 class="max-w-2xl font-serif text-2xl leading-snug sm:text-3xl">
+        Vous souhaitez soutenir un programme ou en savoir plus sur nos
+        résultats ?
+      </h2>
+      <p class="mt-5 max-w-2xl leading-relaxed text-paper/80">
+        Nos rapports de suivi semestriels documentent chaque indicateur. Nous
+        les partageons volontiers avec toute organisation qui envisage de
+        travailler avec nous.
+      </p>
+      <a
+        href="/contact/"
+        class="mt-8 inline-block rounded-full bg-gold px-7 py-3 font-medium text-ink transition-colors hover:bg-gold-2"
+      >
+        Nous écrire
+      </a>
+    </div>
+  </section>
+</Base>
