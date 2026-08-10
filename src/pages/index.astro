@@ -1,0 +1,559 @@
+---
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import Reseaux from '../components/Reseaux.astro';
+import {
+  CONSORTIUM as CONSORTIUM_RESEAUX,
+  NDIEUMBEUTT as NDIEUMBEUTT_RESEAUX,
+} from '../reseaux';
+
+// Tout le contenu de cette page vient de MAQUETTE-SITE.html (01/08), la version
+// montree au client, elle-meme tiree de FICHE-CLIENT.md et de leurs documents.
+// Aucun chiffre n'est invente ici : chacun est deja dans leur matiere.
+
+const chiffres = [
+  { n: '6', l: 'communes couvertes' },
+  { n: '400', l: "femmes accompagnées vers l'autonomie" },
+  { n: '18,75 M', l: "FCFA remis aux associations d'épargne" },
+  { n: '2027', l: 'horizon du programme en cours' },
+];
+
+const axes = [
+  {
+    rang: 'AXE 01',
+    titre: 'Nutrition infantile',
+    texte:
+      'Suivi nutritionnel communautaire des enfants de 0 à 59 mois : pesées, dépistage de la malnutrition, accompagnement des familles les plus vulnérables.',
+  },
+  {
+    rang: 'AXE 02',
+    titre: 'Accès aux soins',
+    texte:
+      'Rapprocher les familles vulnérables des postes de santé, avec l’initiative Diapalanté Fadju et la mutuelle de santé, en appui aux Comités de Développement de Santé.',
+  },
+  {
+    rang: 'AXE 03',
+    titre: 'Autonomisation des femmes',
+    texte:
+      'Financement d’activités génératrices de revenus pour les femmes de 18 à 35 ans, principalement en agriculture et en élevage, via les associations villageoises d’épargne et de crédit.',
+  },
+];
+
+const impacts = [
+  { n: '250', l: 'femmes formées à la transformation et à la production' },
+  { n: '3 219', l: 'initiatives entrepreneuriales financées' },
+  { n: '5 567', l: "produits d'hygiène fabriqués localement" },
+  { n: '75', l: "associations d'épargne dotées en 2026" },
+];
+
+// `cadrage` : point de recadrage de la vignette. Les cartes d'actualite sont
+// des bandes courtes (208 px) ; sans reglage, object-cover coupe au centre et
+// c'est presque toujours le sujet qui saute.
+const actualites = [
+  {
+    photo: 'remise-financement' as const,
+    cadrage: 'object-[50%_38%]',
+    date: '4 juillet 2026',
+    dateIso: '2026-07-04',
+    titre: '18,75 millions FCFA remis à 75 associations de Gandon',
+    texte:
+      'Une soirée consacrée aux associations villageoises d’épargne et de crédit, et à la mise à l’honneur de 125 bénéficiaires formés.',
+  },
+  {
+    photo: 'remise-poussins' as const,
+    cadrage: 'object-[50%_50%]',
+    date: 'Juin 2026',
+    dateIso: '2026-06',
+    titre: 'Lancement du volet aviculture du programme Ndieumbeutt',
+    texte:
+      'Journée de remise de poussins aux bénéficiaires, première étape d’un accompagnement qui se poursuit sur toute la campagne.',
+  },
+  {
+    // Cadrage serre tire de la MEME scene que le heros : la photo large y sert
+    // deja, et la reprendre telle quelle en vignette ferait doublon.
+    photo: 'formation-geste' as const,
+    cadrage: 'object-[50%_45%]',
+    date: 'Mai 2026',
+    dateIso: '2026-05',
+    titre: 'Quatre groupements formés à la saponification',
+    texte:
+      'Une compétence directement monétisable, qui a permis la fabrication de plus de 5 500 produits d’hygiène.',
+  },
+];
+
+const partenaires = [
+  { nom: 'Plan International Sénégal', role: 'Partenaire technique et bailleur' },
+  { nom: 'Fondation Roi Baudouin', role: 'Soutien au programme E4Y' },
+  { nom: 'Nous Cims', role: 'Soutien au programme E4Y' },
+  { nom: 'École Supérieure Polytechnique', role: 'Formation des bénéficiaires' },
+  { nom: 'Comités de Développement de Santé', role: 'Relais communautaires' },
+  { nom: 'Associations villageoises d’épargne', role: 'Réseau de terrain' },
+];
+---
+
+<Base
+  titre="Accueil"
+  description="Le Consortium Dëkkandoo agit dans les six communes du département de Saint-Louis pour la nutrition infantile, l'accès aux soins et l'autonomisation économique des femmes."
+  organisation
+>
+  {/*
+    HEROS — dispositif emprunte a One Acre Fund (cahier de references, n.6) :
+    la photo occupe le plein cadre, mais le titre ne repose JAMAIS dessus. Il
+    vit dans un panneau vert opaque qui la chevauche.
+
+    Deux raisons, et la seconde est la vraie. (1) La lisibilite ne depend alors
+    d'aucun degrade bien regle ni de la luminosite de la photo. (2) Sur cette
+    photo precisement, les personnes occupent le centre du cadre : tout texte
+    superpose atterrirait sur un visage.
+
+    L'accent unique — « l'avenir » en or — est repris de Farm Africa, et il est
+    deja ecrit dans la maquette validee (<em> dans le H1).
+  */}
+  <section class="relative bg-forest text-paper">
+    <div class="lg:grid lg:min-h-[34rem] lg:grid-cols-12 lg:items-stretch">
+      {/* La photo. Sur mobile elle passe au-dessus du panneau. */}
+      <div class="relative lg:col-span-7 lg:col-start-6 lg:row-start-1">
+        {/* object-position recale sur le haut du cadre : les visages sont au
+            tiers superieur de la photo. Avec le recadrage centre par defaut, la
+            bande courte du mobile coupait toutes les tetes — soit exactement ce
+            que la photo est la pour montrer. Sans effet sur grand ecran, ou
+            c'est la largeur qui est rognee, pas la hauteur. */}
+        <Photo
+          cle="formation-femmes"
+          tailles="(min-width: 1024px) 60vw, 100vw"
+          prioritaire
+          class="h-80 w-full object-cover object-[62%_50%] sm:h-96 lg:h-full"
+        />
+      </div>
+
+      {/* Le panneau. Il chevauche la photo a partir de `lg` grace au col-start
+          identique : les deux occupent la meme rangee de grille. */}
+      <div
+        class="relative bg-forest px-5 py-14 sm:px-8 lg:col-span-7 lg:col-start-1 lg:row-start-1 lg:flex lg:flex-col lg:justify-center lg:py-20 lg:pl-[max(1.25rem,calc((100vw-72rem)/2))] lg:pr-16"
+      >
+        <p class="font-mono text-xs uppercase tracking-[0.2em] text-gold">
+          Santé · Nutrition · Autonomisation
+        </p>
+        <h1 class="mt-6 max-w-2xl font-serif text-4xl leading-[1.08] sm:text-5xl xl:text-6xl">
+          Ensemble, nous semons l’espoir.
+          Ensemble, nous semons <em class="not-italic text-gold">l’avenir.</em>
+        </h1>
+        <p class="mt-7 max-w-xl text-lg leading-relaxed text-paper/85">
+          Le Consortium Dëkkandoo agit dans les six communes du département de
+          Saint-Louis pour que chaque enfant reçoive un bon départ dans la vie, et
+          que chaque femme dispose des moyens de son autonomie.
+        </p>
+        <div class="mt-9 flex flex-wrap gap-3">
+          <a
+            href="#programmes"
+            class="rounded-full bg-gold px-7 py-3 font-medium text-ink transition-colors hover:bg-gold-2"
+          >
+            Découvrir nos programmes
+          </a>
+          <a
+            href="#contact"
+            class="rounded-full border border-paper/40 px-7 py-3 font-medium transition-colors hover:border-paper hover:bg-paper/10"
+          >
+            Nous contacter
+          </a>
+        </div>
+      </div>
+    </div>
+
+    {/* Les quatre chiffres cles traites comme le heros, pas comme un bandeau de
+        bas de page (cahier de references, The Ocean Cleanup). Chasse fixe : le
+        detail qui fait « rapport serieux » plutot que « brochure ». */}
+    <div class="relative border-t border-paper/15">
+      <dl class="mx-auto grid max-w-6xl grid-cols-2 gap-y-8 px-5 py-10 lg:grid-cols-4">
+        {
+          chiffres.map(({ n, l }) => (
+            <div class="px-2 text-center lg:border-l lg:border-paper/15 lg:first:border-l-0">
+              <dt class="font-mono text-3xl text-gold sm:text-4xl">{n}</dt>
+              <dd class="mx-auto mt-2 max-w-[16rem] text-sm text-paper/75">{l}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  {/* QUI SOMMES-NOUS */}
+  <section id="qui" class="scroll-mt-24 border-b border-line py-20">
+    <div class="mx-auto max-w-6xl px-5">
+      <p class="font-mono text-xs uppercase tracking-[0.2em] text-leaf">Qui sommes-nous</p>
+      <h2 class="mt-3 max-w-3xl font-serif text-3xl leading-tight text-forest sm:text-4xl">
+        Le développement se construit avec les communautés
+      </h2>
+      <p class="mt-6 max-w-3xl text-lg leading-relaxed text-ink-2">
+        Dëkkandoo signifie « le voisinage », le vivre-ensemble. Ce nom dit notre
+        méthode : les communautés ne sont pas les bénéficiaires de nos projets,
+        elles en sont les actrices. Notre action s’organise autour de trois axes
+        indissociables.
+      </p>
+
+      <div class="revele mt-12 grid gap-6 md:grid-cols-3">
+        {
+          axes.map(({ rang, titre, texte }) => (
+            <article class="rounded-xl border border-line bg-card p-7">
+              <p class="font-mono text-xs tracking-[0.18em] text-earth-2">{rang}</p>
+              <h3 class="mt-3 font-serif text-xl text-forest">{titre}</h3>
+              <p class="mt-3 text-sm leading-relaxed text-ink-2">{texte}</p>
+            </article>
+          ))
+        }
+      </div>
+
+      <figure class="mt-12 border-l-2 border-gold pl-6">
+        <blockquote class="max-w-3xl font-serif text-xl leading-relaxed text-forest sm:text-2xl">
+          « Aujourd’hui encore, la malnutrition touche de nombreuses familles à
+          Saint-Louis. Les conséquences sont graves : retard de croissance,
+          faiblesse scolaire, vulnérabilité face aux maladies. Pourtant, des
+          solutions existent. »
+        </blockquote>
+        <figcaption class="mt-3 font-mono text-xs uppercase tracking-wider text-ink-3">
+          Présentation du programme PRN2S
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  {/*
+    LE MOT DU COORDONNATEUR.
+
+    🔑 Rien n'est ecrit a sa place. Les deux citations sont de lui, mot pour mot,
+    parues dans Sud Quotidien le 28/02/2026, et la source est affichee sous le
+    texte. C'est le principe de charity: water repris du cahier de references —
+    une affirmation, une preuve a cote — et c'est ce qui rend le bloc opposable :
+    un bailleur peut aller verifier.
+
+    Sa fonction exacte est « coordonnateur global du Consortium Dekkandoo »,
+    telle qu'ecrite dans l'article. Pas « dirigeant ».
+
+    ⚠️ Meme sourcee, une citation reprise sur le site officiel de l'organisation
+    se lit comme une parole institutionnelle : a signaler a Khaly avant la mise
+    en ligne. Ce n'est plus une question d'exactitude, c'est une politesse.
+  */}
+  <section class="bg-forest py-16 text-paper sm:py-20">
+    <div class="mx-auto grid max-w-6xl items-center gap-10 px-5 lg:grid-cols-12">
+      <div class="lg:col-span-5">
+        <Photo
+          cle="khaly"
+          tailles="(min-width: 1024px) 40vw, 100vw"
+          class="aspect-[4/5] w-full rounded-xl object-cover object-[52%_26%]"
+        />
+      </div>
+
+      <figure class="lg:col-span-7">
+        <p class="font-mono text-xs uppercase tracking-[0.2em] text-gold">
+          Le mot du coordonnateur
+        </p>
+        <blockquote class="mt-6 font-serif text-2xl leading-snug sm:text-4xl">
+          « Ici, le taux de remboursement du crédit est de 100 %. Parce que pour
+          nous, il est hors de question de ne pas rembourser un crédit. »
+        </blockquote>
+        <p class="mt-6 max-w-xl leading-relaxed text-paper/80">
+          « On a juste sélectionné 400 femmes bénéficiaires, mais on a
+          8 000 femmes dans notre base de données. »
+        </p>
+        <figcaption class="mt-7 border-t border-paper/20 pt-5">
+          <span class="block font-serif text-lg">Abdou Khaly Mbodj</span>
+          <span class="mt-1 block text-sm text-paper/70">
+            Coordonnateur global du Consortium Dëkkandoo
+          </span>
+          <a
+            href="https://fr.allafrica.com/stories/202602280036.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mt-3 inline-block font-mono text-xs text-gold hover:underline"
+          >
+            Sud Quotidien, 28 février 2026 ↗
+          </a>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  {/* PROGRAMMES */}
+  <section id="programmes" class="scroll-mt-24 bg-paper-2 py-20">
+    <div class="mx-auto max-w-6xl px-5">
+      <p class="font-mono text-xs uppercase tracking-[0.2em] text-leaf">Nos programmes</p>
+      <h2 class="mt-3 font-serif text-3xl leading-tight text-forest sm:text-4xl">
+        Deux programmes, une même conviction
+      </h2>
+      <p class="mt-6 max-w-3xl text-lg leading-relaxed text-ink-2">
+        Nos actions s’inscrivent dans la durée, avec des partenaires qui
+        partagent notre exigence de résultats mesurables.
+      </p>
+
+      <div class="revele mt-12 grid gap-6 lg:grid-cols-2">
+        <article class="flex flex-col rounded-xl border border-line bg-card">
+          <div class="flex-1 p-8">
+            <span
+              class="inline-block rounded-full bg-forest px-3 py-1 font-mono text-xs text-paper"
+            >
+              En cours · 2024-2027
+            </span>
+            <h3 class="mt-4 font-serif text-2xl text-forest">PRN2S</h3>
+            <p class="mt-1 text-sm text-ink-3">
+              Renforcement nutritionnel et sanitaire · Saint-Louis
+            </p>
+            <p class="mt-4 leading-relaxed text-ink-2">
+              Avec Plan International Sénégal, un programme de trois ans pour
+              améliorer l’état nutritionnel et sanitaire des enfants de 0 à
+              59 mois, en renforçant les capacités productives des ménages et
+              l’accès effectif aux soins.
+            </p>
+          </div>
+          <dl class="grid grid-cols-2 border-t border-line">
+            <div class="border-r border-line px-8 py-5">
+              <dt class="font-mono text-lg text-earth">36 mois</dt>
+              <dd class="mt-1 text-sm text-ink-3">déc. 2024 → nov. 2027</dd>
+            </div>
+            <div class="px-8 py-5">
+              <dt class="font-mono text-lg text-earth">20 sites</dt>
+              <dd class="mt-1 text-sm text-ink-3">de suivi communautaire</dd>
+            </div>
+          </dl>
+        </article>
+
+        <article class="flex flex-col rounded-xl border border-line bg-card">
+          <div class="flex-1 p-8">
+            <span
+              class="inline-block rounded-full bg-gold px-3 py-1 font-mono text-xs text-ink"
+            >
+              Lancé en 2026
+            </span>
+            <h3 class="mt-4 font-serif text-2xl text-forest">Ndieumbeutt</h3>
+            <p class="mt-1 text-sm text-ink-3">
+              Un financement au service de l’autonomisation féminine
+            </p>
+            <p class="mt-4 leading-relaxed text-ink-2">
+              Accompagner 400 femmes de 18 à 35 ans dans la construction
+              d’activités durables, de la production agricole à l’élevage, avec
+              formation, financement et suivi sur la durée.
+            </p>
+          </div>
+          <dl class="grid grid-cols-2 border-t border-line">
+            <div class="border-r border-line px-8 py-5">
+              <dt class="font-mono text-lg text-earth">400</dt>
+              <dd class="mt-1 text-sm text-ink-3">femmes accompagnées</dd>
+            </div>
+            <div class="px-8 py-5">
+              <dt class="font-mono text-lg text-earth">18-35 ans</dt>
+              <dd class="mt-1 text-sm text-ink-3">public visé</dd>
+            </div>
+          </dl>
+        </article>
+      </div>
+    </div>
+
+    {/*
+      Bandeau photo — emprunte a One Acre Fund : le texte n'est JAMAIS pose sur
+      l'image. Il vit dans un panneau vert opaque qui la chevauche. Lisible quelle
+      que soit la photo, et ca ne depend pas d'un degrade bien regle.
+    */}
+    <div class="revele relative mt-16">
+      {/* Deux reglages, et le premier compte plus que le second. La bande etait
+          trop plate : 1440x480 pour une image qui fait 860 de haut une fois mise
+          a l'echelle, soit 380 px jetes. On la rehausse d'abord, PUIS on recadre
+          haut — sinon aucun reglage de position ne sauve les visages. */}
+      <Photo
+        cle="champ-recolte"
+        tailles="100vw"
+        class="h-[22rem] w-full object-cover object-[50%_14%] sm:h-[30rem] lg:h-[34rem]"
+      />
+      <div class="mx-auto max-w-6xl px-5">
+        <div
+          class="relative -mt-24 max-w-xl bg-forest p-8 text-paper sm:-mt-32 sm:p-10"
+        >
+          <p class="font-mono text-xs uppercase tracking-[0.2em] text-gold">Sur le terrain</p>
+          <p class="mt-4 font-serif text-2xl leading-snug sm:text-3xl">
+            Les femmes accompagnées ne reçoivent pas une aide : elles conduisent
+            une activité.
+          </p>
+          <p class="mt-4 text-sm leading-relaxed text-paper/80">
+            Production maraîchère, élevage, transformation — chaque financement
+            est adossé à une activité suivie dans la durée.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* IMPACT */}
+  <section id="impact" class="scroll-mt-24 py-20">
+    <div class="mx-auto max-w-6xl px-5">
+      <p class="font-mono text-xs uppercase tracking-[0.2em] text-leaf">Notre impact</p>
+      <h2 class="mt-3 font-serif text-3xl leading-tight text-forest sm:text-4xl">
+        Des résultats que nous rendons publics
+      </h2>
+      <p class="mt-6 max-w-3xl text-lg leading-relaxed text-ink-2">
+        Parce qu’un partenaire a le droit de savoir ce que produit son
+        engagement, voici ce que nos programmes ont permis à ce jour.
+      </p>
+
+      <dl class="revele mt-12 grid gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
+        {
+          impacts.map(({ n, l }) => (
+            <div class="bg-card p-8">
+              <dt class="font-mono text-4xl text-forest">{n}</dt>
+              <dd class="mt-3 text-sm leading-relaxed text-ink-2">{l}</dd>
+            </div>
+          ))
+        }
+      </dl>
+
+      <div class="revele mt-12 grid items-center gap-8 lg:grid-cols-2">
+        <Photo
+          cle="beneficiaires-honorees"
+          tailles="(min-width: 1024px) 50vw, 100vw"
+          class="w-full rounded-xl object-cover"
+        />
+        <figure>
+          <blockquote class="font-serif text-2xl leading-relaxed text-forest sm:text-3xl">
+            « Le projet a déjà transformé des milliers de vies, mais le chemin
+            continue. »
+          </blockquote>
+          <figcaption class="mt-4 font-mono text-xs uppercase tracking-wider text-ink-3">
+            Consortium Dëkkandoo
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  {/* ACTUALITÉS */}
+  <section id="actualites" class="scroll-mt-24 bg-paper-2 py-20">
+    <div class="mx-auto max-w-6xl px-5">
+      <p class="font-mono text-xs uppercase tracking-[0.2em] text-leaf">Actualités</p>
+      <h2 class="mt-3 font-serif text-3xl leading-tight text-forest sm:text-4xl">
+        Ce qui se passe sur le terrain
+      </h2>
+      <p class="mt-6 max-w-3xl text-lg leading-relaxed text-ink-2">
+        Nos équipes documentent chaque étape, sur le terrain comme en
+        cérémonie.
+      </p>
+
+      <div class="revele mt-12 grid gap-6 md:grid-cols-3">
+        {
+          actualites.map(({ photo, cadrage, date, dateIso, titre, texte }) => (
+            <article class="overflow-hidden rounded-xl border border-line bg-card">
+              <Photo
+                cle={photo}
+                tailles="(min-width: 768px) 33vw, 100vw"
+                class={`h-52 w-full object-cover ${cadrage}`}
+              />
+              <div class="p-6">
+                <time datetime={dateIso} class="font-mono text-xs uppercase tracking-wider text-ink-3">
+                  {date}
+                </time>
+                <h3 class="mt-3 font-serif text-lg leading-snug text-forest">{titre}</h3>
+                <p class="mt-3 text-sm leading-relaxed text-ink-2">{texte}</p>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* PARTENAIRES */}
+  <section id="partenaires" class="scroll-mt-24 py-20">
+    <div class="mx-auto max-w-6xl px-5">
+      <p class="font-mono text-xs uppercase tracking-[0.2em] text-leaf">Partenaires</p>
+      <h2 class="mt-3 font-serif text-3xl leading-tight text-forest sm:text-4xl">
+        Nous n’avançons jamais seuls
+      </h2>
+      <p class="mt-6 max-w-3xl text-lg leading-relaxed text-ink-2">
+        Bailleurs, institutions et relais communautaires : chacun tient un
+        maillon de la chaîne qui relie une décision de financement à un enfant
+        correctement nourri.
+      </p>
+
+      <ul class="revele mt-12 grid gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
+        {
+          partenaires.map(({ nom, role }) => (
+            <li class="bg-card p-7">
+              <p class="font-serif text-lg text-forest">{nom}</p>
+              <p class="mt-1 text-sm text-ink-3">{role}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  {/* CONTACT */}
+  <section id="contact" class="scroll-mt-24 bg-paper-2 py-20">
+    <div class="mx-auto max-w-6xl px-5">
+      <p class="font-mono text-xs uppercase tracking-[0.2em] text-leaf">Contact</p>
+      <h2 class="mt-3 font-serif text-3xl leading-tight text-forest sm:text-4xl">
+        Parlons de ce que nous pouvons construire
+      </h2>
+      <p class="mt-6 max-w-3xl text-lg leading-relaxed text-ink-2">
+        Que vous soyez un partenaire potentiel, une institution ou un membre de
+        la communauté, nos équipes sont joignables.
+      </p>
+
+      <div class="revele mt-12 grid gap-6 lg:grid-cols-2">
+        <div class="rounded-xl border border-line bg-card p-8">
+          <h3 class="font-serif text-xl text-forest">Consortium Dëkkandoo</h3>
+          <p class="mt-1 font-mono text-xs uppercase tracking-wider text-ink-3">
+            Siège · Saint-Louis
+          </p>
+          <dl class="mt-6 space-y-3 text-sm">
+            <div class="flex gap-4">
+              <dt class="w-24 shrink-0 text-ink-3">Téléphone</dt>
+              <dd><a href="tel:+221772672510" class="text-forest hover:underline">+221 77 267 25 10</a></dd>
+            </div>
+            <div class="flex gap-4">
+              <dt class="w-24 shrink-0 text-ink-3">E-mail</dt>
+              <dd>
+                <a href="mailto:consortiumdekkandoo@gmail.com" class="break-all text-forest hover:underline">
+                  consortiumdekkandoo@gmail.com
+                </a>
+              </dd>
+            </div>
+            <div class="flex gap-4">
+              <dt class="w-24 shrink-0 text-ink-3">Adresse</dt>
+              <dd class="text-ink-2">Saint-Louis, Sénégal</dd>
+            </div>
+          </dl>
+          <div class="mt-7 border-t border-line pt-6">
+            <p class="font-mono text-xs uppercase tracking-wider text-ink-3">Nous suivre</p>
+            <Reseaux comptes={CONSORTIUM_RESEAUX} entite="Consortium Dëkkandoo" class="mt-3" />
+          </div>
+        </div>
+
+        <div class="rounded-xl border border-line bg-card p-8">
+          <h3 class="font-serif text-xl text-forest">Projet Ndieumbeutt</h3>
+          <p class="mt-1 font-mono text-xs uppercase tracking-wider text-ink-3">
+            Antenne · Rao
+          </p>
+          <dl class="mt-6 space-y-3 text-sm">
+            <div class="flex gap-4">
+              <dt class="w-24 shrink-0 text-ink-3">Téléphone</dt>
+              <dd><a href="tel:+221709236970" class="text-forest hover:underline">+221 70 923 69 70</a></dd>
+            </div>
+            <div class="flex gap-4">
+              <dt class="w-24 shrink-0 text-ink-3">E-mail</dt>
+              <dd>
+                <a href="mailto:ndieumbeutt.dekkandoo@gmail.com" class="break-all text-forest hover:underline">
+                  ndieumbeutt.dekkandoo@gmail.com
+                </a>
+              </dd>
+            </div>
+            <div class="flex gap-4">
+              <dt class="w-24 shrink-0 text-ink-3">Adresse</dt>
+              <dd class="text-ink-2">Rao, Saint-Louis</dd>
+            </div>
+          </dl>
+          <div class="mt-7 border-t border-line pt-6">
+            <p class="font-mono text-xs uppercase tracking-wider text-ink-3">Nous suivre</p>
+            <Reseaux comptes={NDIEUMBEUTT_RESEAUX} entite="Projet Ndieumbeutt" class="mt-3" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

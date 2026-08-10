@@ -1,0 +1,162 @@
+{
+  "champ-equipe": {
+    "alt": "Membres du Consortium et productrices dans un champ maraîcher, récolte en cours",
+    "variantes": [
+      {
+        "url": "/photos/champ-equipe-2048.webp",
+        "w": 2048,
+        "h": 1342
+      },
+      {
+        "url": "/photos/champ-equipe-1600.webp",
+        "w": 1600,
+        "h": 1048
+      },
+      {
+        "url": "/photos/champ-equipe-800.webp",
+        "w": 800,
+        "h": 524
+      }
+    ]
+  },
+  "champ-recolte": {
+    "alt": "Groupe de femmes et d'encadrants au milieu des cultures, bassines de récolte à la main",
+    "variantes": [
+      {
+        "url": "/photos/champ-recolte-2048.webp",
+        "w": 2048,
+        "h": 1224
+      },
+      {
+        "url": "/photos/champ-recolte-1600.webp",
+        "w": 1600,
+        "h": 956
+      },
+      {
+        "url": "/photos/champ-recolte-800.webp",
+        "w": 800,
+        "h": 478
+      }
+    ]
+  },
+  "recolte-tomates": {
+    "alt": "Deux productrices récoltant des tomates dans une parcelle maraîchère",
+    "variantes": [
+      {
+        "url": "/photos/recolte-tomates-800.webp",
+        "w": 800,
+        "h": 1067
+      }
+    ]
+  },
+  "remise-poussins": {
+    "alt": "Cartons de poussins prêts pour la journée de remise aux bénéficiaires du projet Ndieumbeutt",
+    "variantes": [
+      {
+        "url": "/photos/remise-poussins-1600.webp",
+        "w": 1600,
+        "h": 1066
+      },
+      {
+        "url": "/photos/remise-poussins-800.webp",
+        "w": 800,
+        "h": 533
+      }
+    ]
+  },
+  "formation-femmes": {
+    "alt": "Session de formation : des femmes réunies autour des bassines de fabrication",
+    "variantes": [
+      {
+        "url": "/photos/formation-femmes-2048.webp",
+        "w": 2048,
+        "h": 1536
+      },
+      {
+        "url": "/photos/formation-femmes-1600.webp",
+        "w": 1600,
+        "h": 1200
+      },
+      {
+        "url": "/photos/formation-femmes-800.webp",
+        "w": 800,
+        "h": 600
+      }
+    ]
+  },
+  "remise-financement": {
+    "alt": "Remise d'un financement de 3 000 000 FCFA à une association villageoise d'épargne et de crédit",
+    "variantes": [
+      {
+        "url": "/photos/remise-financement-1600.webp",
+        "w": 1600,
+        "h": 1066
+      },
+      {
+        "url": "/photos/remise-financement-800.webp",
+        "w": 800,
+        "h": 533
+      }
+    ]
+  },
+  "beneficiaires-honorees": {
+    "alt": "Bénéficiaires mises à l'honneur lors de la cérémonie, écharpes remises",
+    "variantes": [
+      {
+        "url": "/photos/beneficiaires-honorees-1600.webp",
+        "w": 1600,
+        "h": 1066
+      },
+      {
+        "url": "/photos/beneficiaires-honorees-800.webp",
+        "w": 800,
+        "h": 533
+      }
+    ]
+  },
+  "remise-produits": {
+    "alt": "Bénéficiaires du projet Ndieumbeutt lors d'une remise de produits agricoles",
+    "variantes": [
+      {
+        "url": "/photos/remise-produits-2048.webp",
+        "w": 2048,
+        "h": 1364
+      },
+      {
+        "url": "/photos/remise-produits-1600.webp",
+        "w": 1600,
+        "h": 1066
+      },
+      {
+        "url": "/photos/remise-produits-800.webp",
+        "w": 800,
+        "h": 533
+      }
+    ]
+  },
+  "khaly": {
+    "alt": "Abdou Khaly Mbodj, coordonnateur global du Consortium Dëkkandoo, s'adressant à la presse",
+    "variantes": [
+      {
+        "url": "/photos/khaly-1600.webp",
+        "w": 1600,
+        "h": 1066
+      },
+      {
+        "url": "/photos/khaly-800.webp",
+        "w": 800,
+        "h": 533
+      }
+    ]
+  },
+  "formation-geste": {
+    "alt": "Pesée et conditionnement pendant une session de formation",
+    "variantes": [
+      {
+        "url": "/photos/formation-geste-800.webp",
+        "w": 800,
+        "h": 686
+      }
+    ]
+  }
+}

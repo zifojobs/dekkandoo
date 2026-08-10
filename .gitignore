@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.astro/
+.vercel/
+.env*
+.DS_Store
+
+# ⚠️ Ce depot est PUBLIC. Les photos ORIGINALES du client (dossier `img/`, hors
+# depot) montrent des personnes identifiables et ne doivent jamais y entrer.
+# Seules les versions WebP de `public/photos/` sont versionnees : elles sont de
+# toute facon servies par le site public, donc l'exposition est la meme.
+# Les fichiers de donnees du Consortium (CNI, telephones) vivent dans le dossier
+# parent et sont volontairement hors du perimetre de ce depot.

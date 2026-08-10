@@ -1,0 +1,270 @@
+---
+import '../styles/global.css';
+import Reseaux from '../components/Reseaux.astro';
+import {
+  CONSORTIUM as CONSORTIUM_RESEAUX,
+  NDIEUMBEUTT as NDIEUMBEUTT_RESEAUX,
+  TOUS,
+} from '../reseaux';
+
+interface Props {
+  titre: string;
+  description: string;
+  /** Rendu du bloc schema.org Organisation. Page d'accueil uniquement. */
+  organisation?: boolean;
+  /** Carte de partage propre a la page. Chemin absolu depuis la racine. */
+  image?: string;
+  /** `article` sur une actualite : Facebook et WhatsApp en tiennent compte. */
+  ogType?: 'website' | 'article';
+  /** Bloc JSON-LD supplementaire, deja serialise. */
+  schemaSupplementaire?: string;
+}
+
+const {
+  titre,
+  description,
+  organisation = false,
+  image = '/partage.png',
+  ogType = 'website',
+  schemaSupplementaire,
+} = Astro.props;
+
+const url = new URL(Astro.url.pathname, Astro.site);
+const partage = new URL(image, Astro.site);
+
+// Le site est pour l'instant une page unique, comme la maquette validee le
+// 01/08. La navigation pointe donc vers des ancres et non vers des URL : aucun
+// lien mort tant que les six rubriques ne sont pas des pages a part entiere.
+// Quand elles le seront, seule cette liste change.
+const rubriques = [
+  { url: '/#qui', nom: 'Qui sommes-nous' },
+  { url: '/#programmes', nom: 'Nos programmes' },
+  { url: '/#impact', nom: 'Notre impact' },
+  { url: '/#actualites', nom: 'Actualités' },
+  { url: '/#partenaires', nom: 'Partenaires' },
+  { url: '/#contact', nom: 'Contact' },
+];
+
+// Coordonnees officielles : FICHE-CLIENT.md, section « Coordonnees officielles ».
+// C'est la seule source. Le squelette portait un numero errone (77 236 81 62).
+const CONSORTIUM = {
+  tel: '+221 77 267 25 10',
+  telUrl: '+221772672510',
+  email: 'consortiumdekkandoo@gmail.com',
+  lieu: 'Saint-Louis, Sénégal',
+};
+const NDIEUMBEUTT = {
+  tel: '+221 70 923 69 70',
+  telUrl: '+221709236970',
+  email: 'ndieumbeutt.dekkandoo@gmail.com',
+  lieu: 'Rao, Saint-Louis',
+};
+
+// Les comptes vivent dans src/reseaux.ts — source unique partagee avec la
+// section Contact et le schema.org.
+
+
+// schema.org : c'est ce qui fait qu'un moteur comprend « organisation reelle »
+// et non « page web ». Les deux graphies du nom sont declarees — beaucoup
+// ecriront « Dekkandoo » sans trema.
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'NGO',
+  name: 'Consortium Dëkkandoo',
+  alternateName: ['Consortium Dekkandoo', 'Dëkkandoo', 'Dekkandoo'],
+  url: Astro.site?.href,
+  logo: new URL('/logo/logo-dekkandoo-512.png', Astro.site).href,
+  description:
+    "Le Consortium Dëkkandoo agit dans les six communes du département de Saint-Louis pour la nutrition infantile, l'accès aux soins et l'autonomisation économique des femmes.",
+  email: CONSORTIUM.email,
+  telephone: CONSORTIUM.tel,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Saint-Louis',
+    addressCountry: 'SN',
+  },
+  areaServed: 'Département de Saint-Louis, Sénégal',
+  sameAs: TOUS,
+};
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titre} &mdash; Consortium Dëkkandoo</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={url} />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="Consortium Dëkkandoo" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:title" content={`${titre} — Consortium Dëkkandoo`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={url} />
+    <meta property="og:image" content={partage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Consortium Dëkkandoo — six communes du département de Saint-Louis"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" type="image/png" sizes="64x64" href="/logo/favicon-64.png" />
+    <link rel="apple-touch-icon" href="/logo/apple-touch-icon.png" />
+    <meta name="theme-color" content="#1f5138" />
+
+    {
+      organisation && (
+        <script
+          type="application/ld+json"
+          set:html={JSON.stringify(schema)}
+        />
+      )
+    }
+    {
+      schemaSupplementaire && (
+        <script type="application/ld+json" set:html={schemaSupplementaire} />
+      )
+    }
+
+    <!-- Pose la classe `js` avant le rendu : c'est elle qui autorise l'etat
+         cache des sections. Sans JavaScript, la regle CSS ne s'applique jamais
+         et tout reste visible. -->
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+
+  <body class="flex min-h-screen flex-col">
+    <a
+      href="#contenu"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-forest focus:px-4 focus:py-2 focus:text-paper"
+    >
+      Aller au contenu
+    </a>
+
+    <header class="sticky top-0 z-40 border-b border-line bg-paper/95 backdrop-blur">
+      <div
+        class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-8 gap-y-3 px-5 py-3"
+      >
+        <a href="/" class="flex items-center gap-3" aria-label="Consortium Dëkkandoo, accueil">
+          <img
+            src="/logo/logo-dekkandoo-256.png"
+            alt="Consortium Dëkkandoo"
+            width="112"
+            height="92"
+            class="h-11 w-auto"
+          />
+        </a>
+
+        <nav aria-label="Navigation principale">
+          <ul class="flex flex-wrap gap-x-5 gap-y-1 text-sm font-medium">
+            {
+              rubriques.map(({ url: lien, nom }) => (
+                <li>
+                  <a href={lien} class="text-ink-2 transition-colors hover:text-forest">
+                    {nom}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="contenu" class="flex-1">
+      <slot />
+    </main>
+
+    <footer class="bg-forest text-paper">
+      <div class="mx-auto grid max-w-6xl gap-10 px-5 py-14 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="lg:col-span-2">
+          <img
+            src="/logo/logo-dekkandoo-blanc-512.png"
+            alt=""
+            width="160"
+            height="132"
+            class="h-16 w-auto"
+          />
+          <p class="mt-5 max-w-sm text-sm leading-relaxed text-paper/75">
+            Dëkkandoo signifie « le voisinage ». Les communautés ne sont pas les
+            bénéficiaires de nos projets, elles en sont les actrices.
+          </p>
+        </div>
+
+        <div class="text-sm">
+          <p class="font-serif text-base">Consortium Dëkkandoo</p>
+          <p class="mt-1 text-xs uppercase tracking-wide text-paper/55">Siège</p>
+          <ul class="mt-3 space-y-1 text-paper/85">
+            <li><a href={`tel:${CONSORTIUM.telUrl}`} class="hover:underline">{CONSORTIUM.tel}</a></li>
+            <li>
+              <a href={`mailto:${CONSORTIUM.email}`} class="break-all hover:underline">
+                {CONSORTIUM.email}
+              </a>
+            </li>
+            <li class="text-paper/70">{CONSORTIUM.lieu}</li>
+          </ul>
+          <Reseaux
+            comptes={CONSORTIUM_RESEAUX}
+            entite="Consortium Dëkkandoo"
+            ton="clair"
+            class="mt-4"
+          />
+        </div>
+
+        <div class="text-sm">
+          <p class="font-serif text-base">Projet Ndieumbeutt</p>
+          <p class="mt-1 text-xs uppercase tracking-wide text-paper/55">Antenne</p>
+          <ul class="mt-3 space-y-1 text-paper/85">
+            <li><a href={`tel:${NDIEUMBEUTT.telUrl}`} class="hover:underline">{NDIEUMBEUTT.tel}</a></li>
+            <li>
+              <a href={`mailto:${NDIEUMBEUTT.email}`} class="break-all hover:underline">
+                {NDIEUMBEUTT.email}
+              </a>
+            </li>
+            <li class="text-paper/70">{NDIEUMBEUTT.lieu}</li>
+          </ul>
+          <Reseaux
+            comptes={NDIEUMBEUTT_RESEAUX}
+            entite="Projet Ndieumbeutt"
+            ton="clair"
+            class="mt-4"
+          />
+        </div>
+      </div>
+
+      <div class="border-t border-paper/20">
+        <p class="mx-auto max-w-6xl px-5 py-5 text-xs text-paper/60">
+          &copy; {new Date().getFullYear()} Consortium Dëkkandoo. Saint-Louis, Sénégal.
+        </p>
+      </div>
+    </footer>
+
+    <!-- L'unique geste d'animation du site (regle n.2 du cahier de references).
+         IntersectionObserver, une seule fois par element, puis on cesse de
+         l'observer : rien ne tourne en continu sur le telephone du visiteur. -->
+    <script is:inline>
+      const cibles = document.querySelectorAll('.revele');
+      if (cibles.length && 'IntersectionObserver' in window) {
+        const guetteur = new IntersectionObserver(
+          (entrees) => {
+            for (const e of entrees) {
+              if (e.isIntersecting) {
+                e.target.classList.add('vu');
+                guetteur.unobserve(e.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -12% 0px' }
+        );
+        cibles.forEach((c) => guetteur.observe(c));
+      } else {
+        cibles.forEach((c) => c.classList.add('vu'));
+      }
+    </script>
+  </body>
+</html>

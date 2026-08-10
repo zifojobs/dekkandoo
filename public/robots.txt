@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dekkandoo.com/sitemap-index.xml

@@ -1,0 +1,36 @@
+---
+import photos from '../photos.json';
+
+interface Props {
+  /** Cle du manifeste produit par gen_photos_site.py */
+  cle: keyof typeof photos;
+  /** Largeur d'affichage annoncee au navigateur, pour qu'il choisisse la bonne variante. */
+  tailles?: string;
+  class?: string;
+  /** Vrai uniquement pour une image visible sans defiler. */
+  prioritaire?: boolean;
+}
+
+const { cle, tailles = '100vw', class: classe = '', prioritaire = false } = Astro.props;
+
+const photo = photos[cle];
+if (!photo) throw new Error(`Photo inconnue : ${cle}`);
+
+// La plus grande variante sert de source par defaut ; width/height viennent
+// d'elle et reservent la place pendant le chargement (pas de saut de mise en
+// page, qui est aussi un critere de classement).
+const grande = photo.variantes[0];
+const srcset = photo.variantes.map((v) => `${v.url} ${v.w}w`).join(', ');
+---
+
+<img
+  src={grande.url}
+  srcset={srcset}
+  sizes={tailles}
+  width={grande.w}
+  height={grande.h}
+  alt={photo.alt}
+  loading={prioritaire ? 'eager' : 'lazy'}
+  decoding="async"
+  class={classe}
+/>

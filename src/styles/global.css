@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Palette et typographie repris a l'IDENTIQUE de MAQUETTE-SITE.html (01/08),
+   la maquette montree au client. C'est elle qui fait foi : on ne redessine pas
+   ce qui a deja ete presente et achete.
+
+   Un seul theme, le clair. La maquette embarquait aussi une variante sombre
+   automatique (prefers-color-scheme). Ecartee volontairement : beaucoup de
+   telephones Android sont en mode sombre par defaut, et le site serait alors
+   affiche dans une version que ni Saibo ni le client n'ont valides. Un site
+   institutionnel montre a un bailleur doit avoir un rendu previsible.
+
+   Les polices sont celles DEJA PRESENTES sur les appareils : zero fichier a
+   telecharger. Le public consulte depuis un telephone Android sur reseau
+   senegalais, et c'est le choix de la maquette qu'on conserve.
+   --------------------------------------------------------------------------- */
+@theme {
+  --color-paper: #f4f6f1;   /* fond general, le creme */
+  --color-paper-2: #eaeee5; /* bandes alternees */
+  --color-card: #ffffff;
+  --color-line: #d8ded0;
+  --color-line-2: #bdc5b2;
+  --color-ink: #17231c;     /* texte */
+  --color-ink-2: #4c5a50;   /* texte secondaire */
+  --color-ink-3: #7c8a80;   /* mentions, legendes */
+  --color-forest: #1f5138;  /* bandeaux profonds, titres */
+  --color-forest-2: #2e7351;
+  --color-leaf: #4e9c6e;    /* accents, liens */
+  --color-earth: #7a4a2b;
+  --color-earth-2: #a9714a;
+  --color-gold: #c88f22;
+  --color-gold-2: #f5ead2;
+
+  /* Couleurs propres au LOGO — differentes des couleurs d'interface, et
+     laissees intactes : on ne retouche jamais le logo d'un client. */
+  --color-logo-vert: #0b983a;
+  --color-logo-brun: #683c10;
+
+  --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
+    Georgia, ui-serif, serif;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", "Segoe UI Mono", Consolas,
+    monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+/* Le seul geste d'animation de la page, conformement a la regle n.2 du cahier
+   de references : une apparition douce des sections au defilement.
+
+   Deux garde-fous, et l'ordre compte. L'etat cache est porte par `.js .revele`,
+   et la classe `js` n'est posee sur <html> que par le script du layout : sans
+   JavaScript la regle ne s'applique jamais et le contenu s'affiche normalement.
+   Ecrire `.revele { opacity: 0 }` directement rendrait le site BLANC pour qui
+   coupe JavaScript. Second garde-fou : rien ne bouge si le visiteur a demande
+   moins d'animation dans son systeme. */
+@media (prefers-reduced-motion: no-preference) {
+  .js .revele {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+  }
+  .js .revele.vu {
+    opacity: 1;
+    transform: none;
+  }
+}
