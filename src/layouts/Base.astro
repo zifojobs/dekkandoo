@@ -118,7 +118,10 @@ const schema = {
 
     <link rel="icon" type="image/png" sizes="64x64" href="/logo/favicon-64.png" />
     <link rel="apple-touch-icon" href="/logo/apple-touch-icon.png" />
-    <meta name="theme-color" content="#1f5138" />
+    {/* Suit `--color-forest`. C'est la couleur que Chrome sur Android peint
+        autour de la page : desaccordee, elle se voit sur le seul appareil
+        depuis lequel ce site sera vraiment consulte. */}
+    <meta name="theme-color" content="#165a2d" />
 
     {
       organisation && (

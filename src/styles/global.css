@@ -18,17 +18,54 @@
 @theme {
   --color-paper: #f4f6f1;   /* fond general, le creme */
   --color-paper-2: #eaeee5; /* bandes alternees */
-  --color-card: #ffffff;
+  /* Un blanc CHAUD, pas le blanc pur. Le blanc pur est une couleur neutre posee
+     sur un creme verdatre : cote a cote, il tire au bleu et la page se met a
+     ressembler a un gabarit plutot qu'a une identite. Celui-ci est le creme du
+     site remonte en clarte (meme teinte, 84 degres), et il reste plus clair que
+     la page — 1,05 de rapport, la carte se detache toujours, d'autant qu'elle
+     porte un filet. Arbitrage de Saibo le 11/08 : « harmoniser le blanc ». */
+  --color-card: #fafbf8;
   --color-line: #d8ded0;
   --color-line-2: #bdc5b2;
   --color-ink: #17231c;     /* texte */
   --color-ink-2: #4c5a50;   /* texte secondaire */
   --color-ink-3: #7c8a80;   /* mentions, legendes */
-  --color-forest: #1f5138;  /* bandeaux profonds, titres */
-  --color-forest-2: #2e7351;
-  --color-leaf: #4e9c6e;    /* accents, liens */
-  --color-earth: #7a4a2b;
-  --color-earth-2: #a9714a;
+  /* LES APLATS VERTS, ramenes sur la teinte du logo — arbitrage de Saibo le
+     11/08 au soir. Ils valaient #1f5138 et #2e7351 : teinte 150 degres et
+     saturation 45 %, quand le logo est a 140 degres et 87 %. Le vert des
+     panneaux n'etait donc pas celui de la marque, il en etait un cousin terni.
+
+     LA CLARTE NE BOUGE PAS, et c'est tout le point : 22 % avant, 22 % apres.
+     Le panneau valide par le client reste exactement aussi sombre, seule sa
+     teinte se recale. Le creme y garde 7,61 de contraste (contre 8,42), tres
+     au-dessus des 4,5 exiges.
+
+     La saturation s'arrete a 60 % et ne monte pas jusqu'aux 87 % du logo :
+     sur un aplat de cette taille, derriere des photos de terrain, un vert a
+     pleine saturation fait « campagne militante » la ou ce site s'adresse a un
+     bailleur. Le vert plein reste ou il porte — le logo, et les petits signes. */
+  --color-forest: #165a2d;  /* bandeaux profonds, titres */
+  --color-forest-2: #218341;
+
+  /* LE VERT DES SUR-TITRES — c'est le vert du LOGO, seulement assombri.
+     Il valait #4e9c6e, et deux choses n'allaient pas. (1) Sa saturation est de
+     33 % quand celle du logo est de 87 % : c'etait un vert delave, cousin du
+     vert de la marque sans en etre. (2) Mesure : 3,06 de rapport sur le creme,
+     pour du texte de 12 px en capitales — il en faut 4,5. Les six sur-titres de
+     l'accueil etaient donc a la fois hors marque et sous le seuil.
+     Meme teinte que le logo (140 degres), saturation 78 %, descendu en clarte
+     jusqu'a passer : 5,01 sur le creme, 4,64 sur le creme fonce. */
+  --color-leaf: #0f7a33;
+
+  /* LES DEUX BRUNS SECONDAIRES rejoignent le brun du logo. Ils valaient
+     #7a4a2b et #a9714a — 48 % et 39 % de saturation contre 73 % au logo, et une
+     teinte a 24-25 degres contre 30. Autrement dit une TROISIEME famille de
+     brun sur une page qui n'en revendique qu'une. #a9714a mesurait en plus 4,08
+     sur la carte, sous le seuil, pour les etiquettes « AXE 01 ».
+     Ils prennent donc les deux valeurs de l'accent, et la page n'a plus que
+     deux bruns au lieu de quatre. */
+  --color-earth: #683c10;
+  --color-earth-2: #8a5318;
   /* L'ACCENT EST LE BRUN DU LOGO, exactement — arbitrage de Saibo le 11/08,
      apres deux essais ecartes (l'or de la maquette, qui n'appartenait a aucune
      des deux couleurs de la marque ; puis un vert eclairci, qui n'etait plus

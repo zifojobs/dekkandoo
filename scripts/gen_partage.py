@@ -17,9 +17,19 @@ SOURCES = RACINE.parent / "img"   # HORS DEPOT — photos originales du client
 from PIL import Image, ImageDraw, ImageFont
 
 W, H = 1200, 630
-FOREST = (31, 81, 56)      # --color-forest
+FOREST = (22, 90, 45)      # --color-forest — recale sur la teinte du logo le 11/08
 PAPER = (244, 246, 241)    # --color-paper
-GOLD = (200, 143, 34)      # --color-gold
+MUET = (160, 195, 175)     # sur-titres et domaine, sur le vert
+
+# L'OR A DISPARU DE CETTE CARTE, et il fallait le faire : il avait ete ecarte du
+# site le 11/08 au motif qu'il n'appartient a aucune des deux couleurs de la
+# marque. La carte, elle, le portait encore — c'est-a-dire l'image meme qui
+# circule sur WhatsApp, la premiere chose qu'un charge de programme voit du
+# Consortium. Il mesurait en plus 2,92 de contraste sur le vert.
+#
+# Ce qui le remplace suit la regle ecrite dans global.css : sur un fond SOMBRE,
+# pas d'accent colore, on passe au creme. Le « 6 » ne perd rien — c'est sa
+# taille qui le fait lire, pas sa couleur.
 
 F = "C:/Windows/Fonts/"
 serif = lambda s: ImageFont.truetype(F + "pala.ttf", s)
@@ -48,17 +58,17 @@ logo = logo.resize((round(logo.width * ratio), 108), Image.LANCZOS)
 img.paste(logo, (72, 68), logo)
 
 d.text((72, 232), "CONSORTIUM DËKKANDOO", font=serif_g(58), fill=PAPER)
-d.text((72, 306), "Santé  ·  Nutrition  ·  Autonomisation", font=mono(25), fill=(160, 195, 175))
+d.text((72, 306), "Santé  ·  Nutrition  ·  Autonomisation", font=mono(25), fill=MUET)
 
-d.line([(72, 372), (330, 372)], fill=GOLD, width=3)
+d.line([(72, 372), (330, 372)], fill=MUET, width=3)
 
 # LE chiffre. Un seul, celui qui situe l'organisation sur un territoire — c'est
 # ce qu'un bailleur reconnait.
-d.text((72, 410), "6", font=mono(96), fill=GOLD)
+d.text((72, 410), "6", font=mono(96), fill=PAPER)
 d.text((176, 432), "communes du département", font=serif(38), fill=PAPER)
 d.text((176, 484), "de Saint-Louis, Sénégal", font=serif(38), fill=PAPER)
 
-d.text((72, 556), "dekkandoo.com", font=mono(24), fill=(160, 195, 175))
+d.text((72, 556), "dekkandoo.com", font=mono(24), fill=MUET)
 
 img.save(str(RACINE / "public" / "partage.png"), optimize=True)
 print(str(RACINE / "public" / "partage.png"), img.size)
@@ -136,7 +146,7 @@ for slug, titre, cle, date in articles:
 
     lignes = coupe(d, titre, serif_g(50), W - 128)[:3]
     y = H - 78 - len(lignes) * 62
-    d.text((64, y - 46), date.upper(), font=mono(22), fill=GOLD)
+    d.text((64, y - 46), date.upper(), font=mono(22), fill=MUET)
     for ligne in lignes:
         d.text((64, y), ligne, font=serif_g(50), fill=PAPER)
         y += 62
