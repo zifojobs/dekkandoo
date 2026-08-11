@@ -90,29 +90,60 @@ const partenaires = [
     la phrase s'efface, et le titre le reprend — les deux ecrans se tiennent.
   */}
   <div class="heros-piste">
-    <div class="heros-cadre relative h-screen overflow-hidden bg-ink">
-      {/* La fenetre : la photo occupe tout l'ecran, mais n'est visible qu'a
-          travers un cercle pose sur le mot. */}
+    <div class="heros-cadre relative overflow-hidden">
+      {/* La lucarne : la video occupe tout l'ecran, mais n'est visible qu'a
+          travers le contre-poincon du « o ». C'est le point exact du
+          dispositif de Farm Africa — chez eux la video est dans le « o » de
+          « solution », pas derriere le mot. */}
       <div class="heros-fenetre absolute inset-0">
-        <Photo
-          cle="champ-recolte"
-          tailles="100vw"
+        <video
           class="h-full w-full object-cover"
-        />
-        {/* Voile : sans lui, le mot en or devient illisible des que la photo
-            s'ouvre derriere lui. */}
-        <div class="absolute inset-0 bg-ink/40"></div>
+          src="/video/delta.mp4"
+          poster="/video/delta-poster.jpg"
+          muted
+          autoplay
+          loop
+          playsinline
+          preload="none"
+          aria-hidden="true"
+        ></video>
+        {/* Voile : il ne sert qu'une fois la video ouverte, pour que le mot en
+            or reste lisible par-dessus. Tant que la lucarne fait la taille du
+            contre-poincon, il n'a aucune raison d'etre la — il ne ferait que
+            transformer l'image en point brun. Il monte donc avec l'ouverture. */}
+        <div class="heros-voile absolute inset-0 bg-ink"></div>
       </div>
 
-      <div class="relative flex h-full items-center justify-center px-8">
+      <div class="heros-phrase absolute inset-0 px-8 py-24">
         <p
-          class="max-w-4xl text-center font-serif text-5xl leading-[1.15] text-paper xl:text-6xl"
+          class="heros-contour max-w-4xl text-balance self-end text-center font-serif text-6xl leading-[1.15] text-paper xl:text-7xl"
         >
-          <span class="heros-contour block">Et s’il existait un</span>
-          <span class="heros-mot block py-2 text-gold">avenir</span>
-          <span class="heros-contour block"
-            >pour chaque enfant du département de Saint-Louis&nbsp;?</span
-          >
+          Et s’il existait un
+        </p>
+
+        {/* Le mot. Le « o » n'est pas une lettre de la police mais un anneau
+            dessine, pour une raison de precision : la lucarne doit tomber au
+            pixel dans son contre-poincon, or la police est celle de l'appareil
+            (Iowan, Palatino, Georgia selon la machine) et son « o » n'a pas la
+            meme geometrie partout. Un anneau, lui, est identique en tout lieu.
+            Bords lateraux plus epais que le haut et le bas : c'est ce contraste
+            qui fait lire un « o » de labeur plutot qu'un cercle.
+
+            Il est aussi le seul element en flux de sa rangee, et la rangee est
+            posee entre deux `1fr` : son centre tombe donc exactement au milieu
+            de l'ecran, ce qui permet a la lucarne d'y etre centree sans qu'on
+            ait a mesurer quoi que ce soit. */}
+        <p class="heros-ligne-mot font-serif text-6xl text-gold xl:text-7xl">
+          <span class="heros-avant-mot">esp</span>
+          <span class="heros-o"><span class="sr-only">o</span></span>
+          <span class="heros-apres-mot">ir</span>
+        </p>
+
+        <p
+          class="heros-contour max-w-4xl text-balance self-start text-center font-serif text-6xl leading-[1.15] text-paper xl:text-7xl"
+        >
+          pour chaque enfant du département de
+          <span class="whitespace-nowrap">Saint-Louis&nbsp;?</span>
         </p>
       </div>
 
@@ -710,6 +741,66 @@ const partenaires = [
     display: none;
   }
 
+  /* Le fond n'est pas un aplat. Farm Africa pose un motif vegetal a peine plus
+     clair que le fond — assez pour que l'ecran ait une matiere, assez peu pour
+     ne jamais concurrencer le texte. Ici des feuilles, en SVG inline : le motif
+     ne coute aucune requete et pese quelques centaines d'octets. */
+  .heros-cadre {
+    background-color: var(--color-ink);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320' viewBox='0 0 320 320'%3E%3Cg fill='%231e2f25'%3E%3Cpath d='M0-55C28-25 28 25 0 55C-28 25-28-25 0-55Z' transform='translate(62 64) rotate(20)'/%3E%3Cpath d='M0-55C28-25 28 25 0 55C-28 25-28-25 0-55Z' transform='translate(232 60) rotate(-40) scale(0.85)'/%3E%3Cpath d='M0-55C28-25 28 25 0 55C-28 25-28-25 0-55Z' transform='translate(150 168) rotate(70)'/%3E%3Cpath d='M0-55C28-25 28 25 0 55C-28 25-28-25 0-55Z' transform='translate(58 256) rotate(-15) scale(0.9)'/%3E%3Cpath d='M0-55C28-25 28 25 0 55C-28 25-28-25 0-55Z' transform='translate(252 252) rotate(35) scale(0.95)'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 320px 320px;
+  }
+
+  /* La phrase occupe tout le cadre et se lit en trois rangees. Les deux
+     rangees de texte valent `1fr` chacune : la rangee du milieu — celle du mot
+     — tombe donc EXACTEMENT au centre vertical, quel que soit le nombre de
+     lignes au-dessus et en dessous. C'est ce qui permet de centrer la lucarne
+     sur le « o » sans mesurer quoi que ce soit. */
+  .heros-phrase {
+    display: grid;
+    grid-template-rows: 1fr auto 1fr;
+    justify-items: center;
+  }
+
+  /* Meme principe a l'horizontale : `1fr auto 1fr` place l'anneau au milieu
+     exact, que « esp » et « ir » aient la meme largeur ou non. */
+  .heros-ligne-mot {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: baseline;
+  }
+  .heros-avant-mot {
+    justify-self: end;
+  }
+  .heros-apres-mot {
+    justify-self: start;
+  }
+  /* `line-height: 0` sur les deux moities du mot : leur boite ne compte plus
+     dans la hauteur de la rangee, qui vaut donc exactement celle de l'anneau.
+     Le centre de l'anneau et le centre de la rangee deviennent le meme point,
+     et la lucarne posee a `50% 50%` tombe dedans au pixel. Le texte, lui,
+     s'affiche normalement et reste aligne sur la ligne de base. */
+  .heros-avant-mot,
+  .heros-apres-mot {
+    line-height: 0;
+  }
+
+  .heros-o {
+    box-sizing: content-box;
+    display: inline-block;
+    width: 0.3em;
+    height: 0.34em;
+    margin: 0 0.03em;
+    border-style: solid;
+    border-color: currentColor;
+    /* Fin en haut et en bas, epais sur les cotes : c'est ce contraste
+       d'epaisseur qui fait lire un « o » de police a empattements plutot
+       qu'un rond. */
+    border-width: 0.052em 0.105em;
+    border-radius: 50%;
+  }
+
   @supports (animation-timeline: scroll()) {
     @media (min-width: 1024px) {
       /* La piste est plus haute que l'ecran : c'est cette difference — ici
@@ -719,28 +810,53 @@ const partenaires = [
         height: 180vh;
       }
 
+      /* Le bandeau de navigation est colle en haut et opaque : si le cadre
+         faisait 100vh, ses 68 px superieurs seraient masques en permanence et
+         son bas — donc l'indicateur « Defiler » — passerait sous la fenetre.
+         Le cadre occupe donc la hauteur restante, et se colle juste dessous. */
       .heros-cadre {
+        --entete: 4.25rem;
         position: sticky;
-        top: 0;
+        top: var(--entete);
+        height: calc(100vh - var(--entete));
+        /* Rayon de depart : de quoi couvrir le contre-poincon de l'anneau.
+           Legerement plus grand que lui — le debord passe sous la bordure
+           doree, qui est peinte par-dessus la video. */
+        --lucarne-r: 0.64rem;
+        --lucarne-y: 50%;
+      }
+      @media (min-width: 1280px) {
+        .heros-cadre {
+          --lucarne-r: 0.77rem;
+        }
       }
 
-      /* Le rayon est en pourcentage aux deux bouts, pour que l'interpolation
-         reste dans la meme unite. Un rayon de 75 % couvre toujours l'ecran :
-         la reference du pourcentage vaut diagonale / racine(2), et il faut
-         diagonale / 2, soit 70,7 % — quel que soit le format de la fenetre. */
+      /* Transparent tant que la lucarne est petite, opaque quand elle est
+         grande. */
+      .heros-voile {
+        opacity: 0;
+        animation: voile-monte linear both;
+        animation-timeline: scroll(root block);
+        animation-range: 12vh 55vh;
+      }
+
+      /* Les deux bouts sont des longueurs — rem d'un cote, vmax de l'autre —
+         pour que l'interpolation soit garantie. 110vmax couvre toujours
+         l'ecran : il faut la demi-diagonale, soit au pire 71 % du plus grand
+         cote. */
       .heros-fenetre {
-        clip-path: circle(6% at 50% 50%);
+        clip-path: circle(var(--lucarne-r) at 50% var(--lucarne-y));
         animation: fenetre-ouvre linear both;
         animation-timeline: scroll(root block);
         animation-range: 0 65vh;
       }
 
-      /* Le reste de la phrase s'efface, « avenir » reste. Le titre du heros le
-         reprend juste apres. */
+      /* Le reste de la phrase s'efface ; « espoir » reste pose sur le paysage
+         jusqu'au bout, et le titre du heros le reprend juste apres. */
       .heros-contour {
         animation: intro-efface linear both;
         animation-timeline: scroll(root block);
-        animation-range: 30vh 60vh;
+        animation-range: 25vh 55vh;
       }
 
       .heros-fleche {
@@ -782,35 +898,21 @@ const partenaires = [
     }
   }
 
-  /* Ce qui fait vivre la fenetre de Farm Africa, ce n'est pas qu'elle contienne
-     une video : c'est que l'image y bouge. Une derive lente sur la photo donne
-     la meme sensation sans les 3,75 Mo — et sans rien demander au client.
-     20 secondes, aller-retour : assez lent pour qu'on ne voie pas le mouvement,
-     assez present pour que l'image ne soit pas morte. */
-  @media (prefers-reduced-motion: no-preference) {
-    .heros-fenetre img {
-      animation: fenetre-derive 20s ease-in-out infinite alternate;
-    }
-  }
-
-  @keyframes fenetre-derive {
-    from {
-      transform: scale(1.14);
-    }
-    to {
-      transform: scale(1);
-    }
-  }
-
   @keyframes fenetre-ouvre {
     to {
-      clip-path: circle(75% at 50% 50%);
+      clip-path: circle(110vmax at 50% var(--lucarne-y));
     }
   }
 
   @keyframes intro-efface {
     to {
       opacity: 0;
+    }
+  }
+
+  @keyframes voile-monte {
+    to {
+      opacity: 0.5;
     }
   }
 </style>
