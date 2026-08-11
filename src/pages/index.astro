@@ -97,7 +97,7 @@ const partenaires = [
     <div class="heros-cadre relative overflow-hidden">
       <div class="heros-phrase absolute inset-0 px-8 py-24">
         <p
-          class="heros-contour max-w-4xl text-balance self-end text-center font-serif text-6xl leading-[1.15] text-paper xl:text-7xl"
+          class="heros-contour max-w-4xl text-balance font-titre self-end text-center leading-[1.15] text-paper"
         >
           Et s’il existait un
         </p>
@@ -112,7 +112,7 @@ const partenaires = [
             grandit au defilement, il grandit AUTOUR de la lucarne, jamais a
             cote. L'ordre de lecture reste « esp o ir » pour un lecteur
             d'ecran. */}
-        <p class="heros-ligne-mot font-serif text-6xl text-gold xl:text-7xl">
+        <p class="heros-ligne-mot font-titre text-accent">
           <span class="heros-o">
             <span class="heros-avant-mot">esp</span>
             <span class="sr-only">o</span>
@@ -143,7 +143,7 @@ const partenaires = [
         </p>
 
         <p
-          class="heros-contour max-w-4xl text-balance self-start text-center font-serif text-6xl leading-[1.15] text-paper xl:text-7xl"
+          class="heros-contour max-w-4xl text-balance font-titre self-start text-center leading-[1.15] text-paper"
         >
           pour chaque enfant du département de
           <span class="whitespace-nowrap">Saint-Louis&nbsp;?</span>
@@ -157,14 +157,20 @@ const partenaires = [
         Défiler
       </div>
 
-      {/* Le titre arrive quand la video occupe l'ecran, en bas a gauche —
-          c'est la place qu'il tient chez Farm Africa, et un seul mot y est en
-          accent. Ce sont les mots du Consortium : le titre du heros, juste en
-          dessous, les reprend. Volontairement un `p` et non un `h1` : la page
-          n'en a qu'un seul, celui du heros. */}
+      {/* Le voile du bas. La video n'est pas maitrisee image par image — le
+          plan des femmes a la recolte est en plein soleil — et un titre blanc
+          pose dessus deviendrait illisible sur une image claire. Le degrade ne
+          couvre que le tiers bas, la ou le titre se trouve. */}
+      <div class="heros-degrade" aria-hidden="true"></div>
+
+      {/* Le titre arrive quand la video occupe l'ecran, en bas a gauche : c'est
+          la place qu'il tient chez Farm Africa, et un seul mot y est en accent.
+          Meme texte que le titre du heros juste en dessous — demande de Saibo
+          le 11/08. Volontairement un `p` et non un `h1` : la page n'en garde
+          qu'un seul, celui du heros. */}
       <p class="heros-titre">
-        Ensemble, nous semons l’espoir.<br />
-        Ensemble, nous semons <span class="text-gold">l’avenir.</span>
+        Nous nourrissons l’espoir,<br />
+        Nous nourrissons <span class="text-accent">l’avenir.</span>
       </p>
     </div>
   </div>
@@ -191,12 +197,14 @@ const partenaires = [
       <div
         class="heros-panneau relative bg-forest px-5 py-14 sm:px-8 lg:col-span-7 lg:col-start-1 lg:row-start-1 lg:flex lg:flex-col lg:justify-center lg:py-20 lg:pl-[max(1.25rem,calc((100vw-72rem)/2))] lg:pr-16"
       >
-        <p class="font-mono text-xs uppercase tracking-[0.2em] text-gold">
+        <p class="font-mono text-xs uppercase tracking-[0.2em] text-accent">
           Santé · Nutrition · Autonomisation
         </p>
-        <h1 class="mt-6 max-w-2xl font-serif text-4xl leading-[1.08] sm:text-5xl xl:text-6xl">
-          Ensemble, nous semons l’espoir.
-          Ensemble, nous semons <em class="heros-accent not-italic text-gold">l’avenir.</em>
+        <h1
+          class="mt-6 max-w-2xl font-titre text-4xl font-semibold leading-[1.06] tracking-[-0.015em] sm:text-5xl xl:text-6xl"
+        >
+          Nous nourrissons l’espoir,<br />
+          Nous nourrissons <em class="heros-accent not-italic text-accent">l’avenir.</em>
         </h1>
         <p class="mt-7 max-w-xl text-lg leading-relaxed text-paper/85">
           Le Consortium Dëkkandoo agit dans les six communes du département de
@@ -206,7 +214,7 @@ const partenaires = [
         <div class="mt-9 flex flex-wrap gap-3">
           <a
             href="#programmes"
-            class="rounded-full bg-gold px-7 py-3 font-medium text-ink transition-colors hover:bg-gold-2"
+            class="rounded-full bg-accent px-7 py-3 font-medium text-ink transition-colors hover:bg-accent-2"
           >
             Découvrir nos programmes
           </a>
@@ -228,7 +236,7 @@ const partenaires = [
         {
           chiffres.map(({ n, l }) => (
             <div class="px-2 text-center lg:border-l lg:border-paper/15 lg:first:border-l-0">
-              <dt class="font-mono text-3xl text-gold sm:text-4xl">{n}</dt>
+              <dt class="font-mono text-3xl text-accent sm:text-4xl">{n}</dt>
               <dd class="mx-auto mt-2 max-w-[16rem] text-sm text-paper/75">{l}</dd>
             </div>
           ))
@@ -263,7 +271,7 @@ const partenaires = [
         }
       </div>
 
-      <figure class="mt-12 border-l-2 border-gold pl-6">
+      <figure class="mt-12 border-l-2 border-accent pl-6">
         <blockquote class="max-w-3xl font-serif text-xl leading-relaxed text-forest sm:text-2xl">
           « Aujourd’hui encore, la malnutrition touche de nombreuses familles à
           Saint-Louis. Les conséquences sont graves : retard de croissance,
@@ -308,7 +316,7 @@ const partenaires = [
       </div>
 
       <figure class="lg:col-span-7">
-        <p class="font-mono text-xs uppercase tracking-[0.2em] text-gold">
+        <p class="font-mono text-xs uppercase tracking-[0.2em] text-accent">
           Le mot du coordonnateur
         </p>
         <blockquote class="mt-6 font-serif text-2xl leading-snug sm:text-4xl">
@@ -328,7 +336,7 @@ const partenaires = [
             href="https://fr.allafrica.com/stories/202602280036.html"
             target="_blank"
             rel="noopener noreferrer"
-            class="mt-3 inline-block font-mono text-xs text-gold hover:underline"
+            class="mt-3 inline-block font-mono text-xs text-accent hover:underline"
           >
             Sud Quotidien, 28 février 2026 ↗
           </a>
@@ -383,7 +391,7 @@ const partenaires = [
         <article class="flex flex-col rounded-xl border border-line bg-card">
           <div class="flex-1 p-8">
             <span
-              class="inline-block rounded-full bg-gold px-3 py-1 font-mono text-xs text-ink"
+              class="inline-block rounded-full bg-accent px-3 py-1 font-mono text-xs text-ink"
             >
               Lancé en 2026
             </span>
@@ -434,7 +442,7 @@ const partenaires = [
         <div
           class="relative -mt-24 max-w-xl bg-forest p-8 text-paper sm:-mt-32 sm:p-10"
         >
-          <p class="font-mono text-xs uppercase tracking-[0.2em] text-gold">Sur le terrain</p>
+          <p class="font-mono text-xs uppercase tracking-[0.2em] text-accent">Sur le terrain</p>
           <p class="mt-4 font-serif text-2xl leading-snug sm:text-3xl">
             Les femmes accompagnées ne reçoivent pas une aide : elles conduisent
             une activité.
@@ -727,7 +735,7 @@ const partenaires = [
   }
 
   /* Pas de `to` : la valeur d'arrivee est celle de l'element, c'est-a-dire l'or
-     de `text-gold` deja pose dans le balisage. */
+     de `text-accent` deja pose dans le balisage. */
   @keyframes heros-or {
     from {
       color: var(--color-paper);
@@ -794,6 +802,8 @@ const partenaires = [
   .heros-contour,
   .heros-ligne-mot {
     font-size: clamp(2rem, min(7vh, 5.5vw), 4.5rem);
+    font-weight: 600;
+    letter-spacing: -0.015em;
   }
 
   /* L'anneau est le seul element en flux : il suffit de le centrer. */
@@ -805,23 +815,23 @@ const partenaires = [
 
   /* La boite du « o » complet — trait compris. Tout le reste du mot s'accroche
      dessus. */
+  /* Redessine pour une police geometrique : le « o » d'Outfit est presque
+     circulaire et son trait est d'epaisseur constante, la ou celui d'une police
+     a empattements etait ovale et module. */
   .heros-o {
     position: relative;
     display: block;
-    width: 0.51em;
-    height: 0.444em;
+    width: 0.52em;
+    height: 0.52em;
   }
 
-  /* Le trait dore. Fin en haut et en bas, epais sur les cotes : c'est ce
-     contraste d'epaisseur qui fait lire un « o » de police a empattements
-     plutot qu'un rond. Pose apres la lucarne dans le balisage, donc peint
-     par-dessus la video — la video occupe le contre-poincon, le trait fait
-     la lettre. */
+  /* Le trait dore, d'epaisseur constante comme dans une police geometrique.
+     Pose apres la lucarne dans le balisage, donc peint par-dessus la video :
+     la video occupe le contre-poincon, le trait fait la lettre. */
   .heros-anneau {
     position: absolute;
     inset: 0;
-    border: solid currentColor;
-    border-width: 0.052em 0.105em;
+    border: 0.085em solid currentColor;
     border-radius: 50%;
   }
 
@@ -886,12 +896,15 @@ const partenaires = [
         height: 100vh;
       }
 
-      /* Le titre n'apparait qu'une fois la lucarne grande ouverte. */
-      .heros-titre {
+      /* Le titre et son voile n'apparaissent qu'une fois la lucarne grande
+         ouverte. Le voile suit exactement le titre : avant, l'ecran d'intro
+         doit rester un aplat propre. */
+      .heros-titre,
+      .heros-degrade {
         opacity: 0;
         animation: titre-arrive linear both;
         animation-timeline: scroll(root block);
-        animation-range: 34vh 52vh;
+        animation-range: 32vh 50vh;
       }
 
       /* LE ZOOM. Le mot grandit, et comme la lucarne est dans l'anneau, elle
@@ -979,16 +992,27 @@ const partenaires = [
 
   /* Aligne sur la meme marge que le heros juste en dessous, pour que les deux
      titres tombent sur la meme verticale quand on passe de l'un a l'autre. */
+  .heros-degrade {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 48%;
+    background: linear-gradient(to top, rgb(15 26 20 / 88%), rgb(15 26 20 / 55%) 38%, transparent);
+    pointer-events: none;
+  }
+
   .heros-titre {
     position: absolute;
-    bottom: 14vh;
+    bottom: 11vh;
     left: max(1.25rem, calc((100vw - 72rem) / 2));
-    max-width: 22ch;
-    font-family: var(--font-serif);
-    font-size: clamp(1.75rem, min(6vh, 4.4vw), 3.5rem);
-    line-height: 1.12;
+    max-width: 18ch;
+    font-family: var(--font-titre);
+    font-weight: 600;
+    font-size: clamp(2.25rem, min(9.5vh, 6.2vw), 5.5rem);
+    line-height: 1.04;
+    letter-spacing: -0.015em;
     color: var(--color-paper);
-    text-shadow: 0 2px 24px rgb(23 35 28 / 55%);
   }
 
   @keyframes titre-arrive {

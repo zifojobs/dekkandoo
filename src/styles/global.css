@@ -29,13 +29,42 @@
   --color-leaf: #4e9c6e;    /* accents, liens */
   --color-earth: #7a4a2b;
   --color-earth-2: #a9714a;
-  --color-gold: #c88f22;
-  --color-gold-2: #f5ead2;
+  /* L'ACCENT VIENT DU LOGO depuis le 11/08. La maquette utilisait un or
+     (#c88f22) qui n'appartenait a aucune des deux couleurs de la marque ;
+     Saibo a demande ses couleurs a lui.
 
-  /* Couleurs propres au LOGO — differentes des couleurs d'interface, et
-     laissees intactes : on ne retouche jamais le logo d'un client. */
+     Mais ni l'une ni l'autre ne peut servir telle quelle, et c'est mesure :
+     l'accent se pose TOUJOURS sur un fond sombre ici — les 22 emplois sont sur
+     le panneau vert, l'ecran d'intro ou un bandeau. Or sur le vert #1f5138, le
+     brun du logo donne un contraste de 1,02 (il a exactement la meme
+     luminosite que le fond : le mot disparaitrait) et le vert du logo 2,43,
+     illisible aussi. L'or, lui, donnait 3,23.
+
+     La valeur retenue est donc le VERT DU LOGO ECLAIRCI, meme teinte, meme
+     famille, monte en luminosite jusqu'a passer : 4,06 sur le panneau vert et
+     7,19 sur l'ecran d'intro, la ou le seuil d'un grand titre est de 3,0. Le
+     logo, lui, n'est pas retouche : ses couleurs exactes restent ci-dessous. */
+  --color-accent: #3dc46a;
+  --color-accent-2: #5fd98f;
+
+  /* Couleurs EXACTES du logo, relevees au pixel. Servent au logo et aux
+     surfaces claires ; on ne retouche jamais le logo d'un client. */
   --color-logo-vert: #0b983a;
   --color-logo-brun: #683c10;
+
+  /* La police des grands titres. C'est le seul fichier que ce site telecharge,
+     et il faut le dire : la regle initiale etait « zero police a telecharger ».
+     Saibo a demande le 11/08 une police plus imposante, du genre de celle de
+     farmafrica.org. Outfit est geometrique, elle tient a tres grande taille, et
+     elle est libre.
+
+     Ce que ca coute est borne : UN fichier variable de 31,5 Ko couvrant tous
+     les graisses de 400 a 800, sous-jeu latin, servi depuis notre domaine et
+     non depuis Google. `font-display: swap` fait que le texte s'affiche
+     immediatement dans la police de l'appareil et se remplace ensuite : sur un
+     reseau lent, rien n'est jamais invisible. Le texte courant, lui, ne
+     telecharge toujours rien. */
+  --font-titre: "Outfit", ui-sans-serif, system-ui, sans-serif;
 
   --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
     Georgia, ui-serif, serif;
@@ -43,6 +72,14 @@
     "Helvetica Neue", sans-serif;
   --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", "Segoe UI Mono", Consolas,
     monospace;
+}
+
+@font-face {
+  font-family: "Outfit";
+  src: url("/fonts/outfit-latin.woff2") format("woff2");
+  font-weight: 400 800;
+  font-style: normal;
+  font-display: swap;
 }
 
 html {
@@ -110,6 +147,71 @@ body {
 }
 .entete--sur-fond .entete-logo--clair {
   display: block;
+}
+
+/* ---- La barre d'ordinateur : les six rubriques restent visibles ---- */
+.entete-bureau {
+  display: none;
+  align-items: center;
+  gap: 1.25rem;
+}
+@media (min-width: 1024px) {
+  .entete-bureau {
+    display: flex;
+  }
+  /* Et le bouton a trois barres disparait : il ne sert que sur telephone. */
+  .menu {
+    display: none;
+  }
+}
+
+.entete-liens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+.entete-liens a {
+  color: var(--color-ink-2);
+  transition: color 0.2s ease;
+}
+.entete-liens a:hover {
+  color: var(--color-forest);
+}
+.entete-liens a[aria-current='page'] {
+  font-weight: 600;
+  color: var(--color-forest);
+}
+.entete--sur-fond .entete-liens a {
+  color: color-mix(in srgb, var(--color-paper) 85%, transparent);
+}
+.entete--sur-fond .entete-liens a:hover,
+.entete--sur-fond .entete-liens a[aria-current='page'] {
+  color: var(--color-paper);
+}
+
+.entete-filet {
+  width: 1px;
+  height: 1.5rem;
+  background-color: var(--color-line);
+}
+.entete--sur-fond .entete-filet {
+  background-color: color-mix(in srgb, var(--color-paper) 35%, transparent);
+}
+
+.entete-tel {
+  white-space: nowrap;
+  border-radius: 9999px;
+  background-color: var(--color-accent);
+  padding: 0.55rem 1.1rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  transition: background-color 0.2s ease;
+}
+.entete-tel:hover {
+  background-color: var(--color-accent-2);
 }
 
 /* Le bouton. `list-style: none` et le pseudo-element WebKit retirent le
@@ -208,6 +310,15 @@ body {
   display: flex;
 }
 
+.menu-contenu {
+  display: flex;
+  width: 100%;
+  max-width: 28rem;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
 .menu-liste {
   display: flex;
   flex-direction: column;
@@ -216,19 +327,32 @@ body {
 }
 .menu-liste a {
   display: block;
-  padding: 0.5rem 0.75rem;
-  font-family: var(--font-serif);
-  font-size: clamp(1.75rem, 6vw, 3rem);
-  line-height: 1.2;
+  padding: 0.4rem 0.75rem;
+  font-family: var(--font-titre);
+  font-size: clamp(1.5rem, 7vw, 2.5rem);
+  font-weight: 600;
+  line-height: 1.15;
   color: var(--color-paper);
   transition: color 0.2s ease;
 }
+
+.menu-tel {
+  border-radius: 9999px;
+  background-color: var(--color-accent);
+  padding: 0.85rem 1.6rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  transition: background-color 0.2s ease;
+}
+.menu-tel:hover {
+  background-color: var(--color-accent-2);
+}
 .menu-liste a:hover,
 .menu-liste a:focus-visible {
-  color: var(--color-gold);
+  color: var(--color-accent);
 }
 .menu-liste a[aria-current='page'] {
-  color: var(--color-gold);
+  color: var(--color-accent);
 }
 
 /* Le seul geste d'animation de la page, conformement a la regle n.2 du cahier

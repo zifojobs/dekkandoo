@@ -158,57 +158,99 @@ const schema = {
     </a>
 
     {/*
-      EN-TETE — le menu est un bouton a trois barres a TOUTES les largeurs, y
-      compris sur ordinateur. C'est le parti de farmafrica.org, demande par
-      Saibo le 11/08.
+      EN-TETE — deux tenues selon la largeur, et c'est l'arbitrage de Saibo le
+      11/08 : les six rubriques restent VISIBLES sur ordinateur, le bouton a
+      trois barres ne sert que sur telephone. C'est le bon sens pour un site
+      qu'un bailleur consulte : cacher « Notre impact » derriere un clic sur un
+      grand ecran ne fait gagner que de la place dont on dispose.
 
-      Il est bati sur `<details>` et non sur un script : l'ouverture et la
-      fermeture sont assurees par le navigateur, le clavier fonctionne sans
-      qu'on code quoi que ce soit, et le menu reste utilisable JavaScript
-      coupe. C'est la meme regle que partout ailleurs sur ce site.
+      Le menu du telephone est bati sur `<details>` et non sur un script :
+      l'ouverture, la fermeture et le clavier sont assures par le navigateur, et
+      il reste utilisable JavaScript coupe — comme le reste de ce site.
 
-      ⚠️ Ce que ce choix coute, et il faut le savoir : sur ordinateur, les six
-      rubriques passent derriere un clic. Un bailleur qui arrive sur le site ne
-      voit plus « Notre impact » ni « Partenaires » d'un coup d'oeil.
+      Reseaux et telephone figurent des DEUX cotes : dans la barre sur
+      ordinateur, dans le panneau sur telephone.
     */}
     <header class:list={['entete', enteteSurFond && 'entete--sur-fond']}>
-      <div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
-        <a href="/" class="flex items-center" aria-label="Consortium Dëkkandoo, accueil">
+      <div class="mx-auto flex max-w-6xl items-center justify-between gap-6 px-5 py-4">
+        <a href="/" class="flex shrink-0 items-center" aria-label="Consortium Dëkkandoo, accueil">
           <img
             src="/logo/logo-dekkandoo-256.png"
             alt="Consortium Dëkkandoo"
             width="112"
             height="92"
-            class="entete-logo entete-logo--sombre h-11 w-auto"
+            class="entete-logo entete-logo--sombre h-12 w-auto lg:h-[4.5rem]"
           />
           <img
             src="/logo/logo-dekkandoo-blanc-512.png"
             alt="Consortium Dëkkandoo"
             width="160"
             height="132"
-            class="entete-logo entete-logo--clair h-11 w-auto"
+            class="entete-logo entete-logo--clair h-12 w-auto lg:h-[4.5rem]"
           />
         </a>
 
+        {/* Barre d'ordinateur */}
+        <div class="entete-bureau">
+          <nav aria-label="Navigation principale">
+            <ul class="entete-liens">
+              {
+                rubriques.map(({ url: lien, nom }) => (
+                  <li>
+                    <a href={lien} aria-current={estActive(lien) ? 'page' : undefined}>
+                      {nom}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </nav>
+
+          <span class="entete-filet" aria-hidden="true"></span>
+
+          <Reseaux
+            comptes={CONSORTIUM_RESEAUX}
+            entite="Consortium Dëkkandoo"
+            ton={enteteSurFond ? 'clair' : 'sombre'}
+            compact
+          />
+
+          <a href={`tel:${CONSORTIUM.telUrl}`} class="entete-tel">{CONSORTIUM.tel}</a>
+        </div>
+
+        {/* Menu du telephone */}
         <details class="menu">
           <summary class="menu-bouton" aria-label="Ouvrir le menu">
             <span class="menu-barres" aria-hidden="true"><i></i><i></i><i></i></span>
           </summary>
 
           <div class="menu-panneau">
-            <nav aria-label="Navigation principale">
-              <ul class="menu-liste">
-                {
-                  rubriques.map(({ url: lien, nom }) => (
-                    <li>
-                      <a href={lien} aria-current={estActive(lien) ? 'page' : undefined}>
-                        {nom}
-                      </a>
-                    </li>
-                  ))
-                }
-              </ul>
-            </nav>
+            <div class="menu-contenu">
+              <nav aria-label="Navigation principale">
+                <ul class="menu-liste">
+                  {
+                    rubriques.map(({ url: lien, nom }) => (
+                      <li>
+                        <a href={lien} aria-current={estActive(lien) ? 'page' : undefined}>
+                          {nom}
+                        </a>
+                      </li>
+                    ))
+                  }
+                </ul>
+              </nav>
+
+              <a href={`tel:${CONSORTIUM.telUrl}`} class="menu-tel">
+                Appeler le {CONSORTIUM.tel}
+              </a>
+
+              <Reseaux
+                comptes={CONSORTIUM_RESEAUX}
+                entite="Consortium Dëkkandoo"
+                ton="clair"
+                class="justify-center"
+              />
+            </div>
           </div>
         </details>
       </div>
