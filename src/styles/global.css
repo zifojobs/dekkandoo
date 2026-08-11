@@ -55,6 +55,182 @@ body {
   font-family: var(--font-sans);
 }
 
+/* ---------------------------------------------------------------------------
+   L'EN-TETE ET SON MENU A TROIS BARRES
+
+   Bati sur `<details>` : le navigateur assure l'ouverture, la fermeture, le
+   clavier et le lecteur d'ecran. Aucun script, et le menu marche JavaScript
+   coupe — comme le reste de ce site.
+
+   Deux tenues. Par defaut l'en-tete occupe sa bande creme, en haut de page.
+   Avec `--sur-fond` (accueil seulement) il se pose PAR-DESSUS l'ecran d'intro
+   sombre : fond transparent, logo blanc, barres blanches. C'est la tenue de
+   farmafrica.org.
+   --------------------------------------------------------------------------- */
+.entete {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background-color: color-mix(in srgb, var(--color-paper) 95%, transparent);
+  border-bottom: 1px solid var(--color-line);
+  backdrop-filter: blur(8px);
+}
+
+.entete--sur-fond {
+  position: absolute;
+  inset: 0 0 auto;
+  background: none;
+  border-bottom: 0;
+  backdrop-filter: none;
+}
+
+/* Voile degrade sous l'en-tete pose sur fond : le logo blanc et les trois
+   barres doivent rester lisibles quelle que soit l'image en dessous — et
+   l'ecran d'intro finit sur une video en plein cadre, dont on ne maitrise pas
+   la luminosite image par image. */
+.entete--sur-fond::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 180%;
+  background: linear-gradient(to bottom, rgb(23 35 28 / 55%), transparent);
+  pointer-events: none;
+}
+.entete > div {
+  position: relative;
+}
+
+.entete-logo--clair {
+  display: none;
+}
+.entete--sur-fond .entete-logo--sombre {
+  display: none;
+}
+.entete--sur-fond .entete-logo--clair {
+  display: block;
+}
+
+/* Le bouton. `list-style: none` et le pseudo-element WebKit retirent le
+   triangle que les navigateurs dessinent devant un `summary`. */
+.menu-bouton {
+  position: relative;
+  z-index: 70;
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  list-style: none;
+  border-radius: 9999px;
+}
+.menu-bouton::-webkit-details-marker {
+  display: none;
+}
+.menu-bouton:focus-visible {
+  outline: 2px solid var(--color-leaf);
+  outline-offset: 2px;
+}
+
+.menu-barres {
+  position: relative;
+  display: block;
+  width: 1.6rem;
+  height: 1.1rem;
+}
+.menu-barres i {
+  position: absolute;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  border-radius: 2px;
+  background-color: var(--color-ink);
+  transition:
+    transform 0.25s ease,
+    opacity 0.2s ease,
+    top 0.25s ease;
+}
+.menu-barres i:nth-child(1) {
+  top: 0;
+}
+.menu-barres i:nth-child(2) {
+  top: 50%;
+  margin-top: -1px;
+}
+.menu-barres i:nth-child(3) {
+  top: calc(100% - 2px);
+}
+.entete--sur-fond .menu-barres i {
+  background-color: var(--color-paper);
+}
+
+/* Ouvert, les trois barres deviennent une croix. Les deux extremes se
+   rejoignent au milieu et pivotent, celle du centre disparait. */
+.menu[open] .menu-barres i:nth-child(1) {
+  top: 50%;
+  margin-top: -1px;
+  transform: rotate(45deg);
+}
+.menu[open] .menu-barres i:nth-child(2) {
+  opacity: 0;
+}
+.menu[open] .menu-barres i:nth-child(3) {
+  top: 50%;
+  margin-top: -1px;
+  transform: rotate(-45deg);
+}
+.menu[open] .menu-barres i {
+  background-color: var(--color-paper);
+}
+
+/* Le panneau couvre l'ecran, comme chez eux. Le bouton reste au-dessus (z-70)
+   pour qu'un second clic referme. */
+.menu-panneau {
+  /* Masque explicitement, et ce n'est pas une precaution inutile : un panneau
+     en `position: fixed` echappe au masquage qu'un `<details>` ferme applique
+     a son contenu. Mesure a l'appui, la liste occupait 351 a 547 px pour une
+     largeur utile de 489 — le telephone debordait a droite, et le bouton du
+     menu se retrouvait hors champ. */
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+  background-color: var(--color-forest);
+  padding: 6rem 1.5rem 3rem;
+}
+
+.menu[open] .menu-panneau {
+  display: flex;
+}
+
+.menu-liste {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  text-align: center;
+}
+.menu-liste a {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  font-family: var(--font-serif);
+  font-size: clamp(1.75rem, 6vw, 3rem);
+  line-height: 1.2;
+  color: var(--color-paper);
+  transition: color 0.2s ease;
+}
+.menu-liste a:hover,
+.menu-liste a:focus-visible {
+  color: var(--color-gold);
+}
+.menu-liste a[aria-current='page'] {
+  color: var(--color-gold);
+}
+
 /* Le seul geste d'animation de la page, conformement a la regle n.2 du cahier
    de references : une apparition douce des sections au defilement.
 

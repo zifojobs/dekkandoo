@@ -18,6 +18,12 @@ interface Props {
   ogType?: 'website' | 'article';
   /** Bloc JSON-LD supplementaire, deja serialise. */
   schemaSupplementaire?: string;
+  /**
+   * L'en-tete se pose SUR un premier ecran sombre au lieu d'occuper sa propre
+   * bande. Logo blanc, fond transparent. Reserve a l'accueil, seule page qui
+   * commence par l'ecran d'intro.
+   */
+  enteteSurFond?: boolean;
 }
 
 const {
@@ -27,6 +33,7 @@ const {
   image = '/partage.png',
   ogType = 'website',
   schemaSupplementaire,
+  enteteSurFond = false,
 } = Astro.props;
 
 const url = new URL(Astro.url.pathname, Astro.site);
@@ -150,37 +157,60 @@ const schema = {
       Aller au contenu
     </a>
 
-    <header class="sticky top-0 z-40 border-b border-line bg-paper/95 backdrop-blur">
-      <div
-        class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-8 gap-y-3 px-5 py-3"
-      >
-        <a href="/" class="flex items-center gap-3" aria-label="Consortium Dëkkandoo, accueil">
+    {/*
+      EN-TETE — le menu est un bouton a trois barres a TOUTES les largeurs, y
+      compris sur ordinateur. C'est le parti de farmafrica.org, demande par
+      Saibo le 11/08.
+
+      Il est bati sur `<details>` et non sur un script : l'ouverture et la
+      fermeture sont assurees par le navigateur, le clavier fonctionne sans
+      qu'on code quoi que ce soit, et le menu reste utilisable JavaScript
+      coupe. C'est la meme regle que partout ailleurs sur ce site.
+
+      ⚠️ Ce que ce choix coute, et il faut le savoir : sur ordinateur, les six
+      rubriques passent derriere un clic. Un bailleur qui arrive sur le site ne
+      voit plus « Notre impact » ni « Partenaires » d'un coup d'oeil.
+    */}
+    <header class:list={['entete', enteteSurFond && 'entete--sur-fond']}>
+      <div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
+        <a href="/" class="flex items-center" aria-label="Consortium Dëkkandoo, accueil">
           <img
             src="/logo/logo-dekkandoo-256.png"
             alt="Consortium Dëkkandoo"
             width="112"
             height="92"
-            class="h-11 w-auto"
+            class="entete-logo entete-logo--sombre h-11 w-auto"
+          />
+          <img
+            src="/logo/logo-dekkandoo-blanc-512.png"
+            alt="Consortium Dëkkandoo"
+            width="160"
+            height="132"
+            class="entete-logo entete-logo--clair h-11 w-auto"
           />
         </a>
 
-        <nav aria-label="Navigation principale">
-          <ul class="flex flex-wrap gap-x-5 gap-y-1 text-sm font-medium">
-            {
-              rubriques.map(({ url: lien, nom }) => (
-                <li>
-                  <a
-                    href={lien}
-                    aria-current={estActive(lien) ? 'page' : undefined}
-                    class="text-ink-2 transition-colors hover:text-forest aria-[current=page]:font-semibold aria-[current=page]:text-forest"
-                  >
-                    {nom}
-                  </a>
-                </li>
-              ))
-            }
-          </ul>
-        </nav>
+        <details class="menu">
+          <summary class="menu-bouton" aria-label="Ouvrir le menu">
+            <span class="menu-barres" aria-hidden="true"><i></i><i></i><i></i></span>
+          </summary>
+
+          <div class="menu-panneau">
+            <nav aria-label="Navigation principale">
+              <ul class="menu-liste">
+                {
+                  rubriques.map(({ url: lien, nom }) => (
+                    <li>
+                      <a href={lien} aria-current={estActive(lien) ? 'page' : undefined}>
+                        {nom}
+                      </a>
+                    </li>
+                  ))
+                }
+              </ul>
+            </nav>
+          </div>
+        </details>
       </div>
     </header>
 

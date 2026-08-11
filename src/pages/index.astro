@@ -61,6 +61,7 @@ const partenaires = [
   titre="Accueil"
   description="Le Consortium Dëkkandoo agit dans les six communes du département de Saint-Louis pour la nutrition infantile, l'accès aux soins et l'autonomisation économique des femmes."
   organisation
+  enteteSurFond
 >
   {/*
     HEROS — dispositif emprunte a One Acre Fund (cahier de references, n.6) :
@@ -155,6 +156,16 @@ const partenaires = [
       >
         Défiler
       </div>
+
+      {/* Le titre arrive quand la video occupe l'ecran, en bas a gauche —
+          c'est la place qu'il tient chez Farm Africa, et un seul mot y est en
+          accent. Ce sont les mots du Consortium : le titre du heros, juste en
+          dessous, les reprend. Volontairement un `p` et non un `h1` : la page
+          n'en a qu'un seul, celui du heros. */}
+      <p class="heros-titre">
+        Ensemble, nous semons l’espoir.<br />
+        Ensemble, nous semons <span class="text-gold">l’avenir.</span>
+      </p>
     </div>
   </div>
 
@@ -867,15 +878,20 @@ const partenaires = [
         height: 180vh;
       }
 
-      /* Le bandeau de navigation est colle en haut et opaque : si le cadre
-         faisait 100vh, ses 68 px superieurs seraient masques en permanence et
-         son bas — donc l'indicateur « Defiler » — passerait sous la fenetre.
-         Le cadre occupe donc la hauteur restante, et se colle juste dessous. */
+      /* L'en-tete se pose PAR-DESSUS cet ecran depuis le 11/08 : il n'occupe
+         plus de bande, le cadre reprend donc toute la hauteur. */
       .heros-cadre {
-        --entete: 4.25rem;
         position: sticky;
-        top: var(--entete);
-        height: calc(100vh - var(--entete));
+        top: 0;
+        height: 100vh;
+      }
+
+      /* Le titre n'apparait qu'une fois la lucarne grande ouverte. */
+      .heros-titre {
+        opacity: 0;
+        animation: titre-arrive linear both;
+        animation-timeline: scroll(root block);
+        animation-range: 34vh 52vh;
       }
 
       /* LE ZOOM. Le mot grandit, et comme la lucarne est dans l'anneau, elle
@@ -958,6 +974,26 @@ const partenaires = [
   @keyframes mot-zoom {
     to {
       --s: 130;
+    }
+  }
+
+  /* Aligne sur la meme marge que le heros juste en dessous, pour que les deux
+     titres tombent sur la meme verticale quand on passe de l'un a l'autre. */
+  .heros-titre {
+    position: absolute;
+    bottom: 14vh;
+    left: max(1.25rem, calc((100vw - 72rem) / 2));
+    max-width: 22ch;
+    font-family: var(--font-serif);
+    font-size: clamp(1.75rem, min(6vh, 4.4vw), 3.5rem);
+    line-height: 1.12;
+    color: var(--color-paper);
+    text-shadow: 0 2px 24px rgb(23 35 28 / 55%);
+  }
+
+  @keyframes titre-arrive {
+    to {
+      opacity: 1;
     }
   }
 
