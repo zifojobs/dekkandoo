@@ -75,6 +75,56 @@ const partenaires = [
     L'accent unique — « l'avenir » en or — est repris de Farm Africa, et il est
     deja ecrit dans la maquette validee (<em> dans le H1).
   */}
+  {/*
+    ECRAN D'INTRO — le dispositif de farmafrica.org, releve dans leur code le
+    11/08 : une phrase centree dont UN mot est une fenetre ; au defilement la
+    fenetre s'ouvre jusqu'au plein ecran, puis le vrai heros arrive.
+
+    Ce qu'on leur emprunte : le geste. Ce qu'on ne leur emprunte pas : la
+    vidéo de 3,75 Mo — plus lourde que les 22 photos de ce site reunies — et
+    jQuery. Ici la fenetre s'ouvre sur une photo de terrain deja presente, et
+    l'ouverture est pilotee par le defilement en CSS seul.
+
+    Le mot choisi est « avenir » : c'est deja l'accent du H1 juste en dessous
+    (« Ensemble, nous semons l'avenir »). Il reste a l'ecran quand le reste de
+    la phrase s'efface, et le titre le reprend — les deux ecrans se tiennent.
+  */}
+  <div class="heros-piste">
+    <div class="heros-cadre relative h-screen overflow-hidden bg-ink">
+      {/* La fenetre : la photo occupe tout l'ecran, mais n'est visible qu'a
+          travers un cercle pose sur le mot. */}
+      <div class="heros-fenetre absolute inset-0">
+        <Photo
+          cle="champ-recolte"
+          tailles="100vw"
+          class="h-full w-full object-cover"
+        />
+        {/* Voile : sans lui, le mot en or devient illisible des que la photo
+            s'ouvre derriere lui. */}
+        <div class="absolute inset-0 bg-ink/40"></div>
+      </div>
+
+      <div class="relative flex h-full items-center justify-center px-8">
+        <p
+          class="max-w-4xl text-center font-serif text-5xl leading-[1.15] text-paper xl:text-6xl"
+        >
+          <span class="heros-contour block">Et s’il existait un</span>
+          <span class="heros-mot block py-2 text-gold">avenir</span>
+          <span class="heros-contour block"
+            >pour chaque enfant du département de Saint-Louis&nbsp;?</span
+          >
+        </p>
+      </div>
+
+      <div
+        class="heros-fleche absolute bottom-12 left-1/2 -translate-x-1/2 font-mono text-xs uppercase tracking-[0.2em] text-paper/70"
+        aria-hidden="true"
+      >
+        Défiler
+      </div>
+    </div>
+  </div>
+
   <section class="relative bg-forest text-paper">
     <div class="lg:grid lg:min-h-[34rem] lg:grid-cols-12 lg:items-stretch">
       {/* La photo. Sur mobile elle passe au-dessus du panneau. */}
@@ -631,6 +681,136 @@ const partenaires = [
   @keyframes heros-or {
     from {
       color: var(--color-paper);
+    }
+  }
+
+  /* ---------------------------------------------------------------------------
+     L'ECRAN D'INTRO — le dispositif de farmafrica.org.
+
+     Il n'existe QUE la ou le defilement peut reellement le piloter : grand
+     ecran, et navigateur qui sait rattacher une animation a la barre de
+     defilement. Partout ailleurs — telephone, navigateur plus ancien — la
+     piste n'est meme pas affichee et le visiteur arrive directement sur le
+     heros. C'est le meme arbitrage que Farm Africa, qui coupe son intro sous
+     1024 px ; la difference est qu'ici la degradation est propre : on ne sert
+     pas un ecran fige, on ne le sert pas du tout.
+
+     Zero JavaScript, ici encore : `animation-timeline` lie l'avancement de
+     l'animation a la position de defilement. Rien ne bouge tant que le
+     visiteur ne fait rien, et tout se rejoue quand il remonte — c'est ce qui
+     rend le geste visible, la ou une animation au chargement ne se voit qu'une
+     fois et seulement si on regardait.
+
+     Pas de garde-fou `prefers-reduced-motion` sur ce bloc, et c'est
+     deliberé : rien ne s'anime tout seul, c'est la main du visiteur qui
+     avance l'image. Le garde-fou reste sur le geste au chargement ci-dessus,
+     qui, lui, se declenche sans qu'on demande rien.
+     --------------------------------------------------------------------------- */
+  .heros-piste {
+    display: none;
+  }
+
+  @supports (animation-timeline: scroll()) {
+    @media (min-width: 1024px) {
+      /* La piste est plus haute que l'ecran : c'est cette difference — ici
+         80vh — qui donne sa duree au moment ou le cadre reste colle en haut. */
+      .heros-piste {
+        display: block;
+        height: 180vh;
+      }
+
+      .heros-cadre {
+        position: sticky;
+        top: 0;
+      }
+
+      /* Le rayon est en pourcentage aux deux bouts, pour que l'interpolation
+         reste dans la meme unite. Un rayon de 75 % couvre toujours l'ecran :
+         la reference du pourcentage vaut diagonale / racine(2), et il faut
+         diagonale / 2, soit 70,7 % — quel que soit le format de la fenetre. */
+      .heros-fenetre {
+        clip-path: circle(6% at 50% 50%);
+        animation: fenetre-ouvre linear both;
+        animation-timeline: scroll(root block);
+        animation-range: 0 65vh;
+      }
+
+      /* Le reste de la phrase s'efface, « avenir » reste. Le titre du heros le
+         reprend juste apres. */
+      .heros-contour {
+        animation: intro-efface linear both;
+        animation-timeline: scroll(root block);
+        animation-range: 30vh 60vh;
+      }
+
+      .heros-fleche {
+        animation: intro-efface linear both;
+        animation-timeline: scroll(root block);
+        animation-range: 0 18vh;
+      }
+
+      /* Le heros n'est plus la premiere chose a l'ecran : son geste passe du
+         chargement au defilement. Sinon il aurait fini de jouer bien avant
+         qu'on arrive dessus — exactement le defaut qui rendait l'animation
+         invisible. `auto` est la duree qu'exige une animation pilotee par le
+         defilement ; le decalage entre lignes se rejoue en decalant les
+         plages, les `animation-delay` n'ayant plus cours ici. */
+      .heros-photo,
+      .heros-panneau > *,
+      .heros-accent {
+        animation-timeline: view();
+        animation-duration: auto;
+      }
+      .heros-photo {
+        animation-range: entry 0% entry 55%;
+      }
+      .heros-panneau > *:nth-child(1) {
+        animation-range: entry 15% entry 55%;
+      }
+      .heros-panneau > *:nth-child(2) {
+        animation-range: entry 22% entry 62%;
+      }
+      .heros-panneau > *:nth-child(3) {
+        animation-range: entry 29% entry 69%;
+      }
+      .heros-panneau > *:nth-child(4) {
+        animation-range: entry 36% entry 76%;
+      }
+      .heros-accent {
+        animation-range: entry 45% entry 85%;
+      }
+    }
+  }
+
+  /* Ce qui fait vivre la fenetre de Farm Africa, ce n'est pas qu'elle contienne
+     une video : c'est que l'image y bouge. Une derive lente sur la photo donne
+     la meme sensation sans les 3,75 Mo — et sans rien demander au client.
+     20 secondes, aller-retour : assez lent pour qu'on ne voie pas le mouvement,
+     assez present pour que l'image ne soit pas morte. */
+  @media (prefers-reduced-motion: no-preference) {
+    .heros-fenetre img {
+      animation: fenetre-derive 20s ease-in-out infinite alternate;
+    }
+  }
+
+  @keyframes fenetre-derive {
+    from {
+      transform: scale(1.14);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes fenetre-ouvre {
+    to {
+      clip-path: circle(75% at 50% 50%);
+    }
+  }
+
+  @keyframes intro-efface {
+    to {
+      opacity: 0;
     }
   }
 </style>
