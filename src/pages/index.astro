@@ -61,7 +61,6 @@ const partenaires = [
   titre="Accueil"
   description="Le Consortium Dëkkandoo agit dans les six communes du département de Saint-Louis pour la nutrition infantile, l'accès aux soins et l'autonomisation économique des femmes."
   organisation
-  enteteSurFond
 >
   {/*
     HEROS — dispositif emprunte a One Acre Fund (cahier de references, n.6) :
@@ -97,7 +96,7 @@ const partenaires = [
     <div class="heros-cadre relative overflow-hidden">
       <div class="heros-phrase absolute inset-0 px-8 py-24">
         <p
-          class="heros-contour max-w-4xl text-balance font-titre self-end text-center leading-[1.15] text-paper"
+          class="heros-contour max-w-4xl text-balance font-titre self-end text-center leading-[1.15] text-ink"
         >
           Et s’il existait un
         </p>
@@ -143,7 +142,7 @@ const partenaires = [
         </p>
 
         <p
-          class="heros-contour max-w-4xl text-balance font-titre self-start text-center leading-[1.15] text-paper"
+          class="heros-contour max-w-4xl text-balance font-titre self-start text-center leading-[1.15] text-ink"
         >
           pour chaque enfant du département de
           <span class="whitespace-nowrap">Saint-Louis&nbsp;?</span>
@@ -151,7 +150,7 @@ const partenaires = [
       </div>
 
       <div
-        class="heros-fleche absolute bottom-12 left-1/2 -translate-x-1/2 font-mono text-xs uppercase tracking-[0.2em] text-paper/70"
+        class="heros-fleche absolute bottom-12 left-1/2 -translate-x-1/2 font-mono text-xs uppercase tracking-[0.2em] text-ink-3"
         aria-hidden="true"
       >
         Défiler
@@ -170,7 +169,7 @@ const partenaires = [
           qu'un seul, celui du heros. */}
       <p class="heros-titre">
         Nous nourrissons l’espoir,<br />
-        Nous nourrissons <span class="text-accent">l’avenir.</span>
+        Nous nourrissons <span class="text-paper">l’avenir.</span>
       </p>
     </div>
   </div>
@@ -197,14 +196,14 @@ const partenaires = [
       <div
         class="heros-panneau relative bg-forest px-5 py-14 sm:px-8 lg:col-span-7 lg:col-start-1 lg:row-start-1 lg:flex lg:flex-col lg:justify-center lg:py-20 lg:pl-[max(1.25rem,calc((100vw-72rem)/2))] lg:pr-16"
       >
-        <p class="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+        <p class="font-mono text-xs uppercase tracking-[0.2em] text-paper/85">
           Santé · Nutrition · Autonomisation
         </p>
         <h1
           class="mt-6 max-w-2xl font-titre text-4xl font-semibold leading-[1.06] tracking-[-0.015em] sm:text-5xl xl:text-6xl"
         >
           Nous nourrissons l’espoir,<br />
-          Nous nourrissons <em class="heros-accent not-italic text-accent">l’avenir.</em>
+          Nous nourrissons <em class="heros-accent not-italic text-paper">l’avenir.</em>
         </h1>
         <p class="mt-7 max-w-xl text-lg leading-relaxed text-paper/85">
           Le Consortium Dëkkandoo agit dans les six communes du département de
@@ -214,7 +213,7 @@ const partenaires = [
         <div class="mt-9 flex flex-wrap gap-3">
           <a
             href="#programmes"
-            class="rounded-full bg-accent px-7 py-3 font-medium text-ink transition-colors hover:bg-accent-2"
+            class="rounded-full bg-paper px-7 py-3 font-medium text-ink transition-colors hover:bg-white"
           >
             Découvrir nos programmes
           </a>
@@ -236,7 +235,7 @@ const partenaires = [
         {
           chiffres.map(({ n, l }) => (
             <div class="px-2 text-center lg:border-l lg:border-paper/15 lg:first:border-l-0">
-              <dt class="font-mono text-3xl text-accent sm:text-4xl">{n}</dt>
+              <dt class="font-mono text-3xl text-paper sm:text-4xl">{n}</dt>
               <dd class="mx-auto mt-2 max-w-[16rem] text-sm text-paper/75">{l}</dd>
             </div>
           ))
@@ -316,7 +315,7 @@ const partenaires = [
       </div>
 
       <figure class="lg:col-span-7">
-        <p class="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+        <p class="font-mono text-xs uppercase tracking-[0.2em] text-paper/85">
           Le mot du coordonnateur
         </p>
         <blockquote class="mt-6 font-serif text-2xl leading-snug sm:text-4xl">
@@ -336,7 +335,7 @@ const partenaires = [
             href="https://fr.allafrica.com/stories/202602280036.html"
             target="_blank"
             rel="noopener noreferrer"
-            class="mt-3 inline-block font-mono text-xs text-accent hover:underline"
+            class="mt-3 inline-block font-mono text-xs text-paper hover:underline"
           >
             Sud Quotidien, 28 février 2026 ↗
           </a>
@@ -391,7 +390,7 @@ const partenaires = [
         <article class="flex flex-col rounded-xl border border-line bg-card">
           <div class="flex-1 p-8">
             <span
-              class="inline-block rounded-full bg-accent px-3 py-1 font-mono text-xs text-ink"
+              class="inline-block rounded-full bg-paper px-3 py-1 font-mono text-xs text-ink"
             >
               Lancé en 2026
             </span>
@@ -442,7 +441,7 @@ const partenaires = [
         <div
           class="relative -mt-24 max-w-xl bg-forest p-8 text-paper sm:-mt-32 sm:p-10"
         >
-          <p class="font-mono text-xs uppercase tracking-[0.2em] text-accent">Sur le terrain</p>
+          <p class="font-mono text-xs uppercase tracking-[0.2em] text-paper/85">Sur le terrain</p>
           <p class="mt-4 font-serif text-2xl leading-snug sm:text-3xl">
             Les femmes accompagnées ne reçoivent pas une aide : elles conduisent
             une activité.
@@ -768,19 +767,20 @@ const partenaires = [
     display: none;
   }
 
-  /* Le fond n'est pas un aplat. Farm Africa pose un motif vegetal a peine plus
-     clair que le fond — assez pour que l'ecran ait une matiere, assez peu pour
-     ne jamais concurrencer le texte.
+  /* Le fond. Les jeunes pousses ont ete ecartees par Saibo le 11/08 — trop
+     illustratives. A la place, des ONDES concentriques : c'est le sens meme du
+     nom, Dekkandoo veut dire « le voisinage », et une onde qui se propage dit
+     cela sans rien dessiner de litteral. Tracees dans le brun du logo, tres
+     peu appuyees, sur le creme du site. Les cercles poses aux quatre coins
+     font que le motif se raccorde sans couture.
 
-     Ici ce sont des RANGEES DE JEUNES POUSSES, plantees en quinconce comme une
-     parcelle. Le motif etait deja arrete dans le dossier du projet : « il
-     illustre le semis sans imiter leur arbre » — on ne reprend donc pas leur
-     logo en papier peint, on reprend son idee. Il repond aussi au titre juste
-     en dessous, « Ensemble, nous semons l'espoir ». */
+     L'ecran est passe du sombre au CLAIR pour une raison mesurable : l'accent
+     est desormais le brun du logo, et le brun ne se voit que sur fond clair —
+     1,02 de contraste sur du vert fonce, 8,61 sur le creme. */
   .heros-cadre {
-    background-color: var(--color-ink);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='180' viewBox='0 0 260 180'%3E%3Cg fill='%231e2f25'%3E%3Cg transform='translate(40 160) scale(1.5)'%3E%3Crect x='-1.6' y='-30' width='3.2' height='30' rx='1.6'/%3E%3Cpath d='M0-19C-6-27-15-30-21-28C-19-21-10-16 0-19Z'/%3E%3Cpath d='M0-24C6-32 15-35 21-33C19-26 10-21 0-24Z'/%3E%3C/g%3E%3Cg transform='translate(130 160) scale(1.5)'%3E%3Crect x='-1.6' y='-30' width='3.2' height='30' rx='1.6'/%3E%3Cpath d='M0-19C-6-27-15-30-21-28C-19-21-10-16 0-19Z'/%3E%3Cpath d='M0-24C6-32 15-35 21-33C19-26 10-21 0-24Z'/%3E%3C/g%3E%3Cg transform='translate(220 160) scale(1.5)'%3E%3Crect x='-1.6' y='-30' width='3.2' height='30' rx='1.6'/%3E%3Cpath d='M0-19C-6-27-15-30-21-28C-19-21-10-16 0-19Z'/%3E%3Cpath d='M0-24C6-32 15-35 21-33C19-26 10-21 0-24Z'/%3E%3C/g%3E%3Cg transform='translate(85 75) scale(1.5)'%3E%3Crect x='-1.6' y='-30' width='3.2' height='30' rx='1.6'/%3E%3Cpath d='M0-19C-6-27-15-30-21-28C-19-21-10-16 0-19Z'/%3E%3Cpath d='M0-24C6-32 15-35 21-33C19-26 10-21 0-24Z'/%3E%3C/g%3E%3Cg transform='translate(175 75) scale(1.5)'%3E%3Crect x='-1.6' y='-30' width='3.2' height='30' rx='1.6'/%3E%3Cpath d='M0-19C-6-27-15-30-21-28C-19-21-10-16 0-19Z'/%3E%3Cpath d='M0-24C6-32 15-35 21-33C19-26 10-21 0-24Z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    background-size: 260px 180px;
+    background-color: var(--color-paper);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='280' viewBox='0 0 280 280'%3E%3Cg fill='none' stroke='%23683c10' stroke-width='1.3' opacity='0.16'%3E%3Ccircle cx='140' cy='140' r='34'/%3E%3Ccircle cx='140' cy='140' r='70'/%3E%3Ccircle cx='140' cy='140' r='106'/%3E%3Ccircle cx='0' cy='0' r='34'/%3E%3Ccircle cx='0' cy='0' r='70'/%3E%3Ccircle cx='0' cy='0' r='106'/%3E%3Ccircle cx='280' cy='0' r='34'/%3E%3Ccircle cx='280' cy='0' r='70'/%3E%3Ccircle cx='280' cy='0' r='106'/%3E%3Ccircle cx='0' cy='280' r='34'/%3E%3Ccircle cx='0' cy='280' r='70'/%3E%3Ccircle cx='0' cy='280' r='106'/%3E%3Ccircle cx='280' cy='280' r='34'/%3E%3Ccircle cx='280' cy='280' r='70'/%3E%3Ccircle cx='280' cy='280' r='106'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 280px 280px;
   }
 
   /* La phrase occupe tout le cadre et se lit en trois rangees. Les deux
@@ -806,10 +806,13 @@ const partenaires = [
     letter-spacing: -0.015em;
   }
 
-  /* L'anneau est le seul element en flux : il suffit de le centrer. */
+  /* L'anneau est le seul element en flux : il suffit de le centrer. Sa rangee
+     ne fait donc que la hauteur du « o », et « esp » / « ir » debordent sur les
+     lignes voisines — d'ou la marge, qui rend au mot l'air d'une vraie ligne. */
   .heros-ligne-mot {
     display: flex;
     justify-content: center;
+    margin: 0.3em 0;
     line-height: 1;
   }
 
@@ -890,10 +893,13 @@ const partenaires = [
 
       /* L'en-tete se pose PAR-DESSUS cet ecran depuis le 11/08 : il n'occupe
          plus de bande, le cadre reprend donc toute la hauteur. */
+      /* L'en-tete est de nouveau une bande opaque : le cadre lui laisse sa
+         place au lieu de passer dessous. */
       .heros-cadre {
+        --entete: 5.75rem;
         position: sticky;
-        top: 0;
-        height: 100vh;
+        top: var(--entete);
+        height: calc(100vh - var(--entete));
       }
 
       /* Le titre et son voile n'apparaissent qu'une fois la lucarne grande

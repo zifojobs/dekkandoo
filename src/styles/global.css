@@ -29,23 +29,24 @@
   --color-leaf: #4e9c6e;    /* accents, liens */
   --color-earth: #7a4a2b;
   --color-earth-2: #a9714a;
-  /* L'ACCENT VIENT DU LOGO depuis le 11/08. La maquette utilisait un or
-     (#c88f22) qui n'appartenait a aucune des deux couleurs de la marque ;
-     Saibo a demande ses couleurs a lui.
+  /* L'ACCENT EST LE BRUN DU LOGO, exactement — arbitrage de Saibo le 11/08,
+     apres deux essais ecartes (l'or de la maquette, qui n'appartenait a aucune
+     des deux couleurs de la marque ; puis un vert eclairci, qui n'etait plus
+     tout a fait le vert du logo).
 
-     Mais ni l'une ni l'autre ne peut servir telle quelle, et c'est mesure :
-     l'accent se pose TOUJOURS sur un fond sombre ici — les 22 emplois sont sur
-     le panneau vert, l'ecran d'intro ou un bandeau. Or sur le vert #1f5138, le
-     brun du logo donne un contraste de 1,02 (il a exactement la meme
-     luminosite que le fond : le mot disparaitrait) et le vert du logo 2,43,
-     illisible aussi. L'or, lui, donnait 3,23.
+     LA REGLE QUI EN DECOULE, et elle est physique : le brun du logo est une
+     couleur SOMBRE. Il ne se voit que sur un fond clair. Mesure : 8,61 sur le
+     creme, mais 1,02 sur le panneau vert — soit exactement la luminosite du
+     fond, le mot y disparaitrait purement et simplement.
 
-     La valeur retenue est donc le VERT DU LOGO ECLAIRCI, meme teinte, meme
-     famille, monte en luminosite jusqu'a passer : 4,06 sur le panneau vert et
-     7,19 sur l'ecran d'intro, la ou le seuil d'un grand titre est de 3,0. Le
-     logo, lui, n'est pas retouche : ses couleurs exactes restent ci-dessous. */
-  --color-accent: #3dc46a;
-  --color-accent-2: #5fd98f;
+     D'ou le partage tenu dans tout le site :
+       · fond CLAIR  -> l'accent est le brun du logo ;
+       · fond SOMBRE -> pas d'accent colore, on passe au creme.
+     C'est ce qui a fait basculer l'ecran d'intro en clair. Le panneau vert du
+     heros, lui, reste tel que le client l'a valide : son mot d'accent y est
+     simplement en creme. */
+  --color-accent: #683c10;
+  --color-accent-2: #8a5318;
 
   /* Couleurs EXACTES du logo, relevees au pixel. Servent au logo et aux
      surfaces claires ; on ne retouche jamais le logo d'un client. */
@@ -99,10 +100,10 @@ body {
    clavier et le lecteur d'ecran. Aucun script, et le menu marche JavaScript
    coupe — comme le reste de ce site.
 
-   Deux tenues. Par defaut l'en-tete occupe sa bande creme, en haut de page.
-   Avec `--sur-fond` (accueil seulement) il se pose PAR-DESSUS l'ecran d'intro
-   sombre : fond transparent, logo blanc, barres blanches. C'est la tenue de
-   farmafrica.org.
+   Une seule tenue depuis le 11/08 : bande creme, logo en vraies couleurs, liens
+   et pastille d'appel dans le brun du logo. La version posee sur fond sombre,
+   avec le logo blanc, a ete ecartee par Saibo — elle n'a plus lieu d'etre
+   depuis que l'ecran d'intro est clair lui aussi.
    --------------------------------------------------------------------------- */
 .entete {
   position: sticky;
@@ -113,41 +114,6 @@ body {
   backdrop-filter: blur(8px);
 }
 
-.entete--sur-fond {
-  position: absolute;
-  inset: 0 0 auto;
-  background: none;
-  border-bottom: 0;
-  backdrop-filter: none;
-}
-
-/* Voile degrade sous l'en-tete pose sur fond : le logo blanc et les trois
-   barres doivent rester lisibles quelle que soit l'image en dessous — et
-   l'ecran d'intro finit sur une video en plein cadre, dont on ne maitrise pas
-   la luminosite image par image. */
-.entete--sur-fond::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  height: 180%;
-  background: linear-gradient(to bottom, rgb(23 35 28 / 55%), transparent);
-  pointer-events: none;
-}
-.entete > div {
-  position: relative;
-}
-
-.entete-logo--clair {
-  display: none;
-}
-.entete--sur-fond .entete-logo--sombre {
-  display: none;
-}
-.entete--sur-fond .entete-logo--clair {
-  display: block;
-}
 
 /* ---- La barre d'ordinateur : les six rubriques restent visibles ---- */
 .entete-bureau {
@@ -173,31 +139,28 @@ body {
   font-weight: 500;
 }
 .entete-liens a {
-  color: var(--color-ink-2);
-  transition: color 0.2s ease;
+  display: inline-block;
+  color: var(--color-accent);
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
 }
-.entete-liens a:hover {
-  color: var(--color-forest);
+/* Au survol : le meme brun, et un leger grossissement. `inline-block` est
+   necessaire — une `transform` ne s'applique pas a une boite en-ligne. */
+.entete-liens a:hover,
+.entete-liens a:focus-visible {
+  color: var(--color-accent-2);
+  transform: scale(1.08);
 }
 .entete-liens a[aria-current='page'] {
-  font-weight: 600;
-  color: var(--color-forest);
-}
-.entete--sur-fond .entete-liens a {
-  color: color-mix(in srgb, var(--color-paper) 85%, transparent);
-}
-.entete--sur-fond .entete-liens a:hover,
-.entete--sur-fond .entete-liens a[aria-current='page'] {
-  color: var(--color-paper);
+  font-weight: 700;
+  color: var(--color-accent);
 }
 
 .entete-filet {
   width: 1px;
   height: 1.5rem;
   background-color: var(--color-line);
-}
-.entete--sur-fond .entete-filet {
-  background-color: color-mix(in srgb, var(--color-paper) 35%, transparent);
 }
 
 .entete-tel {
@@ -207,7 +170,7 @@ body {
   padding: 0.55rem 1.1rem;
   font-size: 0.9375rem;
   font-weight: 600;
-  color: var(--color-ink);
+  color: var(--color-paper);
   transition: background-color 0.2s ease;
 }
 .entete-tel:hover {
@@ -264,9 +227,6 @@ body {
 .menu-barres i:nth-child(3) {
   top: calc(100% - 2px);
 }
-.entete--sur-fond .menu-barres i {
-  background-color: var(--color-paper);
-}
 
 /* Ouvert, les trois barres deviennent une croix. Les deux extremes se
    rejoignent au milieu et pivotent, celle du centre disparait. */
@@ -284,7 +244,7 @@ body {
   transform: rotate(-45deg);
 }
 .menu[open] .menu-barres i {
-  background-color: var(--color-paper);
+  background-color: var(--color-accent);
 }
 
 /* Le panneau couvre l'ecran, comme chez eux. Le bouton reste au-dessus (z-70)
@@ -302,7 +262,7 @@ body {
   align-items: center;
   justify-content: center;
   overflow-y: auto;
-  background-color: var(--color-forest);
+  background-color: var(--color-paper);
   padding: 6rem 1.5rem 3rem;
 }
 
@@ -332,8 +292,10 @@ body {
   font-size: clamp(1.5rem, 7vw, 2.5rem);
   font-weight: 600;
   line-height: 1.15;
-  color: var(--color-paper);
-  transition: color 0.2s ease;
+  color: var(--color-accent);
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .menu-tel {
@@ -341,7 +303,7 @@ body {
   background-color: var(--color-accent);
   padding: 0.85rem 1.6rem;
   font-weight: 600;
-  color: var(--color-ink);
+  color: var(--color-paper);
   transition: background-color 0.2s ease;
 }
 .menu-tel:hover {
@@ -349,10 +311,12 @@ body {
 }
 .menu-liste a:hover,
 .menu-liste a:focus-visible {
-  color: var(--color-accent);
+  color: var(--color-accent-2);
+  transform: scale(1.06);
 }
 .menu-liste a[aria-current='page'] {
   color: var(--color-accent);
+  font-weight: 700;
 }
 
 /* Le seul geste d'animation de la page, conformement a la regle n.2 du cahier
