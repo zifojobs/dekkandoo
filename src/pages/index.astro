@@ -78,7 +78,7 @@ const partenaires = [
   <section class="relative bg-forest text-paper">
     <div class="lg:grid lg:min-h-[34rem] lg:grid-cols-12 lg:items-stretch">
       {/* La photo. Sur mobile elle passe au-dessus du panneau. */}
-      <div class="relative lg:col-span-7 lg:col-start-6 lg:row-start-1">
+      <div class="heros-photo relative lg:col-span-7 lg:col-start-6 lg:row-start-1">
         {/* object-position recale sur le haut du cadre : les visages sont au
             tiers superieur de la photo. Avec le recadrage centre par defaut, la
             bande courte du mobile coupait toutes les tetes — soit exactement ce
@@ -95,14 +95,14 @@ const partenaires = [
       {/* Le panneau. Il chevauche la photo a partir de `lg` grace au col-start
           identique : les deux occupent la meme rangee de grille. */}
       <div
-        class="relative bg-forest px-5 py-14 sm:px-8 lg:col-span-7 lg:col-start-1 lg:row-start-1 lg:flex lg:flex-col lg:justify-center lg:py-20 lg:pl-[max(1.25rem,calc((100vw-72rem)/2))] lg:pr-16"
+        class="heros-panneau relative bg-forest px-5 py-14 sm:px-8 lg:col-span-7 lg:col-start-1 lg:row-start-1 lg:flex lg:flex-col lg:justify-center lg:py-20 lg:pl-[max(1.25rem,calc((100vw-72rem)/2))] lg:pr-16"
       >
         <p class="font-mono text-xs uppercase tracking-[0.2em] text-gold">
           Santé · Nutrition · Autonomisation
         </p>
         <h1 class="mt-6 max-w-2xl font-serif text-4xl leading-[1.08] sm:text-5xl xl:text-6xl">
           Ensemble, nous semons l’espoir.
-          Ensemble, nous semons <em class="not-italic text-gold">l’avenir.</em>
+          Ensemble, nous semons <em class="heros-accent not-italic text-gold">l’avenir.</em>
         </h1>
         <p class="mt-7 max-w-xl text-lg leading-relaxed text-paper/85">
           Le Consortium Dëkkandoo agit dans les six communes du département de
@@ -556,3 +556,81 @@ const partenaires = [
     </div>
   </section>
 </Base>
+
+<style>
+  /* ---------------------------------------------------------------------------
+     LE GESTE DU HEROS — cahier de references, regle n.2 : un seul effet
+     d'animation sur toute la page d'accueil, place sur le mot qui porte le sens.
+
+     Trois temps qui se lisent comme un seul mouvement :
+       1. la photo se devoile de gauche a droite (elle emerge de derriere le
+          panneau vert, qui la chevauche a partir de `lg`) ;
+       2. le texte du panneau monte, ligne par ligne ;
+       3. « l'avenir » passe du creme a l'or, en dernier. C'est la seule chose
+          que le visiteur doit retenir, donc c'est la derniere qui bouge.
+
+     POURQUOI ZERO JAVASCRIPT. Le dispositif `.revele` du layout est pilote par
+     un observateur au defilement : il lui FAUT du JS, d'ou la classe `.js` qui
+     protege son `opacity: 0`. Ici rien de tel n'est necessaire — l'animation se
+     declenche au chargement, ce que CSS sait faire seul. Farm Africa, dont le
+     heros a inspire celui-ci, charge jQuery et une video de 3,75 Mo pour son
+     effet : c'est plus lourd que les 22 photos de ce site reunies, et ils le
+     coupent purement et simplement sur mobile. Ici l'effet coute 0 octet et
+     s'affiche donc partout, telephone Android compris.
+
+     LE GARDE-FOU, et il tient dans un mot : `backwards`. L'etat FINAL est
+     l'etat normal des elements, ecrit dans le balisage Tailwind ; les
+     `@keyframes` ne decrivent que le point de DEPART. Un navigateur qui
+     n'animerait pas affiche donc la page terminee, jamais une page vide — le
+     defaut inverse de `.revele { opacity: 0 }`.
+
+     Et rien ne bouge pour qui a demande moins d'animation dans son systeme.
+     --------------------------------------------------------------------------- */
+  @media (prefers-reduced-motion: no-preference) {
+    .heros-photo {
+      animation: heros-volet 900ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    }
+
+    .heros-panneau > * {
+      animation: heros-monte 700ms ease-out backwards;
+    }
+    .heros-panneau > *:nth-child(1) {
+      animation-delay: 260ms;
+    }
+    .heros-panneau > *:nth-child(2) {
+      animation-delay: 360ms;
+    }
+    .heros-panneau > *:nth-child(3) {
+      animation-delay: 460ms;
+    }
+    .heros-panneau > *:nth-child(4) {
+      animation-delay: 560ms;
+    }
+
+    /* Le dernier temps. Il demarre apres que le titre a fini de monter. */
+    .heros-accent {
+      animation: heros-or 700ms ease-out 900ms backwards;
+    }
+  }
+
+  @keyframes heros-volet {
+    from {
+      clip-path: inset(0 0 0 100%);
+    }
+  }
+
+  @keyframes heros-monte {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+
+  /* Pas de `to` : la valeur d'arrivee est celle de l'element, c'est-a-dire l'or
+     de `text-gold` deja pose dans le balisage. */
+  @keyframes heros-or {
+    from {
+      color: var(--color-paper);
+    }
+  }
+</style>
