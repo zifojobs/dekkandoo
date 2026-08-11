@@ -146,8 +146,33 @@ body {
   position: sticky;
   top: 0;
   z-index: 40;
-  background-color: color-mix(in srgb, var(--color-paper) 95%, transparent);
   border-bottom: 1px solid var(--color-line);
+}
+
+/* 🔧 LE FOND TRANSLUCIDE ET SON FLOU VIVENT SUR UN PSEUDO-ELEMENT, ET SURTOUT
+   PAS SUR `.entete`. Ce n'est pas un raffinement, c'est la correction d'un
+   defaut qui cassait le menu du telephone.
+
+   `backdrop-filter` porte par un element en fait le BLOC CONTENEUR de tous ses
+   descendants en `position: fixed` — au meme titre que `transform`, `filter` ou
+   `will-change`. Le panneau du menu, qui est un descendant de l'en-tete,
+   n'etait donc plus cale sur l'ecran mais sur la bande de l'en-tete.
+
+   Mesure du defaut, a 390x844 : le panneau faisait 390x144 au lieu de 390x844,
+   et son contenu se trouvait a y = -124, c'est-a-dire au-dessus du haut de
+   l'ecran. A l'image, le menu apparaissait comme une bande ou « Notre impact »
+   etait coupe en haut et « Contact » en bas.
+
+   Sur le pseudo-element, le flou s'applique exactement pareil — c'est la meme
+   surface — mais `.entete` redevient un element ordinaire et le `fixed` du
+   panneau retrouve l'ecran. `z-index: -1` le maintient derriere les liens, a
+   l'interieur du contexte d'empilement que l'en-tete cree deja. */
+.entete::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-color: color-mix(in srgb, var(--color-paper) 95%, transparent);
   backdrop-filter: blur(8px);
 }
 
