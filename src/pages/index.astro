@@ -175,21 +175,17 @@ const partenaires = [
         </span>
       </div>
 
-      {/* Le voile du bas. La video n'est pas maitrisee image par image — le
-          plan des femmes a la recolte est en plein soleil — et un titre blanc
-          pose dessus deviendrait illisible sur une image claire. Le degrade ne
-          couvre que le tiers bas, la ou le titre se trouve. */}
-      <div class="heros-degrade" aria-hidden="true"></div>
+      {/* Rien n'est pose sur la video — arbitrage de Saibo le 11/08 au soir.
+          Elle portait jusqu'ici le titre « Nous nourrissons l'espoir, Nous
+          nourrissons l'avenir », qui repetait mot pour mot celui du heros situe
+          juste en dessous : le visiteur lisait deux fois la meme phrase a deux
+          secondes d'intervalle.
 
-      {/* Le titre arrive quand la video occupe l'ecran, en bas a gauche : c'est
-          la place qu'il tient chez Farm Africa, et un seul mot y est en accent.
-          Meme texte que le titre du heros juste en dessous — demande de Saibo
-          le 11/08. Volontairement un `p` et non un `h1` : la page n'en garde
-          qu'un seul, celui du heros. */}
-      <p class="heros-titre">
-        Nous nourrissons l’espoir,<br />
-        Nous nourrissons <span class="text-paper">l’avenir.</span>
-      </p>
+          Le voile sombre est parti avec lui, et c'est la consequence a ne pas
+          rater : il n'existait QUE pour rendre ce titre lisible sur une image
+          claire. Conserve seul, il aurait assombri le bas de la video sans que
+          rien ne l'explique. L'ecran finit donc sur leur image, nette et
+          entiere — et c'est le heros qui prend la parole ensuite. */}
     </div>
   </div>
 
@@ -957,17 +953,6 @@ const partenaires = [
         height: calc(100vh - var(--entete));
       }
 
-      /* Le titre et son voile n'apparaissent qu'une fois la lucarne grande
-         ouverte. Le voile suit exactement le titre : avant, l'ecran d'intro
-         doit rester un aplat propre. */
-      .heros-titre,
-      .heros-degrade {
-        opacity: 0;
-        animation: titre-arrive linear both;
-        animation-timeline: scroll(root block);
-        animation-range: 32vh 50vh;
-      }
-
       /* LE ZOOM. Le mot grandit, et comme la lucarne est dans l'anneau, elle
          grandit avec lui jusqu'a remplir l'ecran : on finit sur la video. Un
          facteur 130 suffit largement — le « o » fait 37 px de large au depart,
@@ -1048,37 +1033,6 @@ const partenaires = [
   @keyframes mot-zoom {
     to {
       --s: 130;
-    }
-  }
-
-  /* Aligne sur la meme marge que le heros juste en dessous, pour que les deux
-     titres tombent sur la meme verticale quand on passe de l'un a l'autre. */
-  .heros-degrade {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    height: 48%;
-    background: linear-gradient(to top, rgb(15 26 20 / 88%), rgb(15 26 20 / 55%) 38%, transparent);
-    pointer-events: none;
-  }
-
-  .heros-titre {
-    position: absolute;
-    bottom: 11vh;
-    left: max(1.25rem, calc((100vw - 72rem) / 2));
-    max-width: 18ch;
-    font-family: var(--font-titre);
-    font-weight: 600;
-    font-size: clamp(2.25rem, min(9.5vh, 6.2vw), 5.5rem);
-    line-height: 1.04;
-    letter-spacing: -0.015em;
-    color: var(--color-paper);
-  }
-
-  @keyframes titre-arrive {
-    to {
-      opacity: 1;
     }
   }
 
