@@ -77,43 +77,23 @@ const partenaires = [
   */}
   {/*
     ECRAN D'INTRO — le dispositif de farmafrica.org, releve dans leur code le
-    11/08 : une phrase centree dont UN mot est une fenetre ; au defilement la
-    fenetre s'ouvre jusqu'au plein ecran, puis le vrai heros arrive.
+    11/08 : une phrase centree dont UN mot porte une lucarne ; au defilement le
+    mot grandit jusqu'a ce que la lucarne remplisse l'ecran, et on finit sur la
+    video. Puis le vrai heros arrive.
 
-    Ce qu'on leur emprunte : le geste. Ce qu'on ne leur emprunte pas : la
-    vidéo de 3,75 Mo — plus lourde que les 22 photos de ce site reunies — et
-    jQuery. Ici la fenetre s'ouvre sur une photo de terrain deja presente, et
-    l'ouverture est pilotee par le defilement en CSS seul.
+    Ce qu'on leur emprunte : le geste. Ce qu'on ne leur emprunte pas : jQuery,
+    et une video de 3,75 Mo — plus lourde que les 22 photos de ce site reunies.
 
-    Le mot choisi est « avenir » : c'est deja l'accent du H1 juste en dessous
-    (« Ensemble, nous semons l'avenir »). Il reste a l'ecran quand le reste de
-    la phrase s'efface, et le titre le reprend — les deux ecrans se tiennent.
+    LA LUCARNE EST UN ENFANT DE L'ANNEAU, et ce n'est pas un detail de
+    structure. Une premiere version posait la video en plein cadre et l'ouvrait
+    par un cercle place au centre geometrique de l'ecran, en comptant sur le
+    fait que le mot y tombait aussi. Mesure faite : vrai en 1440x900, FAUX en
+    1366x768 — la phrase y deborde du cadre, les rangees se tassent, le mot
+    remonte de 57 px et la video apparait sous le « o ». Enfant de l'anneau,
+    les deux ne peuvent plus se desaligner, sur aucun ecran.
   */}
   <div class="heros-piste">
     <div class="heros-cadre relative overflow-hidden">
-      {/* La lucarne : la video occupe tout l'ecran, mais n'est visible qu'a
-          travers le contre-poincon du « o ». C'est le point exact du
-          dispositif de Farm Africa — chez eux la video est dans le « o » de
-          « solution », pas derriere le mot. */}
-      <div class="heros-fenetre absolute inset-0">
-        <video
-          class="h-full w-full object-cover"
-          src="/video/delta.mp4"
-          poster="/video/delta-poster.jpg"
-          muted
-          autoplay
-          loop
-          playsinline
-          preload="none"
-          aria-hidden="true"
-        ></video>
-        {/* Voile : il ne sert qu'une fois la video ouverte, pour que le mot en
-            or reste lisible par-dessus. Tant que la lucarne fait la taille du
-            contre-poincon, il n'a aucune raison d'etre la — il ne ferait que
-            transformer l'image en point brun. Il monte donc avec l'ouverture. */}
-        <div class="heros-voile absolute inset-0 bg-ink"></div>
-      </div>
-
       <div class="heros-phrase absolute inset-0 px-8 py-24">
         <p
           class="heros-contour max-w-4xl text-balance self-end text-center font-serif text-6xl leading-[1.15] text-paper xl:text-7xl"
@@ -122,21 +102,43 @@ const partenaires = [
         </p>
 
         {/* Le mot. Le « o » n'est pas une lettre de la police mais un anneau
-            dessine, pour une raison de precision : la lucarne doit tomber au
-            pixel dans son contre-poincon, or la police est celle de l'appareil
-            (Iowan, Palatino, Georgia selon la machine) et son « o » n'a pas la
-            meme geometrie partout. Un anneau, lui, est identique en tout lieu.
-            Bords lateraux plus epais que le haut et le bas : c'est ce contraste
-            qui fait lire un « o » de labeur plutot qu'un cercle.
+            dessine : la police est celle de l'appareil (Iowan, Palatino ou
+            Georgia selon la machine) et son « o » n'a pas la meme geometrie
+            partout, alors qu'un anneau est identique en tout lieu.
 
-            Il est aussi le seul element en flux de sa rangee, et la rangee est
-            posee entre deux `1fr` : son centre tombe donc exactement au milieu
-            de l'ecran, ce qui permet a la lucarne d'y etre centree sans qu'on
-            ait a mesurer quoi que ce soit. */}
+            L'anneau porte la lucarne, et « esp » / « ir » sont poses par
+            rapport a lui. Tout le mot est donc solidaire du « o » : quand il
+            grandit au defilement, il grandit AUTOUR de la lucarne, jamais a
+            cote. L'ordre de lecture reste « esp o ir » pour un lecteur
+            d'ecran. */}
         <p class="heros-ligne-mot font-serif text-6xl text-gold xl:text-7xl">
-          <span class="heros-avant-mot">esp</span>
-          <span class="heros-o"><span class="sr-only">o</span></span>
-          <span class="heros-apres-mot">ir</span>
+          <span class="heros-o">
+            <span class="heros-avant-mot">esp</span>
+            <span class="sr-only">o</span>
+            <span class="heros-apres-mot">ir</span>
+
+            {/* La video est dimensionnee en unites d'ecran et contre-mise a
+                l'echelle : sa taille affichee ne bouge donc JAMAIS pendant que
+                la lucarne s'ouvre. Seule la fenetre grandit, l'image ne
+                s'etire pas — ce qui compte d'autant plus que la source n'est
+                qu'en 624x352. */}
+            <span class="heros-lucarne" aria-hidden="true">
+              <video
+                class="heros-video"
+                src="/video/actions.mp4"
+                poster="/video/actions-poster.jpg"
+                muted
+                autoplay
+                loop
+                playsinline
+                preload="none"></video>
+            </span>
+
+            {/* Le trait dore du « o », pose PAR-DESSUS la video : c'est lui qui
+                fait la lettre. Il s'efface des que le mot commence a grandir,
+                sinon son trait, mis a l'echelle, finirait par barrer l'ecran. */}
+            <span class="heros-anneau" aria-hidden="true"></span>
+          </span>
         </p>
 
         <p
@@ -665,9 +667,15 @@ const partenaires = [
      n'animerait pas affiche donc la page terminee, jamais une page vide — le
      defaut inverse de `.revele { opacity: 0 }`.
 
+     SUR TELEPHONE, RIEN. Arbitrage de Saibo le 11/08 : le heros mobile reste
+     exactement celui du matin, sans aucune animation. Ce geste ne sert donc
+     plus que de repli sur grand ecran, pour les navigateurs qui ne savent pas
+     lier une animation au defilement — les autres le rejouent a l'arrivee du
+     heros (plus bas).
+
      Et rien ne bouge pour qui a demande moins d'animation dans son systeme.
      --------------------------------------------------------------------------- */
-  @media (prefers-reduced-motion: no-preference) {
+  @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
     .heros-photo {
       animation: heros-volet 900ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
     }
@@ -743,12 +751,17 @@ const partenaires = [
 
   /* Le fond n'est pas un aplat. Farm Africa pose un motif vegetal a peine plus
      clair que le fond — assez pour que l'ecran ait une matiere, assez peu pour
-     ne jamais concurrencer le texte. Ici des feuilles, en SVG inline : le motif
-     ne coute aucune requete et pese quelques centaines d'octets. */
+     ne jamais concurrencer le texte.
+
+     Ici ce sont des RANGEES DE JEUNES POUSSES, plantees en quinconce comme une
+     parcelle. Le motif etait deja arrete dans le dossier du projet : « il
+     illustre le semis sans imiter leur arbre » — on ne reprend donc pas leur
+     logo en papier peint, on reprend son idee. Il repond aussi au titre juste
+     en dessous, « Ensemble, nous semons l'espoir ». */
   .heros-cadre {
     background-color: var(--color-ink);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320' viewBox='0 0 320 320'%3E%3Cg fill='%231e2f25'%3E%3Cpath d='M0-55C28-25 28 25 0 55C-28 25-28-25 0-55Z' transform='translate(62 64) rotate(20)'/%3E%3Cpath d='M0-55C28-25 28 25 0 55C-28 25-28-25 0-55Z' transform='translate(232 60) rotate(-40) scale(0.85)'/%3E%3Cpath d='M0-55C28-25 28 25 0 55C-28 25-28-25 0-55Z' transform='translate(150 168) rotate(70)'/%3E%3Cpath d='M0-55C28-25 28 25 0 55C-28 25-28-25 0-55Z' transform='translate(58 256) rotate(-15) scale(0.9)'/%3E%3Cpath d='M0-55C28-25 28 25 0 55C-28 25-28-25 0-55Z' transform='translate(252 252) rotate(35) scale(0.95)'/%3E%3C/g%3E%3C/svg%3E");
-    background-size: 320px 320px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='180' viewBox='0 0 260 180'%3E%3Cg fill='%231e2f25'%3E%3Cg transform='translate(40 160) scale(1.5)'%3E%3Crect x='-1.6' y='-30' width='3.2' height='30' rx='1.6'/%3E%3Cpath d='M0-19C-6-27-15-30-21-28C-19-21-10-16 0-19Z'/%3E%3Cpath d='M0-24C6-32 15-35 21-33C19-26 10-21 0-24Z'/%3E%3C/g%3E%3Cg transform='translate(130 160) scale(1.5)'%3E%3Crect x='-1.6' y='-30' width='3.2' height='30' rx='1.6'/%3E%3Cpath d='M0-19C-6-27-15-30-21-28C-19-21-10-16 0-19Z'/%3E%3Cpath d='M0-24C6-32 15-35 21-33C19-26 10-21 0-24Z'/%3E%3C/g%3E%3Cg transform='translate(220 160) scale(1.5)'%3E%3Crect x='-1.6' y='-30' width='3.2' height='30' rx='1.6'/%3E%3Cpath d='M0-19C-6-27-15-30-21-28C-19-21-10-16 0-19Z'/%3E%3Cpath d='M0-24C6-32 15-35 21-33C19-26 10-21 0-24Z'/%3E%3C/g%3E%3Cg transform='translate(85 75) scale(1.5)'%3E%3Crect x='-1.6' y='-30' width='3.2' height='30' rx='1.6'/%3E%3Cpath d='M0-19C-6-27-15-30-21-28C-19-21-10-16 0-19Z'/%3E%3Cpath d='M0-24C6-32 15-35 21-33C19-26 10-21 0-24Z'/%3E%3C/g%3E%3Cg transform='translate(175 75) scale(1.5)'%3E%3Crect x='-1.6' y='-30' width='3.2' height='30' rx='1.6'/%3E%3Cpath d='M0-19C-6-27-15-30-21-28C-19-21-10-16 0-19Z'/%3E%3Cpath d='M0-24C6-32 15-35 21-33C19-26 10-21 0-24Z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    background-size: 260px 180px;
   }
 
   /* La phrase occupe tout le cadre et se lit en trois rangees. Les deux
@@ -762,43 +775,87 @@ const partenaires = [
     justify-items: center;
   }
 
-  /* Meme principe a l'horizontale : `1fr auto 1fr` place l'anneau au milieu
-     exact, que « esp » et « ir » aient la meme largeur ou non. */
+  /* La taille du texte suit la HAUTEUR de la fenetre autant que sa largeur.
+     Sans cela la phrase deborde d'un ecran court — c'est exactement ce qui
+     decalait le mot de 57 px en 1366x768. Le decalage ne casse plus rien
+     depuis que la lucarne est dans l'anneau, mais une phrase qui deborde
+     reste laide. */
+  .heros-contour,
   .heros-ligne-mot {
-    display: grid;
-    width: 100%;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: baseline;
-  }
-  .heros-avant-mot {
-    justify-self: end;
-  }
-  .heros-apres-mot {
-    justify-self: start;
-  }
-  /* `line-height: 0` sur les deux moities du mot : leur boite ne compte plus
-     dans la hauteur de la rangee, qui vaut donc exactement celle de l'anneau.
-     Le centre de l'anneau et le centre de la rangee deviennent le meme point,
-     et la lucarne posee a `50% 50%` tombe dedans au pixel. Le texte, lui,
-     s'affiche normalement et reste aligne sur la ligne de base. */
-  .heros-avant-mot,
-  .heros-apres-mot {
-    line-height: 0;
+    font-size: clamp(2rem, min(7vh, 5.5vw), 4.5rem);
   }
 
+  /* L'anneau est le seul element en flux : il suffit de le centrer. */
+  .heros-ligne-mot {
+    display: flex;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  /* La boite du « o » complet — trait compris. Tout le reste du mot s'accroche
+     dessus. */
   .heros-o {
-    box-sizing: content-box;
-    display: inline-block;
-    width: 0.3em;
-    height: 0.34em;
-    margin: 0 0.03em;
-    border-style: solid;
-    border-color: currentColor;
-    /* Fin en haut et en bas, epais sur les cotes : c'est ce contraste
-       d'epaisseur qui fait lire un « o » de police a empattements plutot
-       qu'un rond. */
+    position: relative;
+    display: block;
+    width: 0.51em;
+    height: 0.444em;
+  }
+
+  /* Le trait dore. Fin en haut et en bas, epais sur les cotes : c'est ce
+     contraste d'epaisseur qui fait lire un « o » de police a empattements
+     plutot qu'un rond. Pose apres la lucarne dans le balisage, donc peint
+     par-dessus la video — la video occupe le contre-poincon, le trait fait
+     la lettre. */
+  .heros-anneau {
+    position: absolute;
+    inset: 0;
+    border: solid currentColor;
     border-width: 0.052em 0.105em;
     border-radius: 50%;
+  }
+
+  .heros-lucarne {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: 50%;
+  }
+
+  .heros-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    /* Plus grand que l'ecran : de quoi rester couvrant meme si le mot n'est
+       pas exactement au centre du cadre sur une fenetre courte.
+
+       `max-width: none` n'est pas cosmetique : la feuille de base de Tailwind
+       pose `max-width: 100%` sur tout `video`, ce qui ramenait cette largeur a
+       celle de la lucarne — 19 px — avant que l'anneau ne la multiplie par 53.
+       La video s'affichait alors en bande verticale. Mesure a l'appui :
+       `width` calculee a 18,84 px pour un `130vw` demande. */
+    max-width: none;
+    width: 130vw;
+    height: 130vh;
+    object-fit: cover;
+    transform: translate(-50%, -50%) scale(calc(1 / var(--s)));
+  }
+
+  /* Les deux moities du mot sont posees de part et d'autre du « o », et non
+     dans le flux : elles suivent donc l'anneau quand il grandit. Le calage
+     vertical met leur ligne de base sur le bas de l'anneau, comme le ferait
+     une vraie lettre. */
+  .heros-avant-mot,
+  .heros-apres-mot {
+    position: absolute;
+    bottom: -0.24em;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .heros-avant-mot {
+    right: calc(100% + 0.02em);
+  }
+  .heros-apres-mot {
+    left: calc(100% + 0.02em);
   }
 
   @supports (animation-timeline: scroll()) {
@@ -819,44 +876,35 @@ const partenaires = [
         position: sticky;
         top: var(--entete);
         height: calc(100vh - var(--entete));
-        /* Rayon de depart : de quoi couvrir le contre-poincon de l'anneau.
-           Legerement plus grand que lui — le debord passe sous la bordure
-           doree, qui est peinte par-dessus la video. */
-        --lucarne-r: 0.64rem;
-        --lucarne-y: 50%;
-      }
-      @media (min-width: 1280px) {
-        .heros-cadre {
-          --lucarne-r: 0.77rem;
-        }
       }
 
-      /* Transparent tant que la lucarne est petite, opaque quand elle est
-         grande. */
-      .heros-voile {
-        opacity: 0;
-        animation: voile-monte linear both;
+      /* LE ZOOM. Le mot grandit, et comme la lucarne est dans l'anneau, elle
+         grandit avec lui jusqu'a remplir l'ecran : on finit sur la video. Un
+         facteur 130 suffit largement — le « o » fait 37 px de large au depart,
+         soit 4 800 px a l'arrivee. */
+      .heros-o {
+        transform: scale(var(--s));
+        animation: mot-zoom linear both;
         animation-timeline: scroll(root block);
-        animation-range: 12vh 55vh;
+        animation-range: 0 62vh;
       }
 
-      /* Les deux bouts sont des longueurs — rem d'un cote, vmax de l'autre —
-         pour que l'interpolation soit garantie. 110vmax couvre toujours
-         l'ecran : il faut la demi-diagonale, soit au pire 71 % du plus grand
-         cote. */
-      .heros-fenetre {
-        clip-path: circle(var(--lucarne-r) at 50% var(--lucarne-y));
-        animation: fenetre-ouvre linear both;
+      /* Le trait du « o » s'epaissit en meme temps que la lettre — c'est ce que
+         fait un vrai zoom — puis s'efface avant de barrer l'ecran. Les deux
+         moities du mot partent avec lui : passe cette taille, « esp » et « ir »
+         sont deja hors cadre. */
+      .heros-anneau,
+      .heros-avant-mot,
+      .heros-apres-mot {
+        animation: intro-efface linear both;
         animation-timeline: scroll(root block);
-        animation-range: 0 65vh;
+        animation-range: 6vh 28vh;
       }
 
-      /* Le reste de la phrase s'efface ; « espoir » reste pose sur le paysage
-         jusqu'au bout, et le titre du heros le reprend juste apres. */
       .heros-contour {
         animation: intro-efface linear both;
         animation-timeline: scroll(root block);
-        animation-range: 25vh 55vh;
+        animation-range: 2vh 20vh;
       }
 
       .heros-fleche {
@@ -898,21 +946,24 @@ const partenaires = [
     }
   }
 
-  @keyframes fenetre-ouvre {
+  /* `--s` doit etre declaree pour etre animable — un nombre, pas une chaine —
+     et heritee, car c'est la video qui la relit pour se contre-mettre a
+     l'echelle. */
+  @property --s {
+    syntax: "<number>";
+    inherits: true;
+    initial-value: 1;
+  }
+
+  @keyframes mot-zoom {
     to {
-      clip-path: circle(110vmax at 50% var(--lucarne-y));
+      --s: 130;
     }
   }
 
   @keyframes intro-efface {
     to {
       opacity: 0;
-    }
-  }
-
-  @keyframes voile-monte {
-    to {
-      opacity: 0.5;
     }
   }
 </style>
