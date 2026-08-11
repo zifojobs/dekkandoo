@@ -70,19 +70,36 @@ const axes = [
           <p class="mt-2 text-sm text-ink-2">
             communes du département de Saint-Louis
           </p>
-          <ul class="mt-6 space-y-2 border-t border-line pt-5 text-sm text-ink-2">
+          {/* LES SIX SONT NOMMEES, et elles ne viennent pas d'une deduction :
+              elles sont ecrites dans le registre AVEC du Consortium lui-meme
+              (« Xibaar deukeundo medoune Année 2.xlsx », feuillet
+              « Informations Generales », en tetes de section). La liste s'y lit
+              par zone d'intervention :
+
+                Zone de Diamaguene - HLM - LEONA  -> commune de Saint-Louis
+                Zone de Gandon                    -> Gandon
+                Zone de RAO                       -> Rao
+                Zone de Gandiol                   -> Ndiébène Gandiole
+                Fass Ngom                         -> Fass Ngom
+                MPAL                              -> Mpal
+
+              Une seule correspondance demande une lecture et non une copie :
+              Diamaguene, HLM et Leona ne sont pas des communes, ce sont des
+              QUARTIERS de la commune de Saint-Louis. Les six zones du registre
+              tombent donc exactement sur les six communes du departement, ce
+              que le chiffre « 6 » affichait deja sans pouvoir le detailler.
+
+              Elles restent a faire confirmer par le client — mais on affirme
+              desormais au lieu d'avouer un trou, parce que la source est la
+              leur. */}
+          <ul class="mt-6 grid grid-cols-2 gap-x-4 gap-y-2 border-t border-line pt-5 text-sm text-ink-2">
             <li>Saint-Louis</li>
             <li>Gandon</li>
             <li>Rao</li>
             <li>Ndiébène Gandiole</li>
+            <li>Fass Ngom</li>
+            <li>Mpal</li>
           </ul>
-          {/* Quatre communes seulement sont nommees : ce sont les seules
-              documentees (maquette validee + Sud Quotidien du 28/02/2026).
-              Les deux autres seront ajoutees des que le client les confirmera —
-              on ne comble pas une liste par deduction. */}
-          <p class="mt-5 text-xs text-ink-3">
-            Liste des communes nommées à ce jour.
-          </p>
         </div>
       </div>
     </div>
