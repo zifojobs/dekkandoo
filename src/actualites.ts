@@ -64,7 +64,7 @@ export const ACTUALITES: Actualite[] = [
       {
         type: 'p',
         texte:
-          "La soirée a également mis à l'honneur 125 bénéficiaires ayant achevé leur parcours de formation dans le cadre du programme E4Y, conduit en partenariat avec l'École Supérieure Polytechnique. Chacune de ces personnes dispose désormais d'une compétence directement mobilisable dans son activité.",
+          "La soirée a également mis à l'honneur 125 bénéficiaires ayant achevé leur parcours de formation dans le cadre du programme E4Y, conduit en partenariat avec Entrepreneurial Solution Partners (ESP). Chacune de ces personnes dispose désormais d'une compétence directement mobilisable dans son activité.",
       },
       {
         type: 'p',
