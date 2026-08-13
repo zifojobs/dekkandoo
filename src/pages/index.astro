@@ -239,6 +239,22 @@ const partenaires = [
             Nous contacter
           </a>
         </div>
+
+        {/* Le feuillage. Il est pose EN DERNIER dans le balisage, et non en
+            premier, pour une raison mecanique : les quatre elements de contenu
+            ci-dessus sont animes par `:nth-child(1..4)`. Un decor insere avant
+            eux decalerait toute la sequence d'une place.
+
+            Trois plans separes, parce qu'ils se deplacent a trois vitesses
+            differentes sous la souris. Empiles, ils redonnent exactement une
+            seule composition — et comme ils sont de la MEME couleur, leurs
+            recouvrements ne creent aucune valeur intermediaire : le contraste
+            du texte ne depend donc pas de la position du curseur. */}
+        <div class="feuillage" aria-hidden="true">
+          <span class="feuillage-plan feuillage-1"></span>
+          <span class="feuillage-plan feuillage-2"></span>
+          <span class="feuillage-plan feuillage-3"></span>
+        </div>
       </div>
     </div>
 
@@ -713,7 +729,7 @@ const partenaires = [
       animation: heros-volet 900ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
     }
 
-    .heros-panneau > * {
+    .heros-panneau > *:not(.feuillage) {
       animation: heros-monte 700ms ease-out backwards;
     }
     .heros-panneau > *:nth-child(1) {
@@ -814,9 +830,24 @@ const partenaires = [
      decalait le mot de 57 px en 1366x768. Le decalage ne casse plus rien
      depuis que la lucarne est dans l'anneau, mais une phrase qui deborde
      reste laide. */
+  /* L'echelle a ete montee le 13/08 a la demande du client : la phrase doit
+     occuper l'ecran, comme chez farmafrica. Elle passe de `min(7vh, 5.5vw)` a
+     `min(10vh, 7.6vw)`, soit environ 1,43x — 76,8 px au lieu de 53,8 en
+     1366x768.
+
+     Les deux termes du `min()` ont chacun leur role et aucun n'est decoratif :
+     `vw` empeche le debordement horizontal sur un ecran etroit, `vh` empeche le
+     debordement VERTICAL sur un ecran court. C'est ce second terme qui protege
+     le 1366x768, ou le cadre ne fait que 676 px de haut une fois l'en-tete
+     deduit. Une valeur fixe casserait l'un ou l'autre.
+
+     La lucarne n'a rien a rattraper : `.heros-o` est dimensionne en `em`, donc
+     l'anneau, la fenetre et les deux moities du mot grandissent tous du meme
+     facteur. Verifie a 1366x768 et 1920x1080 : centre de l'anneau et centre de
+     la lucarne confondus au pixel. */
   .heros-contour,
   .heros-ligne-mot {
-    font-size: clamp(2rem, min(7vh, 5.5vw), 4.5rem);
+    font-size: clamp(2.25rem, min(10vh, 7.6vw), 7rem);
     font-weight: 600;
     letter-spacing: -0.015em;
   }
@@ -995,7 +1026,7 @@ const partenaires = [
          defilement ; le decalage entre lignes se rejoue en decalant les
          plages, les `animation-delay` n'ayant plus cours ici. */
       .heros-photo,
-      .heros-panneau > *,
+      .heros-panneau > *:not(.feuillage),
       .heros-accent {
         animation-timeline: view();
         animation-duration: auto;
@@ -1041,4 +1072,149 @@ const partenaires = [
       opacity: 0;
     }
   }
+
+  /* ---------------------------------------------------------------------------
+     LE FEUILLAGE DU PANNEAU HEROS — le motif de farmafrica.org.
+
+     Un fond vert tres sombre couvert de grandes formes de feuilles et de
+     rosaces, dessinees dans un vert A PEINE plus clair que le fond. Du ton sur
+     ton, jamais un contraste : le motif ne doit pas se disputer le texte, il
+     doit lui donner une matiere.
+
+     LA FEUILLE VIENT DU LOGO, pas d'une banque de formes. Le feuillage de
+     l'arbre Dekkandoo est fait de lames en amande, pointues au sommet,
+     arrondies a la base, legerement fauciformes et sans nervure — une
+     silhouette pleine. C'est ce trace qui est repris, seul ou par quatre en
+     rosace.
+
+     LA COULEUR EST MESUREE, pas choisie a l'oeil. Le panneau est `#165a2d`,
+     soit hsl(140 60% 22%) — la teinte du vert du logo. Le motif est la MEME
+     teinte et la MEME saturation, quatre points plus clair : hsl(140 60% 26%),
+     `#1b6a35`. Aucune autre famille de couleur n'entre ici (l'or de la maquette
+     a ete ecarte le 11/08, et il ne revient pas).
+     Contraste mesure du texte le plus fragile — le paragraphe et le sur-titre,
+     qui sont en `text-paper/85` — pose SUR une feuille : 4,91:1. Sur le fond nu
+     il valait 6,01:1. Le seuil de 4,5 est tenu partout.
+
+     LE MOTIF ENTOURE LE TEXTE. Il occupe tout le panneau, bord a bord, y
+     compris derriere le bloc de texte. Il n'est pas relegue sur les cotes.
+     --------------------------------------------------------------------------- */
+
+  /* Sans ceci, le feuillage disparait. Un `z-index: -1` remonte jusqu'au
+     premier ancetre qui forme un contexte d'empilement ; `.heros-panneau` est
+     en `position: relative` mais en `z-index: auto`, donc il n'en forme pas, et
+     le decor serait alle se ranger DERRIERE l'aplat vert de la section. */
+  .heros-panneau {
+    isolation: isolate;
+  }
+
+  /* Le cadre rogne les plans. Il est volontairement pose ici, et non sur
+     `.heros-panneau` : `overflow: hidden` fait de son element une boite de
+     defilement, et `.heros-panneau` est l'ancetre des elements animes par
+     `view()` — leur point de mesure aurait change. */
+  .feuillage {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    --px: 0;
+    --py: 0;
+  }
+
+  /* Chaque plan deborde de 48 px de tous les cotes : c'est la reserve dans
+     laquelle la parallaxe se deplace (18 px au maximum). Sans elle, une bande
+     nue apparaitrait au bord des que la souris bouge. */
+  .feuillage-plan {
+    position: absolute;
+    inset: -48px;
+    background-repeat: repeat;
+    background-size: 720px 720px;
+  }
+
+  .feuillage-1 {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='720' height='720' viewBox='0 0 720 720'%3E%3Cdefs%3E%3Cpath id='l' d='M0-52C19-27 30 6 5 52C-9 28-27-6 0-52Z'/%3E%3Cg id='r'%3E%3Cuse xlink:href='%23l' transform='rotate(0) translate(0 -46)'/%3E%3Cuse xlink:href='%23l' transform='rotate(90) translate(0 -46)'/%3E%3Cuse xlink:href='%23l' transform='rotate(180) translate(0 -46)'/%3E%3Cuse xlink:href='%23l' transform='rotate(270) translate(0 -46)'/%3E%3C/g%3E%3C/defs%3E%3Cg fill='%231b6a35'%3E%3Cuse xlink:href='%23l' transform='translate(124 553) rotate(285) scale(0.77)'/%3E%3Cuse xlink:href='%23l' transform='translate(115 600) rotate(300) scale(0.8)'/%3E%3Cuse xlink:href='%23l' transform='translate(523 353) rotate(175) scale(0.88)'/%3E%3Cuse xlink:href='%23l' transform='translate(77 422) rotate(30) scale(0.95)'/%3E%3Cuse xlink:href='%23l' transform='translate(443 532) rotate(45) scale(1.02)'/%3E%3Cuse xlink:href='%23l' transform='translate(378 313) rotate(80) scale(1.08)'/%3E%3Cuse xlink:href='%23l' transform='translate(190 421) rotate(290) scale(1.16)'/%3E%3Cg transform='translate(-720 0)'%3E%3Cuse xlink:href='%23l' transform='translate(713 136) rotate(300) scale(1.34)'/%3E%3C/g%3E%3Cuse xlink:href='%23l' transform='translate(713 136) rotate(300) scale(1.34)'/%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  .feuillage-2 {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='720' height='720' viewBox='0 0 720 720'%3E%3Cdefs%3E%3Cpath id='l' d='M0-52C19-27 30 6 5 52C-9 28-27-6 0-52Z'/%3E%3Cg id='r'%3E%3Cuse xlink:href='%23l' transform='rotate(0) translate(0 -46)'/%3E%3Cuse xlink:href='%23l' transform='rotate(90) translate(0 -46)'/%3E%3Cuse xlink:href='%23l' transform='rotate(180) translate(0 -46)'/%3E%3Cuse xlink:href='%23l' transform='rotate(270) translate(0 -46)'/%3E%3C/g%3E%3C/defs%3E%3Cg fill='%231b6a35'%3E%3Cuse xlink:href='%23l' transform='translate(557 473) rotate(155) scale(1.35)'/%3E%3Cg transform='translate(-720 0)'%3E%3Cuse xlink:href='%23l' transform='translate(648 422) rotate(305) scale(1.64)'/%3E%3C/g%3E%3Cuse xlink:href='%23l' transform='translate(648 422) rotate(305) scale(1.64)'/%3E%3Cg transform='translate(0 -720)'%3E%3Cuse xlink:href='%23l' transform='translate(131 617) rotate(30) scale(2.03)'/%3E%3C/g%3E%3Cuse xlink:href='%23l' transform='translate(131 617) rotate(30) scale(2.03)'/%3E%3Cg transform='translate(-720 0)'%3E%3Cuse xlink:href='%23r' transform='translate(670 568) rotate(100) scale(1.18)'/%3E%3C/g%3E%3Cuse xlink:href='%23r' transform='translate(670 568) rotate(100) scale(1.18)'/%3E%3Cuse xlink:href='%23l' transform='translate(412 443) rotate(65) scale(2.19)'/%3E%3Cuse xlink:href='%23r' transform='translate(107 426) rotate(350) scale(1.23)'/%3E%3Cg transform='translate(720 0)'%3E%3Cuse xlink:href='%23r' transform='translate(107 426) rotate(350) scale(1.23)'/%3E%3C/g%3E%3Cg transform='translate(0 -720)'%3E%3Cuse xlink:href='%23r' transform='translate(235 613) rotate(235) scale(1.26)'/%3E%3C/g%3E%3Cuse xlink:href='%23r' transform='translate(235 613) rotate(235) scale(1.26)'/%3E%3Cuse xlink:href='%23r' transform='translate(154 61) rotate(285) scale(1.3)'/%3E%3Cg transform='translate(0 720)'%3E%3Cuse xlink:href='%23r' transform='translate(154 61) rotate(285) scale(1.3)'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  .feuillage-3 {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='720' height='720' viewBox='0 0 720 720'%3E%3Cdefs%3E%3Cpath id='l' d='M0-52C19-27 30 6 5 52C-9 28-27-6 0-52Z'/%3E%3Cg id='r'%3E%3Cuse xlink:href='%23l' transform='rotate(0) translate(0 -46)'/%3E%3Cuse xlink:href='%23l' transform='rotate(90) translate(0 -46)'/%3E%3Cuse xlink:href='%23l' transform='rotate(180) translate(0 -46)'/%3E%3Cuse xlink:href='%23l' transform='rotate(270) translate(0 -46)'/%3E%3C/g%3E%3C/defs%3E%3Cg fill='%231b6a35'%3E%3Cuse xlink:href='%23r' transform='translate(490 577) rotate(170) scale(1.32)'/%3E%3Cg transform='translate(-720 0)'%3E%3Cuse xlink:href='%23r' transform='translate(591 95) rotate(160) scale(1.41)'/%3E%3C/g%3E%3Cg transform='translate(-720 720)'%3E%3Cuse xlink:href='%23r' transform='translate(591 95) rotate(160) scale(1.41)'/%3E%3C/g%3E%3Cuse xlink:href='%23r' transform='translate(591 95) rotate(160) scale(1.41)'/%3E%3Cg transform='translate(0 720)'%3E%3Cuse xlink:href='%23r' transform='translate(591 95) rotate(160) scale(1.41)'/%3E%3C/g%3E%3Cuse xlink:href='%23r' transform='translate(235 83) rotate(265) scale(1.42)'/%3E%3Cg transform='translate(0 720)'%3E%3Cuse xlink:href='%23r' transform='translate(235 83) rotate(265) scale(1.42)'/%3E%3C/g%3E%3Cuse xlink:href='%23l' transform='translate(426 218) rotate(110) scale(2.58)'/%3E%3Cuse xlink:href='%23r' transform='translate(254 223) rotate(305) scale(1.49)'/%3E%3Cg transform='translate(-720 0)'%3E%3Cuse xlink:href='%23l' transform='translate(693 290) rotate(305) scale(2.98)'/%3E%3C/g%3E%3Cuse xlink:href='%23l' transform='translate(693 290) rotate(305) scale(2.98)'/%3E%3Cuse xlink:href='%23l' transform='translate(476 43) rotate(320) scale(3.01)'/%3E%3Cg transform='translate(0 720)'%3E%3Cuse xlink:href='%23l' transform='translate(476 43) rotate(320) scale(3.01)'/%3E%3C/g%3E%3Cuse xlink:href='%23l' transform='translate(110 282) rotate(345) scale(3.2)'/%3E%3Cg transform='translate(720 0)'%3E%3Cuse xlink:href='%23l' transform='translate(110 282) rotate(345) scale(3.2)'/%3E%3C/g%3E%3Cuse xlink:href='%23r' transform='translate(324 505) rotate(230) scale(1.87)'/%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  /* LA PARALLAXE. Elle n'existe que si le script l'a allumee — c'est-a-dire sur
+     un appareil a souris, et seulement si le visiteur n'a pas demande moins
+     d'animation. Le `transform` n'est donc PAS ecrit par defaut : sur telephone
+     et sans JavaScript, aucun des trois plans n'est promu en couche de
+     composition, et le motif s'affiche simplement immobile.
+
+     Les grandes formes se deplacent le plus, les petites le moins : c'est ce
+     qui fait la profondeur. Amplitudes maximales : 5, 11 et 18 px. Seul
+     `transform` bouge — aucune mise en page n'est recalculee. */
+  .feuillage-vive .feuillage-1 {
+    transform: translate3d(calc(var(--px) * 10px), calc(var(--py) * 10px), 0);
+  }
+  .feuillage-vive .feuillage-2 {
+    transform: translate3d(calc(var(--px) * 22px), calc(var(--py) * 22px), 0);
+  }
+  .feuillage-vive .feuillage-3 {
+    transform: translate3d(calc(var(--px) * 36px), calc(var(--py) * 36px), 0);
+  }
+
+  /* Le garde-fou, en plus du test fait par le script : si le reglage systeme
+     change en cours de visite, le mouvement s'arrete tout de meme. */
+  @media (prefers-reduced-motion: reduce) {
+    .feuillage-plan {
+      transform: none !important;
+    }
+  }
 </style>
+
+<!-- La parallaxe du feuillage. Trois conditions, et le script s'arrete a la
+     premiere qui manque :
+
+     1. le panneau existe sur la page ;
+     2. l'appareil a une souris — `(hover: hover) and (pointer: fine)`. Sur
+        telephone, AUCUN ecouteur n'est pose : le motif y est statique, et il
+        doit l'etre, la moitie du parc etant des terminaux d'entree de gamme ;
+     3. le visiteur n'a pas demande moins d'animation dans son systeme.
+
+     Le mouvement n'est pas ecrit par le `pointermove` : celui-ci ne fait que
+     retenir deux nombres. C'est `requestAnimationFrame` qui pose les deux
+     variables, une seule fois par image, sur UN seul element. Rien d'autre que
+     `transform` ne change, donc rien n'est remis en page.
+
+     La classe `.feuillage-vive` est ce qui allume le `transform` : sans elle —
+     donc sans JavaScript — les trois plans restent des fonds ordinaires, et le
+     navigateur n'a aucune couche de composition a tenir. -->
+<script is:inline>
+  (() => {
+    const cadre = document.querySelector('.feuillage');
+    if (!cadre) return;
+    if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    let x = 0;
+    let y = 0;
+    let attente = 0;
+
+    const pose = () => {
+      attente = 0;
+      cadre.style.setProperty('--px', x.toFixed(3));
+      cadre.style.setProperty('--py', y.toFixed(3));
+    };
+
+    cadre.classList.add('feuillage-vive');
+    addEventListener(
+      'pointermove',
+      (e) => {
+        x = e.clientX / innerWidth - 0.5;
+        y = e.clientY / innerHeight - 0.5;
+        if (!attente) attente = requestAnimationFrame(pose);
+      },
+      { passive: true }
+    );
+  })();
+</script>
