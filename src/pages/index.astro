@@ -94,9 +94,28 @@ const partenaires = [
   */}
   <div class="heros-piste">
     <div class="heros-cadre relative overflow-hidden">
+      {/* Le feuillage. Il est pose EN PREMIER dans le balisage, donc peint
+          AVANT la phrase, la lucarne et le repere de defilement — qui sont tous
+          positionnes eux aussi. Aucun `z-index` n'entre ici : l'ordre du
+          document suffit, et il ne peut pas se faire pieger par un contexte
+          d'empilement (`.heros-cadre` en devient un des qu'il passe en
+          `position: sticky`, ce qui aurait renvoye un `z-index: -1` derriere
+          l'aplat vert).
+
+          Trois plans separes, parce qu'ils se deplacent a trois vitesses
+          differentes sous la souris. Empiles, ils redonnent exactement une
+          seule composition — et comme ils sont de la MEME couleur, leurs
+          recouvrements ne creent aucune valeur intermediaire : le contraste du
+          texte ne depend donc pas de la position du curseur. */}
+      <div class="feuillage" aria-hidden="true">
+        <span class="feuillage-plan feuillage-1"></span>
+        <span class="feuillage-plan feuillage-2"></span>
+        <span class="feuillage-plan feuillage-3"></span>
+      </div>
+
       <div class="heros-phrase absolute inset-0 px-8 py-24">
         <p
-          class="heros-contour max-w-4xl text-balance font-titre self-end text-center leading-[1.15] text-ink"
+          class="heros-contour max-w-4xl text-balance font-titre self-end text-center leading-[1.15] text-paper"
         >
           Et s’il existait un
         </p>
@@ -111,7 +130,14 @@ const partenaires = [
             grandit au defilement, il grandit AUTOUR de la lucarne, jamais a
             cote. L'ordre de lecture reste « esp o ir » pour un lecteur
             d'ecran. */}
-        <p class="heros-ligne-mot font-titre text-accent">
+        {/* 🔴 LE MOT EST EN CREME, ET CE N'EST PAS UN CHOIX DE GOUT. L'accent du
+            site est le brun du logo, `#683c10` — une couleur SOMBRE, mesuree a
+            1,02 de contraste sur le vert fonce, c'est-a-dire exactement la
+            luminosite du fond. Sur cet ecran redevenu sombre, « espoir » y
+            disparaitrait purement et simplement. C'est la regle deja ecrite
+            dans `global.css` : fond clair -> accent brun ; fond sombre -> pas
+            d'accent colore, on passe au creme. */}
+        <p class="heros-ligne-mot font-titre text-paper">
           <span class="heros-o">
             <span class="heros-avant-mot">esp</span>
             <span class="sr-only">o</span>
@@ -142,7 +168,7 @@ const partenaires = [
         </p>
 
         <p
-          class="heros-contour max-w-4xl text-balance font-titre self-start text-center leading-[1.15] text-ink"
+          class="heros-contour max-w-4xl text-balance font-titre self-start text-center leading-[1.15] text-paper"
         >
           pour chaque enfant du département de
           <span class="whitespace-nowrap">Saint-Louis&nbsp;?</span>
@@ -155,7 +181,8 @@ const partenaires = [
           fait pas concurrence a la phrase juste au-dessus, qui est le seul
           texte que cet ecran doit donner a lire.
 
-          Le trait est le brun du logo : fond clair, donc accent brun. */}
+          Le trait suit la meme regle que le mot : l'ecran est redevenu sombre,
+          donc pas d'accent colore — le repere passe au creme. */}
       <div
         class="heros-fleche absolute bottom-12 left-1/2 -translate-x-1/2"
         aria-hidden="true"
@@ -238,22 +265,6 @@ const partenaires = [
           >
             Nous contacter
           </a>
-        </div>
-
-        {/* Le feuillage. Il est pose EN DERNIER dans le balisage, et non en
-            premier, pour une raison mecanique : les quatre elements de contenu
-            ci-dessus sont animes par `:nth-child(1..4)`. Un decor insere avant
-            eux decalerait toute la sequence d'une place.
-
-            Trois plans separes, parce qu'ils se deplacent a trois vitesses
-            differentes sous la souris. Empiles, ils redonnent exactement une
-            seule composition — et comme ils sont de la MEME couleur, leurs
-            recouvrements ne creent aucune valeur intermediaire : le contraste
-            du texte ne depend donc pas de la position du curseur. */}
-        <div class="feuillage" aria-hidden="true">
-          <span class="feuillage-plan feuillage-1"></span>
-          <span class="feuillage-plan feuillage-2"></span>
-          <span class="feuillage-plan feuillage-3"></span>
         </div>
       </div>
     </div>
@@ -729,7 +740,7 @@ const partenaires = [
       animation: heros-volet 900ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
     }
 
-    .heros-panneau > *:not(.feuillage) {
+    .heros-panneau > * {
       animation: heros-monte 700ms ease-out backwards;
     }
     .heros-panneau > *:nth-child(1) {
@@ -798,20 +809,22 @@ const partenaires = [
     display: none;
   }
 
-  /* Le fond. Les jeunes pousses ont ete ecartees par Saibo le 11/08 — trop
-     illustratives. A la place, des ONDES concentriques : c'est le sens meme du
-     nom, Dekkandoo veut dire « le voisinage », et une onde qui se propage dit
-     cela sans rien dessiner de litteral. Tracees dans le brun du logo, tres
-     peu appuyees, sur le creme du site. Les cercles poses aux quatre coins
-     font que le motif se raccorde sans couture.
+  /* Le fond de l'ecran d'intro. Il est vert SOMBRE, et c'est un arbitrage
+     rouvert en connaissance de cause le 13/08 : l'ecran avait ete passe en
+     clair le 11/08 pour que le brun de l'accent s'y voie. Le client veut le
+     dispositif de farmafrica.org, qui est sombre. On rouvre donc l'arbitrage —
+     et on en paie la consequence, qui est ecrite juste au-dessus du mot :
+     « espoir » quitte le brun pour le creme, sans quoi il disparaitrait.
 
-     L'ecran est passe du sombre au CLAIR pour une raison mesurable : l'accent
-     est desormais le brun du logo, et le brun ne se voit que sur fond clair —
-     1,02 de contraste sur du vert fonce, 8,61 sur le creme. */
+     C'est exactement le vert des panneaux du site, `--color-forest` : le meme
+     aplat que le heros juste en dessous, ce qui evite une troisieme valeur de
+     vert sur une page qui n'en revendique que deux. Le motif de feuilles est
+     pose par-dessus par `.feuillage`, en element et non en `background-image`,
+     parce qu'il se deplace en trois plans. Les ondes concentriques du 11/08
+     partent avec le fond clair : c'est le motif que le client veut voir
+     remplace. */
   .heros-cadre {
-    background-color: var(--color-paper);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='280' viewBox='0 0 280 280'%3E%3Cg fill='none' stroke='%23683c10' stroke-width='1.3' opacity='0.16'%3E%3Ccircle cx='140' cy='140' r='34'/%3E%3Ccircle cx='140' cy='140' r='70'/%3E%3Ccircle cx='140' cy='140' r='106'/%3E%3Ccircle cx='0' cy='0' r='34'/%3E%3Ccircle cx='0' cy='0' r='70'/%3E%3Ccircle cx='0' cy='0' r='106'/%3E%3Ccircle cx='280' cy='0' r='34'/%3E%3Ccircle cx='280' cy='0' r='70'/%3E%3Ccircle cx='280' cy='0' r='106'/%3E%3Ccircle cx='0' cy='280' r='34'/%3E%3Ccircle cx='0' cy='280' r='70'/%3E%3Ccircle cx='0' cy='280' r='106'/%3E%3Ccircle cx='280' cy='280' r='34'/%3E%3Ccircle cx='280' cy='280' r='70'/%3E%3Ccircle cx='280' cy='280' r='106'/%3E%3C/g%3E%3C/svg%3E");
-    background-size: 280px 280px;
+    background-color: var(--color-forest);
   }
 
   /* La phrase occupe tout le cadre et se lit en trois rangees. Les deux
@@ -928,17 +941,19 @@ const partenaires = [
     left: calc(100% + 0.02em);
   }
 
-  /* L'anneau du repere de defilement. Le trait est volontairement transparent a
-     moitie : a pleine opacite, un cercle de 3,25 rem dans le brun du logo pese
-     autant que le mot « espoir » et se met a lui disputer l'oeil. */
+  /* L'anneau du repere de defilement. Il est au creme depuis que l'ecran est
+     redevenu sombre — meme regle que le mot. Le trait reste volontairement
+     transparent a moitie : a pleine opacite, un cercle de 3,25 rem pese autant
+     que le mot « espoir » et se met a lui disputer l'oeil. La fleche, elle,
+     garde le creme plein, sinon le signe devient illisible sur le feuillage. */
   .heros-fleche-rond {
     display: grid;
     place-items: center;
     width: 3.25rem;
     height: 3.25rem;
-    border: 1px solid color-mix(in srgb, var(--color-accent) 40%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-paper) 45%, transparent);
     border-radius: 50%;
-    color: var(--color-accent);
+    color: var(--color-paper);
   }
   .heros-fleche-rond svg {
     width: 1.3rem;
@@ -1026,7 +1041,7 @@ const partenaires = [
          defilement ; le decalage entre lignes se rejoue en decalant les
          plages, les `animation-delay` n'ayant plus cours ici. */
       .heros-photo,
-      .heros-panneau > *:not(.feuillage),
+      .heros-panneau > *,
       .heros-accent {
         animation-timeline: view();
         animation-duration: auto;
@@ -1074,12 +1089,18 @@ const partenaires = [
   }
 
   /* ---------------------------------------------------------------------------
-     LE FEUILLAGE DU PANNEAU HEROS — le motif de farmafrica.org.
+     LE FEUILLAGE DE L'ECRAN D'INTRO — le motif de farmafrica.org.
 
-     Un fond vert tres sombre couvert de grandes formes de feuilles et de
-     rosaces, dessinees dans un vert A PEINE plus clair que le fond. Du ton sur
-     ton, jamais un contraste : le motif ne doit pas se disputer le texte, il
-     doit lui donner une matiere.
+     Un fond vert sombre couvert de grandes formes de feuilles et de rosaces,
+     dessinees dans un vert A PEINE plus clair que le fond. Du ton sur ton,
+     jamais un contraste : le motif ne doit pas se disputer le texte, il doit
+     lui donner une matiere.
+
+     Il a d'abord ete pose sur le panneau vert du heros (13/08, `0b09b06`).
+     C'etait le mauvais endroit : le client visait l'ecran d'intro. Le trace de
+     la feuille, la tuile et les trois plans se reutilisent tels quels ; seule
+     la surface qui les porte change. Le panneau du heros redevient l'aplat que
+     le client avait valide.
 
      LA FEUILLE VIENT DU LOGO, pas d'une banque de formes. Le feuillage de
      l'arbre Dekkandoo est fait de lames en amande, pointues au sommet,
@@ -1087,35 +1108,30 @@ const partenaires = [
      silhouette pleine. C'est ce trace qui est repris, seul ou par quatre en
      rosace.
 
-     LA COULEUR EST MESUREE, pas choisie a l'oeil. Le panneau est `#165a2d`,
-     soit hsl(140 60% 22%) — la teinte du vert du logo. Le motif est la MEME
-     teinte et la MEME saturation, quatre points plus clair : hsl(140 60% 26%),
+     LA COULEUR EST MESUREE, pas choisie a l'oeil. Le fond est `#165a2d`, soit
+     hsl(140 60% 22%) — la teinte du vert du logo. Le motif est la MEME teinte
+     et la MEME saturation, quatre points plus clair : hsl(140 60% 26%),
      `#1b6a35`. Aucune autre famille de couleur n'entre ici (l'or de la maquette
      a ete ecarte le 11/08, et il ne revient pas).
-     Contraste mesure du texte le plus fragile — le paragraphe et le sur-titre,
-     qui sont en `text-paper/85` — pose SUR une feuille : 4,91:1. Sur le fond nu
-     il valait 6,01:1. Le seuil de 4,5 est tenu partout.
 
-     LE MOTIF ENTOURE LE TEXTE. Il occupe tout le panneau, bord a bord, y
-     compris derriere le bloc de texte. Il n'est pas relegue sur les cotes.
+     LE MOTIF ENTOURE LE TEXTE. Il occupe tout le cadre, bord a bord, y compris
+     derriere la phrase. Il n'est pas relegue sur les cotes.
      --------------------------------------------------------------------------- */
 
-  /* Sans ceci, le feuillage disparait. Un `z-index: -1` remonte jusqu'au
-     premier ancetre qui forme un contexte d'empilement ; `.heros-panneau` est
-     en `position: relative` mais en `z-index: auto`, donc il n'en forme pas, et
-     le decor serait alle se ranger DERRIERE l'aplat vert de la section. */
-  .heros-panneau {
-    isolation: isolate;
-  }
+  /* Aucun `z-index` : `.feuillage` est le PREMIER enfant positionne du cadre,
+     et la phrase, la lucarne et le repere de defilement viennent apres lui dans
+     le document — ils sont donc peints par-dessus. Un `z-index: -1` aurait ete
+     le piege : `.heros-cadre` passe en `position: sticky` au-dela de 1024 px,
+     ce qui en fait un contexte d'empilement, et le decor serait alle se ranger
+     derriere son propre aplat vert.
 
-  /* Le cadre rogne les plans. Il est volontairement pose ici, et non sur
-     `.heros-panneau` : `overflow: hidden` fait de son element une boite de
-     defilement, et `.heros-panneau` est l'ancetre des elements animes par
-     `view()` — leur point de mesure aurait change. */
+     `overflow: hidden` est repete ici alors que `.heros-cadre` le porte deja :
+     c'est la reserve de 48 px des plans qu'il faut rogner, et la rogner sur le
+     cadre marcherait aussi — mais le decor doit rester autonome, y compris si
+     le cadre perd un jour son `overflow`. */
   .feuillage {
     position: absolute;
     inset: 0;
-    z-index: -1;
     overflow: hidden;
     pointer-events: none;
     --px: 0;
@@ -1172,14 +1188,20 @@ const partenaires = [
   }
 </style>
 
-<!-- La parallaxe du feuillage. Trois conditions, et le script s'arrete a la
+<!-- La parallaxe du feuillage. Cinq conditions, et le script s'arrete a la
      premiere qui manque :
 
-     1. le panneau existe sur la page ;
-     2. l'appareil a une souris — `(hover: hover) and (pointer: fine)`. Sur
+     1. le cadre existe sur la page ;
+     2. l'ecran d'intro est REELLEMENT AFFICHE. Les deux tests qui suivent sont
+        la copie exacte du `@supports` et du `@media` qui l'allument dans la
+        feuille de style. Sans eux, un Firefox de bureau — qui ne sait pas
+        rattacher une animation au defilement, et pour qui l'ecran d'intro n'est
+        donc pas affiche du tout — se verrait poser un ecouteur `pointermove`
+        pour un decor invisible ;
+     3. l'appareil a une souris — `(hover: hover) and (pointer: fine)`. Sur
         telephone, AUCUN ecouteur n'est pose : le motif y est statique, et il
         doit l'etre, la moitie du parc etant des terminaux d'entree de gamme ;
-     3. le visiteur n'a pas demande moins d'animation dans son systeme.
+     4. le visiteur n'a pas demande moins d'animation dans son systeme.
 
      Le mouvement n'est pas ecrit par le `pointermove` : celui-ci ne fait que
      retenir deux nombres. C'est `requestAnimationFrame` qui pose les deux
@@ -1188,11 +1210,17 @@ const partenaires = [
 
      La classe `.feuillage-vive` est ce qui allume le `transform` : sans elle —
      donc sans JavaScript — les trois plans restent des fonds ordinaires, et le
-     navigateur n'a aucune couche de composition a tenir. -->
+     navigateur n'a aucune couche de composition a tenir. C'est le meme
+     mecanisme que la classe `.js` posee sur <html> par le layout : l'etat par
+     defaut du balisage est l'etat VISIBLE, le script n'ajoute que du mouvement.
+     Ecrire le `transform` par defaut et le retirer ensuite aurait fait sauter
+     le motif au chargement. -->
 <script is:inline>
   (() => {
     const cadre = document.querySelector('.feuillage');
     if (!cadre) return;
+    if (!CSS.supports('animation-timeline', 'scroll()')) return;
+    if (!matchMedia('(min-width: 1024px)').matches) return;
     if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
