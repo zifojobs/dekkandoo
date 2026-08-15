@@ -1093,8 +1093,8 @@ const partenaires = [
        `contain` plutot que `cover` : a dimensions egales les deux donnent le
        meme resultat, mais `contain` garantit qu'aucun rognage ne reapparaitra
        si un jour la source cesse d'etre exactement en 16/9. */
-    width: min(100vw, calc((100vh - var(--entete, 5.75rem)) * 16 / 9));
-    height: min(56.25vw, calc(100vh - var(--entete, 5.75rem)));
+    width: min(100vw, calc(100vh * 16 / 9));
+    height: min(56.25vw, 100vh);
     object-fit: contain;
     transform: translate(-50%, -50%) scale(calc(1 / var(--s)));
   }
@@ -1253,9 +1253,20 @@ const partenaires = [
     @media (min-width: 1024px) {
       /* La piste est plus haute que l'ecran : c'est cette difference — ici
          80vh — qui donne sa duree au moment ou le cadre reste colle en haut. */
+      /* 🔑 LA PISTE REMONTE SOUS LA BARRE, et c'est ce qui fait tenir tout le
+         reste. Tant qu'elle commencait APRES la barre, l'ecran d'intro debutait
+         a y = 105 px : un film de 100vh de haut y depassait forcement du bas de
+         la fenetre. La marge negative le ramene a y = 0, la barre flotte
+         par-dessus (elle est deja en `sticky` avec un `z-index` superieur), et
+         le film occupe exactement la fenetre.
+
+         6,5625rem = 105 px, la hauteur mesuree de la barre au-dela de 1024 px :
+         logo de 4,5rem + 2 x 1rem de marge + 1 px de filet. Elle est verifiee
+         au navigateur, pas supposee. */
       .heros-piste {
         display: block;
         height: 180vh;
+        margin-top: -6.5625rem;
       }
 
       /* L'en-tete se pose PAR-DESSUS cet ecran depuis le 11/08 : il n'occupe
@@ -1274,13 +1285,26 @@ const partenaires = [
          commande et il devient moins large que l'ecran. Il reste donc une bande
          de fond, en haut et en bas sur un ecran etroit, sur les cotes sur un
          ecran large — c'est la contrepartie assumee du « zero rognage ». */
+      /* 🔄 PLEINE LARGEUR, ET LA BARRE PASSE PAR-DESSUS — arbitrage de Saibo le
+         15/08 au soir. C'est le dispositif de farmafrica.org, cette fois repris
+         en entier : chez eux aussi la barre flotte sur la video.
+
+         LA CONTRAINTE EST ARITHMETIQUE, elle ne se negocie pas. Une video
+         pleine largeur en 16/9 sur un ecran 1920x1080 fait EXACTEMENT 1080 px
+         de haut, soit toute la fenetre. Tant que la barre occupait ses 92 px,
+         il fallait 1172 px pour 1080 disponibles : pleine largeur et video
+         entiere ne pouvaient pas coexister. En passant `top` a 0 et en faisant
+         flotter la barre, les deux redeviennent possibles.
+
+         `min(56.25vw, 100vh)` : pleine largeur tant que la hauteur suit. Sur un
+         ecran plus large que 16/9 (21/9 par exemple) c'est la hauteur qui
+         commande et le cadre cesse d'etre pleine largeur — sans quoi le bas du
+         film sortirait de la fenetre. */
       .heros-cadre {
-        --entete: 5.75rem;
-        --dispo: calc(100vh - var(--entete));
         position: sticky;
-        top: var(--entete);
-        height: min(56.25vw, var(--dispo));
-        width: min(100vw, calc(var(--dispo) * 16 / 9));
+        top: 0;
+        height: min(56.25vw, 100vh);
+        width: min(100vw, calc(100vh * 16 / 9));
         margin-inline: auto;
       }
 
@@ -1482,6 +1506,33 @@ const partenaires = [
         /* Lecture refusee par le navigateur : le poster reste affiche, et
            l'ecran garde son sens. Rien a rattraper. */
       });
+
+      /* LA BARRE FLOTTE SUR LE FILM tant que l'ecran d'intro couvre le haut de
+         la fenetre. La classe est posee ici et non dans le layout : elle ne doit
+         valoir que sur l'accueil, et seulement la ou l'ecran d'intro existe
+         reellement — ce script porte deja ces garde-fous.
+
+         L'ecouteur ne fait que retenir un etat ; c'est `requestAnimationFrame`
+         qui touche au DOM, une seule fois par image. */
+      const entete = document.querySelector('.entete');
+      const piste = document.querySelector('.heros-piste');
+      if (entete && piste) {
+        let enAttente = 0;
+        const suivre = () => {
+          enAttente = 0;
+          const r = piste.getBoundingClientRect();
+          entete.classList.toggle(
+            'sur-film',
+            r.top <= 0 && r.bottom > entete.offsetHeight
+          );
+        };
+        const planifier = () => {
+          if (!enAttente) enAttente = requestAnimationFrame(suivre);
+        };
+        suivre();
+        addEventListener('scroll', planifier, { passive: true });
+        addEventListener('resize', planifier, { passive: true });
+      }
 
       /* Le bouton de son. Il n'existe que si la video existe : sans elle il
          n'aurait rien a commander. */

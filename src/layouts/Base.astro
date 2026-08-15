@@ -179,15 +179,31 @@ const schema = {
     <header class="entete">
       <div class="mx-auto flex max-w-6xl items-center justify-between gap-6 px-5 py-4">
         <a href="/" class="flex shrink-0 items-center" aria-label="Consortium Dëkkandoo, accueil">
-          {/* Le logo en VRAIES COULEURS partout, y compris sur l'accueil : la
-              barre est desormais creme sur toutes les pages, la version blanche
-              n'a plus lieu d'etre ici. Elle reste au pied de page. */}
+          {/* DEUX LOGOS, ET UN SEUL S'AFFICHE A LA FOIS. Le logo en vraies
+              couleurs sert partout ; la version blanche ne sort que lorsque la
+              barre flotte sur le film de l'ecran d'intro (classe `sur-film`,
+              posee par le script de l'accueil).
+
+              Les deux sont dans le balisage et c'est le CSS qui choisit : un
+              echange de `src` en JavaScript aurait fait clignoter le logo a
+              chaque bascule, le temps que la seconde image se telecharge. Ici
+              les deux sont deja la. Le brun du logo mesure 1,02:1 sur le vert
+              et se perd tout autant sur une image sombre — la version blanche
+              n'est donc pas un gout, c'est la meme regle que partout. */}
           <img
             src="/logo/logo-dekkandoo-256.png"
             alt="Consortium Dëkkandoo"
             width="112"
             height="92"
-            class="h-12 w-auto lg:h-[4.5rem]"
+            class="entete-logo-couleur h-12 w-auto lg:h-[4.5rem]"
+          />
+          <img
+            src="/logo/logo-dekkandoo-blanc-512.png"
+            alt=""
+            aria-hidden="true"
+            width="112"
+            height="92"
+            class="entete-logo-blanc h-12 w-auto lg:h-[4.5rem]"
           />
         </a>
 
@@ -209,11 +225,14 @@ const schema = {
 
           <span class="entete-filet" aria-hidden="true"></span>
 
+          {/* `class` sert de crochet pour l'etat « barre sur le film » : le
+              composant genere des classes utilitaires, sans nom stable a viser. */}
           <Reseaux
             comptes={CONSORTIUM_RESEAUX}
             entite="Consortium Dëkkandoo"
             ton="sombre"
             compact
+            class="entete-reseaux"
           />
 
           <a href={`tel:${CONSORTIUM.telUrl}`} class="entete-tel">{CONSORTIUM.tel}</a>
