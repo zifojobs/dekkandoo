@@ -235,6 +235,32 @@ const partenaires = [
         <span class="heros-rail"><span class="heros-goutte"></span></span>
       </div>
 
+      {/* LE BOUTON DE SON, demande par Saibo le 15/08. La video est muette au
+          chargement, et elle ne peut pas etre autrement : aucun navigateur ne
+          lance une lecture automatique sonore. Le bouton rend donc le son
+          possible, il ne l'impose pas.
+
+          C'est un vrai <button> et non un <div> cliquable : il se trouve au
+          clavier, il s'annonce a un lecteur d'ecran, et `aria-pressed` dit son
+          etat. Les deux icones sont dans le balisage et c'est le CSS qui montre
+          la bonne — pas de reecriture de SVG en JavaScript.
+
+          Il reste visible pendant tout l'ecran d'intro, contrairement au repere
+          de defilement qui s'efface : le son devient pertinent QUAND la lucarne
+          remplit l'ecran, c'est-a-dire apres que le repere a disparu. */}
+      <button
+        class="heros-son absolute bottom-10 right-8"
+        type="button"
+        aria-pressed="false"
+      >
+        <span class="sr-only">Activer le son de la vidéo</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 9.5v5h3.5L12 18V6L7.5 9.5H4z" />
+          <path class="heros-son-barre" d="M16 9.5l4.5 5m0-5l-4.5 5" />
+          <path class="heros-son-ondes" d="M15.8 9.4a3.6 3.6 0 010 5.2M18.6 7.2a7.2 7.2 0 010 9.6" />
+        </svg>
+      </button>
+
       {/* Rien n'est pose sur la video — arbitrage de Saibo le 11/08 au soir.
           Elle portait jusqu'ici le titre « Nous nourrissons l'espoir, Nous
           nourrissons l'avenir », qui repetait mot pour mot celui du heros situe
@@ -1005,8 +1031,18 @@ const partenaires = [
        La video s'affichait alors en bande verticale. Mesure a l'appui :
        `width` calculee a 18,84 px pour un `130vw` demande. */
     max-width: none;
-    width: 130vw;
-    height: 130vh;
+    /* 🔄 RAMENE DE 130vw/130vh A 100/100 LE 15/08 : Saibo voyait la video
+       deborder. Les 130 % dataient d'une epoque ou le mot n'etait pas garanti
+       centre ; il l'est depuis que `.heros-phrase` est une grille
+       `1fr auto 1fr`, dont la rangee du milieu tombe au centre vertical exact.
+       La reserve de 30 % ne servait donc plus qu'a rogner l'image.
+
+       A 100/100 avec `cover`, un ecran 16/9 affiche la video ENTIERE, sans
+       aucune coupe : la source fait 1440x810, soit exactement 16/9. Sur un
+       ecran d'un autre rapport, `cover` rogne le strict necessaire — c'est ce
+       qu'il faut, un `contain` poserait des bandes noires. */
+    width: 100vw;
+    height: 100vh;
     object-fit: cover;
     transform: translate(-50%, -50%) scale(calc(1 / var(--s)));
   }
@@ -1096,6 +1132,52 @@ const partenaires = [
     .heros-goutte {
       top: 1.5rem;
     }
+  }
+
+  /* LE BOUTON DE SON. Meme couple que la pastille de defilement d'avant et
+     que les boutons du heros : aplat brun, signe creme, 8,61:1 entre les deux.
+     Le filet creme est la pour la meme raison que sur la pastille — le brun
+     mesure 1,02:1 sur le vert, sans filet le disque n'aurait pas de contour. */
+  .heros-son {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    background-color: var(--color-accent);
+    border: 1px solid color-mix(in srgb, var(--color-paper) 55%, transparent);
+    border-radius: 50%;
+    color: var(--color-paper);
+    cursor: pointer;
+    transition: background-color 0.16s, transform 0.16s;
+  }
+  .heros-son:hover {
+    background-color: var(--color-accent-2);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .heros-son:hover {
+      transform: scale(1.08);
+    }
+  }
+  .heros-son:focus-visible {
+    outline: 2px solid var(--color-paper);
+    outline-offset: 3px;
+  }
+  .heros-son svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  /* L'etat par defaut est MUET : on montre la barre, on cache les ondes.
+     `aria-pressed` porte l'etat, et le CSS le suit — une seule source de
+     verite, pas deux. */
+  .heros-son .heros-son-ondes {
+    display: none;
+  }
+  .heros-son[aria-pressed='true'] .heros-son-barre {
+    display: none;
+  }
+  .heros-son[aria-pressed='true'] .heros-son-ondes {
+    display: block;
   }
 
   @keyframes heros-descend {
@@ -1333,6 +1415,24 @@ const partenaires = [
         /* Lecture refusee par le navigateur : le poster reste affiche, et
            l'ecran garde son sens. Rien a rattraper. */
       });
+
+      /* Le bouton de son. Il n'existe que si la video existe : sans elle il
+         n'aurait rien a commander. */
+      const bouton = document.querySelector('.heros-son');
+      if (bouton) {
+        const etiquette = bouton.querySelector('.sr-only');
+        bouton.addEventListener('click', () => {
+          video.muted = !video.muted;
+          const actif = !video.muted;
+          bouton.setAttribute('aria-pressed', actif ? 'true' : 'false');
+          etiquette.textContent = actif
+            ? 'Couper le son de la vidéo'
+            : 'Activer le son de la vidéo';
+          /* Un navigateur peut avoir mis la lecture en pause en attendant un
+             geste : le clic en est un, on en profite pour relancer. */
+          if (video.paused) video.play().catch(() => {});
+        });
+      }
     }
 
     const SOURCES = [
