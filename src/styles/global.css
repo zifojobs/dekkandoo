@@ -78,12 +78,27 @@
 
      D'ou le partage tenu dans tout le site :
        · fond CLAIR  -> l'accent est le brun du logo ;
-       · fond SOMBRE -> pas d'accent colore, on passe au creme.
-     C'est ce qui a fait basculer l'ecran d'intro en clair. Le panneau vert du
-     heros, lui, reste tel que le client l'a valide : son mot d'accent y est
-     simplement en creme. */
+       · fond SOMBRE -> l'accent est le SABLE ci-dessous.
+
+     LE SABLE, ajoute le 15/08. La regle disait jusqu'ici « fond sombre -> pas
+     d'accent colore, on passe au creme ». Elle avait raison sur la physique et
+     tort sur la conclusion : le probleme n'est pas la TEINTE du brun, c'est sa
+     LUMINOSITE. Saibo a demande un mot-cle chaud sur les titres a fond vert, en
+     montrant une affiche PRN2S ou le titre alterne vert et brun — mais cette
+     affiche est sur fond BLANC, ce qui est precisement le cas ou le brun marche.
+
+     `#e6b889` est le brun du logo garde a sa teinte exacte (30 degres) et monte
+     en luminosite : c'est la meme famille chaude, assez claire pour exister sur
+     le vert. Mesures : 4,57:1 sur le vert fonce, et 1,67:1 contre le creme —
+     ce second chiffre est celui qui compte pour l'effet demande, puisqu'il dit
+     de combien le mot d'accent se detache du reste de la phrase.
+
+     ⚠️ Les deux seuls titres sur fond vert sont le H1 du heros et la phrase de
+     l'ecran d'intro : les six titres de section sont deja en vert sur clair et
+     ne changent pas. */
   --color-accent: #683c10;
   --color-accent-2: #8a5318;
+  --color-sable: #e6b889;
 
   /* Couleurs EXACTES du logo, relevees au pixel. Servent au logo et aux
      surfaces claires ; on ne retouche jamais le logo d'un client. */

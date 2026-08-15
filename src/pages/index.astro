@@ -138,14 +138,24 @@ const partenaires = [
             grandit au defilement, il grandit AUTOUR de la lucarne, jamais a
             cote. L'ordre de lecture reste « esp o ir » pour un lecteur
             d'ecran. */}
-        {/* 🔴 LE MOT EST EN CREME, ET CE N'EST PAS UN CHOIX DE GOUT. L'accent du
-            site est le brun du logo, `#683c10` — une couleur SOMBRE, mesuree a
-            1,02 de contraste sur le vert fonce, c'est-a-dire exactement la
-            luminosite du fond. Sur cet ecran redevenu sombre, « espoir » y
-            disparaitrait purement et simplement. C'est la regle deja ecrite
-            dans `global.css` : fond clair -> accent brun ; fond sombre -> pas
-            d'accent colore, on passe au creme. */}
-        <p class="heros-ligne-mot font-titre text-paper">
+        {/* 🔴 LE MOT EST EN SABLE, ET CE N'EST PAS UN CHOIX DE GOUT. Le brun du
+            logo `#683c10` mesure 1,02 de contraste sur le vert fonce — soit
+            exactement la luminosite du fond : « espoir » y disparaitrait. Le
+            sable `#e6b889` est ce meme brun garde a sa teinte et monte en
+            luminosite, mesure a 4,57:1 sur le vert. Voir `global.css`, ou la
+            regle et les mesures sont ecrites une seule fois.
+
+            L'ANNEAU SUIT LE MOT SANS QU'ON LUI DEMANDE : `.heros-anneau` est
+            trace en `currentColor`, il passe donc au sable avec la lettre. Le
+            trait redevient dore, comme il l'etait dans la maquette — et cette
+            fois la couleur vient du logo au lieu d'un or emprunte.
+
+            ⚠️ LE FOND TRAME EST BORNE POUR CE MOT, pas pour le creme. Le sable
+            est bien plus sombre que la phrase qui l'entoure : le plafond
+            d'encre sous le texte a donc ete descendu d'un cran (voir
+            `SUR_DU_TEXTE` dans le script). Sable sur `#106b2e` : 3,66:1, au
+            dessus du seuil de 3:1 qui s'applique a un texte de cette taille. */}
+        <p class="heros-ligne-mot font-titre text-sable">
           <span class="heros-o">
             <span class="heros-avant-mot">esp</span>
             <span class="sr-only">o</span>
@@ -253,7 +263,11 @@ const partenaires = [
           class="mt-6 max-w-2xl font-titre text-4xl font-semibold leading-[1.06] tracking-[-0.015em] sm:text-5xl xl:text-6xl"
         >
           Nous nourrissons l’espoir,<br />
-          Nous nourrissons <em class="heros-accent not-italic text-paper">l’avenir.</em>
+          {/* Le mot d'accent passe du creme au SABLE le 15/08. Le crochet
+              existait depuis la maquette — c'est le <em> que le client a
+              valide — mais il etait reste de la meme couleur que le reste du
+              titre, d'ou le « tout blanc » que Saibo a releve. */}
+          Nous nourrissons <em class="heros-accent not-italic text-sable">l’avenir.</em>
         </h1>
         <p class="mt-7 max-w-xl text-lg leading-relaxed text-paper/85">
           Le Consortium Dëkkandoo agit dans les six communes du département de
@@ -1223,17 +1237,29 @@ const partenaires = [
        DEUX DERNIERES sont sous le seuil de 4,5:1 : elles ne sont autorisees que
        hors de l'ellipse du texte, et `SUR_DU_TEXTE` est la borne qui le garde. */
     const ENCRES = ['#683c10', '#106b2e', '#0f7a33', '#3f9e5f', '#8fc4a2'];
-    /* Six niveaux de quantification. Le niveau 0 ne trace rien : c'est le fond
-       nu qui fait le noir. Chaque niveau a son encre ET son rayon — la couleur
-       et la taille montent ensemble, ce qui etale la plage tonale bien au-dela
-       de ce que cinq teintes laisseraient croire. */
-    const NIVEAUX = 6;
-    const ENCRE_DE = [0, 0, 1, 2, 3, 4];
-    const RAYON_DE = [0, 0.3, 0.45, 0.6, 0.76, 0.92];
-    /* Le niveau le plus clair tolere la ou passe la phrase. `#0f7a33`, 5,01:1. */
-    const SUR_DU_TEXTE = 3;
+    /* HUIT niveaux de quantification, contre six au premier jet. Le niveau 0 ne
+       trace rien : c'est le fond nu qui fait le noir.
 
-    const CELL = 9; /* pixelSize, dans la plage 6-14 de la spec */
+       LE RAYON PORTE PLUS DE NUANCES QUE LA COULEUR, et c'est ce qui permet de
+       gagner en lisibilite sans toucher au contraste : deux niveaux peuvent
+       partager une encre et ne differer que par la taille du point. Un point
+       est soit de sa couleur soit absent — sa TAILLE ne change donc jamais le
+       pire cas de contraste, alors qu'une encre plus claire, si. C'est le
+       levier qu'on pousse quand le client demande de mieux reconnaitre les
+       personnes (demande du 15/08). */
+    const NIVEAUX = 8;
+    const ENCRE_DE = [0, 0, 0, 1, 1, 2, 3, 4];
+    const RAYON_DE = [0, 0.26, 0.4, 0.52, 0.64, 0.74, 0.85, 0.95];
+    /* Le niveau le plus clair tolere la ou passe la phrase. Descendu de 5 a 4
+       le 15/08 : le mot d'accent est passe du creme au SABLE, bien plus sombre,
+       et c'est lui desormais qui fixe la borne. Sable sur `#106b2e` (niveau 4) :
+       3,66:1 — au-dessus du seuil de 3:1 des grands textes. Sur `#0f7a33`
+       (niveau 5) il serait tombe a 3,00:1, soit tout juste sur le fil. */
+    const SUR_DU_TEXTE = 4;
+
+    const CELL = 8; /* pixelSize, dans la plage 6-14 de la spec. Descendu de 9 a
+                       8 le 15/08 : environ 27 % de cellules en plus, donc des
+                       silhouettes qui se lisent. */
     const DUREE = 7600; /* ms par photo, fondu compris */
     const FONDU = 2800; /* ms de fondu vers la suivante */
     const PAS = 1000 / 11; /* ~11 images par seconde */
@@ -1427,12 +1453,19 @@ const partenaires = [
           x = x < 0 ? 0 : x > 1 ? 1 : x;
           /* Etalement du contraste autour du gris moyen : les auto-niveaux
              ramenent la plage a [0,1], ce coup de pouce lui rend du modele. */
-          x = (x - 0.5) * 1.32 + 0.5;
+          x = (x - 0.5) * 1.45 + 0.5;
           x = x < 0 ? 0 : x > 1 ? 1 : x;
           /* La phrase s'assombrit ce qu'il y a dessous. C'est ce facteur qui
              fait la profondeur de champ — et c'est lui, pas un voile pose
-             par-dessus, qui rend le texte lisible. */
-          x *= 0.52 + 0.48 * a;
+             par-dessus, qui rend le texte lisible.
+
+             LE PLANCHER N'EST PAS CHOISI A L'OEIL : 4/7 = 0,571, c'est-a-dire
+             la valeur qui fait atteindre EXACTEMENT le niveau 4 — la borne
+             `SUR_DU_TEXTE` — au plus clair de la zone du texte. Un plancher
+             plus haut ferait taper la butee et ecraserait les hautes lumieres
+             en un aplat ; plus bas, on perdrait un palier pour rien. Le
+             plafond dur qui suit reste un garde-fou, pas le mecanisme. */
+          x *= 0.571 + 0.429 * a;
 
           const s = x * (NIVEAUX - 1);
           const base = Math.floor(s);
