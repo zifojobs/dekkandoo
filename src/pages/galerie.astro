@@ -80,6 +80,16 @@ import { GALERIE } from '../galerie';
       lien vers son image en 1400 px. Le script ne fait qu'intercepter le clic.
       C'est le meme principe que le menu du site, bati sur <details>. */}
   <dialog class="galerie-vue" aria-label="Photographie agrandie">
+    {/* 🔴 CETTE BOITE INTERMEDIAIRE EST LA CORRECTION DU 15/08, et elle repare
+        un vrai defaut. Le <dialog> etait large de 1400 px quelle que soit la
+        photo : sur un PORTRAIT, l'image n'en occupait que 450, les fleches se
+        collaient aux bords de la boite a 500 px du sujet, et il restait un
+        immense vide a droite.
+
+        La boite, elle, est en `inline-block` : elle se retrecit sur l'image.
+        Les boutons s'y accrochent, donc ils suivent la photo au lieu de suivre
+        l'ecran. Le <dialog> ne sert plus qu'a centrer. */}
+    <figure class="galerie-boite">
     <img alt="" />
     <button class="galerie-btn galerie-fermer" type="button">
       <span class="sr-only">Fermer</span>
@@ -99,7 +109,8 @@ import { GALERIE } from '../galerie';
         <path d="M9 5l7 7-7 7" />
       </svg>
     </button>
-    <p class="galerie-rang" aria-live="polite"></p>
+    <figcaption class="galerie-rang" aria-live="polite"></figcaption>
+    </figure>
   </dialog>
 </Base>
 
@@ -156,27 +167,48 @@ import { GALERIE } from '../galerie';
   }
 
   /* ─── L'agrandissement ─── */
+  /* Le dialogue occupe tout l'ecran et ne fait que CENTRER. Il n'a plus de
+     largeur propre : c'est ce qui empechait la boite d'epouser la photo.
+     Le `display` n'est pose que sur `[open]` — un <dialog> ferme doit rester
+     en `display: none`, et l'ecraser ici l'aurait rendu visible en permanence. */
   .galerie-vue {
-    width: min(96vw, 1400px);
-    max-width: none;
-    max-height: 94vh;
+    width: 100vw;
+    max-width: 100vw;
+    height: 100dvh;
+    max-height: 100dvh;
     padding: 0;
     border: 0;
-    border-radius: 0.5rem;
     background: transparent;
     overflow: visible;
+  }
+  .galerie-vue[open] {
+    display: grid;
+    place-items: center;
+  }
+
+  /* La boite se retrecit sur l'image — c'est tout son role. `inline-block`
+     plutot que `flex` : un conteneur en-ligne prend la largeur de son contenu
+     sans qu'on ait rien a lui dire. */
+  .galerie-boite {
+    position: relative;
+    display: inline-block;
+    margin: 0;
+    line-height: 0;
   }
   .galerie-vue::backdrop {
     /* Le vert du site plutot qu'un noir neutre : l'agrandissement reste dans
        l'identite au lieu de faire visionneuse de systeme. */
     background-color: color-mix(in srgb, var(--color-ink) 88%, var(--color-forest));
   }
+  /* L'image se dimensionne SEULE, dans les deux limites de l'ecran. Aucun
+     `width: 100%` : c'est lui qui forcait un portrait a remplir 1400 px de
+     large avant d'etre rabattu par la hauteur. */
   .galerie-vue img {
     display: block;
-    width: 100%;
+    width: auto;
     height: auto;
-    max-height: 88vh;
-    object-fit: contain;
+    max-width: 90vw;
+    max-height: 82dvh;
     border-radius: 0.5rem;
     background-color: var(--color-ink);
   }
@@ -283,11 +315,12 @@ import { GALERIE } from '../galerie';
       if (e.key === 'ArrowRight') montrer(i + 1);
     });
 
-    /* Un clic sur le fond ferme. `<dialog>` ne distingue pas le fond du contenu
-       dans sa cible d'evenement : on compare donc les coordonnees du clic au
-       rectangle de la boite. */
+    /* Un clic sur le fond ferme. On compare au rectangle de la BOITE et non a
+       celui du dialogue : depuis le 15/08 le dialogue occupe tout l'ecran, s'y
+       fier reviendrait a ne jamais rien fermer. */
+    const boite = vue.querySelector('.galerie-boite');
     vue.addEventListener('click', (e) => {
-      const r = vue.getBoundingClientRect();
+      const r = boite.getBoundingClientRect();
       const dedans =
         e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
       if (!dedans) vue.close();

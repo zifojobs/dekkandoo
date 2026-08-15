@@ -36,7 +36,12 @@ const partage = new URL(image, Astro.site);
 // defilement complet et sert de resume : chaque section s'y termine par un lien
 // vers sa page. C'est ainsi que fonctionnent Farm Africa et One Acre Fund.
 const rubriques = [
-  { url: '/qui-sommes-nous/', nom: 'Qui sommes-nous' },
+  // 🔄 LIBELLE CHANGE LE 15/08 : « Qui sommes-nous » devient « Notre histoire ».
+  // C'est la demande de Laye du 14/08, et Saibo a tranche qu'elle ne cree PAS
+  // une page de plus — c'est cette page-ci qui la porte. L'ADRESSE, ELLE, NE
+  // BOUGE PAS : le lien du site circule sur WhatsApp depuis le 12/08, et casser
+  // une URL deja partagee couterait plus que le confort d'une adresse assortie.
+  { url: '/qui-sommes-nous/', nom: 'Notre histoire' },
   { url: '/programmes/', nom: 'Nos programmes' },
   { url: '/impact/', nom: 'Notre impact' },
   { url: '/actualites/', nom: 'Actualités' },
