@@ -92,189 +92,6 @@ const partenaires = [
     remonte de 57 px et la video apparait sous le « o ». Enfant de l'anneau,
     les deux ne peuvent plus se desaligner, sur aucun ecran.
   */}
-  <div class="heros-piste">
-    <div class="heros-cadre relative overflow-hidden">
-      {/* LE CHAMP TRAME. Il remplace le feuillage du 13/08, retire a la demande
-          de Saibo le 15/08 : le fond tramé porte l'ecran seul.
-
-          Pose EN PREMIER dans le balisage, donc peint AVANT la phrase, la
-          lucarne et le repere de defilement — qui sont tous positionnes eux
-          aussi. Aucun `z-index` n'entre ici : l'ordre du document suffit, et il
-          ne peut pas se faire pieger par un contexte d'empilement
-          (`.heros-cadre` en devient un des qu'il passe en `position: sticky`,
-          ce qui aurait renvoye un `z-index: -1` derriere l'aplat vert).
-
-          CE QUE LA TRAME MONTRE EST LEUR PROPRE TERRAIN. Quatre photos du
-          Consortium — recolte, formation, remise de poussins, equipe au champ —
-          rendues en grille de points. Ce n'est pas un effet pose sur l'ecran :
-          c'est la preuve qui devient le decor. L'arbitrage du 11/08 disait que
-          sur un site d'ONG le « wow » vient de la preuve et pas de l'effet ; ici
-          les deux sont le meme objet.
-
-          ET LA LUCARNE EST LE SEUL ENDROIT NET. Tout l'ecran est en points, sauf
-          a travers l'anneau du « o » d'« espoir », ou la video passe en clair.
-          Le mot dit ce que l'image fait.
-
-          Le canvas est vide sans JavaScript, et c'est sans consequence :
-          `.heros-cadre` porte l'aplat vert en `background-color`. L'ecran reste
-          alors exactement ce qu'il etait avant le 13/08 — un fond plein, une
-          phrase lisible. Rien ne disparait. */}
-      <canvas class="trame" aria-hidden="true"></canvas>
-
-      <div class="heros-phrase absolute inset-0 px-8 py-12">
-        <p
-          class="heros-contour max-w-4xl text-balance font-titre self-end text-center leading-[1.15] text-paper"
-        >
-          Et s’il existait un
-        </p>
-
-        {/* Le mot. Le « o » n'est pas une lettre de la police mais un anneau
-            dessine : la police est celle de l'appareil (Iowan, Palatino ou
-            Georgia selon la machine) et son « o » n'a pas la meme geometrie
-            partout, alors qu'un anneau est identique en tout lieu.
-
-            L'anneau porte la lucarne, et « esp » / « ir » sont poses par
-            rapport a lui. Tout le mot est donc solidaire du « o » : quand il
-            grandit au defilement, il grandit AUTOUR de la lucarne, jamais a
-            cote. L'ordre de lecture reste « esp o ir » pour un lecteur
-            d'ecran. */}
-        {/* 🔴 LE MOT EST EN CREME, ET CE N'EST PAS UN CHOIX DE GOUT. Le brun
-            du logo `#683c10` mesure 1,02:1 sur ce vert : il y disparaitrait.
-
-            Cet ecran a ete essaye en CLAIR le 15/08, precisement pour que le
-            mot puisse porter ce brun — puis Saibo a demande a revenir au fond
-            sombre, qui est le dispositif de farmafrica. Le fond sombre gagne,
-            le mot reste donc creme. Le brun, lui, a garde tout le reste du
-            site : sur-titres, chiffres, heros, citation de Khaly.
-
-            L'anneau suit le mot : `.heros-anneau` est trace en `currentColor`. */}
-        <p class="heros-ligne-mot font-titre text-paper">
-          <span class="heros-o">
-            <span class="heros-avant-mot">esp</span>
-            <span class="sr-only">o</span>
-            <span class="heros-apres-mot">ir</span>
-
-            {/* La video est dimensionnee en unites d'ecran et contre-mise a
-                l'echelle : sa taille affichee ne bouge donc JAMAIS pendant que
-                la lucarne s'ouvre. Seule la fenetre grandit, l'image ne
-                s'etire pas.
-
-                🔄 REMPLACEE LE 15/08 PAR LE MASTER HD. L'ancienne boucle etait
-                tiree d'un film anterieur — elle portait meme un filigrane du
-                logo — et mesurait 960x542. (Un commentaire disait ici 624x352 :
-                c'etait faux, mesure faite.) La nouvelle est coupee dans
-                `VIDEO FINALE V1.mp4`, le master 1920x1080 remis par Laye le
-                15/08, et fait 1440x810 — 50 % de definition en plus pour
-                1 096 Ko contre 867.
-
-                LA PREMIERE MINUTE ENTIERE, sans coupe — arbitrage de Saibo le
-                15/08. Une premiere version montait trois plans d'action de 3 s
-                en evitant les cartons de texte du film (0-4 s, 25-31 s,
-                63-67 s) ; Saibo a demande le 0 a 1 min 10 tel quel, ces cartons
-                compris. C'est son film qui parle.
-
-                LE POIDS DU FICHIER N'EST PAS LE COUT DU VISITEUR, et c'est
-                mesure : le fichier fait 4,9 Mo, mais une visite reelle n'en
-                telecharge que 1 096 Ko — exactement ce que coutait le montage
-                de 9 s. Le navigateur ne va chercher que ce qu'il lit, et
-                `movflags +faststart` lui permet de commencer sans attendre. */}
-            <span class="heros-lucarne" aria-hidden="true">
-              {/* 🔴 NI `src` NI `poster` DANS LE BALISAGE, ET C'EST UN CORRECTIF
-                  DU 15/08. Avec `autoplay`, le navigateur va chercher le
-                  fichier MEME si l'element est en `display: none` : `autoplay`
-                  passe outre `preload="none"`. Mesure faite a 390 px avant
-                  correction : 1 247 Ko telecharges — poster compris — pour un
-                  ecran d'intro qui n'est jamais affiche sur telephone.
-
-                  Sur un public majoritairement mobile et en donnees payantes,
-                  c'est le genre de defaut qui ne se voit sur aucune capture et
-                  qui coute a chaque visite. L'adresse est donc posee par le
-                  script, apres les memes garde-fous que la trame. */}
-              <video
-                class="heros-video"
-                data-src="/video/actions.mp4"
-                data-poster="/video/actions-poster.jpg"
-                muted
-                loop
-                playsinline
-                preload="none"></video>
-            </span>
-
-            {/* Le trait dore du « o », pose PAR-DESSUS la video : c'est lui qui
-                fait la lettre. Il s'efface des que le mot commence a grandir,
-                sinon son trait, mis a l'echelle, finirait par barrer l'ecran. */}
-            <span class="heros-anneau" aria-hidden="true"></span>
-          </span>
-        </p>
-
-        <p
-          class="heros-contour max-w-4xl text-balance font-titre self-start text-center leading-[1.15] text-paper"
-        >
-          pour chaque enfant du département de
-          <span class="whitespace-nowrap">Saint-Louis&nbsp;?</span>
-        </p>
-      </div>
-
-      {/* Le repere de defilement. Sans un mot — demande de Saibo le 11/08 en
-          remplacement du libelle « Défiler » : un signe se lit sans etre
-          traduit, et il ne fait pas concurrence a la phrase au-dessus.
-
-          🔄 LE CERCLE ET LA FLECHE SONT PARTIS LE 15/08. Saibo les a trouves
-          trop communs et a demande « quelque chose de premium ». Un cercle
-          borde une fleche, donc il fabrique un bouton — et un bouton appelle un
-          clic qui n'existe pas ici. Le rail, lui, ne dit rien d'autre que la
-          direction : un trait fin ou descend une goutte de lumiere. C'est le
-          registre des sites qui n'ont pas besoin de hausser la voix.
-
-          Zero image, zero JavaScript, et le mouvement s'arrete pour qui a
-          demande moins d'animation. */}
-      <div
-        class="heros-fleche absolute bottom-12 left-1/2 -translate-x-1/2"
-        aria-hidden="true"
-      >
-        <span class="heros-rail"><span class="heros-goutte"></span></span>
-      </div>
-
-      {/* LE BOUTON DE SON, demande par Saibo le 15/08. La video est muette au
-          chargement, et elle ne peut pas etre autrement : aucun navigateur ne
-          lance une lecture automatique sonore. Le bouton rend donc le son
-          possible, il ne l'impose pas.
-
-          C'est un vrai <button> et non un <div> cliquable : il se trouve au
-          clavier, il s'annonce a un lecteur d'ecran, et `aria-pressed` dit son
-          etat. Les deux icones sont dans le balisage et c'est le CSS qui montre
-          la bonne — pas de reecriture de SVG en JavaScript.
-
-          Il reste visible pendant tout l'ecran d'intro, contrairement au repere
-          de defilement qui s'efface : le son devient pertinent QUAND la lucarne
-          remplit l'ecran, c'est-a-dire apres que le repere a disparu. */}
-      <button
-        class="heros-son absolute bottom-10 right-8"
-        type="button"
-        aria-pressed="false"
-      >
-        <span class="sr-only">Activer le son de la vidéo</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M4 9.5v5h3.5L12 18V6L7.5 9.5H4z" />
-          <path class="heros-son-barre" d="M16 9.5l4.5 5m0-5l-4.5 5" />
-          <path class="heros-son-ondes" d="M15.8 9.4a3.6 3.6 0 010 5.2M18.6 7.2a7.2 7.2 0 010 9.6" />
-        </svg>
-      </button>
-
-      {/* Rien n'est pose sur la video — arbitrage de Saibo le 11/08 au soir.
-          Elle portait jusqu'ici le titre « Nous nourrissons l'espoir, Nous
-          nourrissons l'avenir », qui repetait mot pour mot celui du heros situe
-          juste en dessous : le visiteur lisait deux fois la meme phrase a deux
-          secondes d'intervalle.
-
-          Le voile sombre est parti avec lui, et c'est la consequence a ne pas
-          rater : il n'existait QUE pour rendre ce titre lisible sur une image
-          claire. Conserve seul, il aurait assombri le bas de la video sans que
-          rien ne l'explique. L'ecran finit donc sur leur image, nette et
-          entiere — et c'est le heros qui prend la parole ensuite. */}
-    </div>
-  </div>
-
   {/* PANNEAU PASSE EN CLAIR LE 15/08, meme raison que la citation de Khaly :
       Saibo veut le brun du logo sur le mot d'accent, et ce brun n'existe pas
       sur un fond vert (1,02:1). On change le fond, pas la couleur. Le titre
@@ -354,7 +171,72 @@ const partenaires = [
     </div>
   </section>
 
-  {/* QUI SOMMES-NOUS */}
+  {/* ---------------------------------------------------------------------------
+      LE FILM — une section a lui, depuis le 15/08.
+
+      Il vivait jusqu'ici dans la lucarne de l'ecran d'intro, qui s'ouvrait au
+      defilement. Ce dispositif est supprime : Saibo voulait le film ENTIER et
+      en pleine largeur, et la geometrie s'y opposait. Une video pleine largeur
+      en 16/9 sur un ecran 1920x1080 fait exactement 1080 px de haut, soit toute
+      la fenetre — l'en-tete ne pouvait pas cohabiter avec elle.
+
+      Ici, plus rien ne s'y oppose : la section fait la largeur de la page, le
+      film garde son rapport, et on le voit en entier sans qu'il ait a se
+      partager l'ecran avec autre chose.
+
+      LE POIDS N'EST PAYE QUE PAR QUI DESCEND JUSQU'ICI. Ni `src` ni `poster` ne
+      sont dans le balisage : c'est un observateur qui les pose quand la section
+      approche de l'ecran.
+
+      Ce que ca donne, mesure : sur TELEPHONE la section commence a y = 1307
+      pour un ecran de 844, donc zero requete et zero octet tant qu'on ne
+      descend pas — et c'est la que ca compte, le public etant majoritairement
+      mobile et en donnees payantes. Sur un grand ecran, en revanche, la section
+      est deja visible au premier coup d'oeil et se charge aussitot : c'est
+      normal, elle y est le deuxieme element de la page.
+
+      Le cadre porte son rapport 16/9 et un aplat vert : la place est reservee
+      avant le chargement, donc la page ne saute jamais.
+      --------------------------------------------------------------------------- */}
+  <section class="bg-forest" aria-labelledby="film-titre">
+    <h2 id="film-titre" class="sr-only">Le film du Consortium Dëkkandoo</h2>
+    <div class="film">
+      <video
+        class="film-video"
+        data-src="/video/actions.mp4"
+        data-poster="/video/actions-poster.jpg"
+        muted
+        loop
+        playsinline
+        preload="none"></video>
+
+      {/* La video demarre MUETTE, et ne peut pas etre autrement : aucun
+          navigateur n'autorise une lecture automatique sonore. Le bouton rend
+          le son possible, il ne l'impose pas.
+
+          Un vrai <button> : trouvable au clavier, annonce par un lecteur
+          d'ecran, et `aria-pressed` porte l'etat que le CSS suit — une seule
+          source de verite. */}
+      <button class="film-son" type="button" aria-pressed="false">
+        <span class="sr-only">Activer le son de la vidéo</span>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M4 9.5v5h3.5L12 18V6L7.5 9.5H4z" />
+          <path class="film-son-barre" d="M16 9.5l4.5 5m0-5l-4.5 5" />
+          <path class="film-son-ondes" d="M15.8 9.4a3.6 3.6 0 010 5.2M18.6 7.2a7.2 7.2 0 010 9.6" />
+        </svg>
+      </button>
+    </div>
+  </section>
+
+  {/* NOTRE HISTOIRE */}
   <section id="qui" class="scroll-mt-24 border-b border-line py-20">
     <div class="mx-auto max-w-6xl px-5">
       <p class="font-mono text-xs uppercase tracking-[0.2em] text-accent">Notre histoire</p>
@@ -870,327 +752,34 @@ const partenaires = [
   }
 
   /* ---------------------------------------------------------------------------
-     L'ECRAN D'INTRO — le dispositif de farmafrica.org.
-
-     Il n'existe QUE la ou le defilement peut reellement le piloter : grand
-     ecran, et navigateur qui sait rattacher une animation a la barre de
-     defilement. Partout ailleurs — telephone, navigateur plus ancien — la
-     piste n'est meme pas affichee et le visiteur arrive directement sur le
-     heros. C'est le meme arbitrage que Farm Africa, qui coupe son intro sous
-     1024 px ; la difference est qu'ici la degradation est propre : on ne sert
-     pas un ecran fige, on ne le sert pas du tout.
-
-     Zero JavaScript, ici encore : `animation-timeline` lie l'avancement de
-     l'animation a la position de defilement. Rien ne bouge tant que le
-     visiteur ne fait rien, et tout se rejoue quand il remonte — c'est ce qui
-     rend le geste visible, la ou une animation au chargement ne se voit qu'une
-     fois et seulement si on regardait.
-
-     Pas de garde-fou `prefers-reduced-motion` sur ce bloc, et c'est
-     deliberé : rien ne s'anime tout seul, c'est la main du visiteur qui
-     avance l'image. Le garde-fou reste sur le geste au chargement ci-dessus,
-     qui, lui, se declenche sans qu'on demande rien.
+     LA SECTION FILM
      --------------------------------------------------------------------------- */
-  .heros-piste {
-    display: none;
-  }
-
-  /* Le fond de l'ecran d'intro. Il est vert SOMBRE, et c'est un arbitrage
-     rouvert en connaissance de cause le 13/08 : l'ecran avait ete passe en
-     clair le 11/08 pour que le brun de l'accent s'y voie. Le client veut le
-     dispositif de farmafrica.org, qui est sombre. On rouvre donc l'arbitrage —
-     et on en paie la consequence, qui est ecrite juste au-dessus du mot :
-     « espoir » quitte le brun pour le creme, sans quoi il disparaitrait.
-
-     C'est exactement le vert des panneaux du site, `--color-forest` : le meme
-     aplat que le heros juste en dessous, ce qui evite une troisieme valeur de
-     vert sur une page qui n'en revendique que deux.
-
-     Cet aplat n'est plus le decor, il est devenu LE REPLI. Le champ tramé est
-     peint par-dessus, dans un canvas. Si le JavaScript ne tourne pas, si les
-     photos ne se chargent pas, ou si le navigateur ne sait pas rattacher une
-     animation au defilement, il ne reste que ce vert — et l'ecran fonctionne
-     quand meme. C'est pour cela que la couleur reste ecrite ici et pas dans le
-     canvas. */
-  .heros-cadre {
+  /* Le rapport est porte par le CADRE et non par la video : la place est ainsi
+     reservee avant que le fichier n'arrive, et la page ne saute pas. L'aplat
+     vert evite le rectangle blanc pendant le chargement. */
+  .film {
+    position: relative;
+    aspect-ratio: 16 / 9;
     background-color: var(--color-forest);
   }
 
-  /* LE CANVAS DU CHAMP TRAME. Il couvre le cadre bord a bord, y compris
-     derriere la phrase — la trame entoure le texte, elle n'est pas releguee sur
-     les cotes (meme regle que le feuillage qu'elle remplace).
-
-     `pointer-events: none` parce que la souris doit continuer a atteindre ce
-     qu'il y a dessous ; le script ecoute `pointermove` sur la fenetre, pas sur
-     le canvas.
-
-     Aucune transition ni aucun `opacity` anime ici : le fondu d'une photo a
-     l'autre se fait DANS la trame, en interpolant les niveaux de gris avant
-     quantification. Deux images superposees en opacite auraient produit deux
-     grilles de points l'une sur l'autre — un moire, pas un fondu. */
-  .trame {
+  .film-video {
     position: absolute;
     inset: 0;
     display: block;
     width: 100%;
     height: 100%;
-    pointer-events: none;
+    /* La source est en 16/9 comme le cadre : `cover` ne rogne donc rien. Il
+       n'est la que pour le jour ou la source cesserait de l'etre. */
+    object-fit: cover;
   }
 
-  /* La phrase occupe tout le cadre et se lit en trois rangees. Les deux
-     rangees de texte valent `1fr` chacune : la rangee du milieu — celle du mot
-     — tombe donc EXACTEMENT au centre vertical, quel que soit le nombre de
-     lignes au-dessus et en dessous. C'est ce qui permet de centrer la lucarne
-     sur le « o » sans mesurer quoi que ce soit. */
-  /* 🔴 `minmax(0, 1fr)` ET NON `1fr`, ET C'EST LA CAUSE D'UN VIEUX DEFAUT.
-     Un `1fr` nu vaut `minmax(auto, 1fr)` : la rangee ne peut pas devenir plus
-     petite que son contenu. Or la derniere ligne se replie sur TROIS lignes et
-     gonflait donc sa rangee, qui poussait le « o » vers le haut.
-
-     Mesure avant correction : le « o » etait 68 px au-dessus du centre du cadre
-     en 1366x768, et 162 px en 1920x1080 — l'ecart grandissait avec la taille du
-     texte, ce qui est la signature meme du repliement. Identique au repos et
-     zoom termine, donc bien structurel et non un artefact de mesure.
-
-     Avec `minmax(0, 1fr)` les deux rangees de texte sont forcees egales, et la
-     rangee du milieu retombe au centre exact. C'est ce qui permet a la video de
-     se caler sur le cadre sans compensation. */
-  .heros-phrase {
-    display: grid;
-    grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr);
-    justify-items: center;
-  }
-
-  /* La taille du texte suit la HAUTEUR de la fenetre autant que sa largeur.
-     Sans cela la phrase deborde d'un ecran court — c'est exactement ce qui
-     decalait le mot de 57 px en 1366x768. Le decalage ne casse plus rien
-     depuis que la lucarne est dans l'anneau, mais une phrase qui deborde
-     reste laide. */
-  /* L'echelle a ete montee le 13/08 a la demande du client : la phrase doit
-     occuper l'ecran, comme chez farmafrica. Elle passe de `min(7vh, 5.5vw)` a
-     `min(10vh, 7.6vw)`, soit environ 1,43x — 76,8 px au lieu de 53,8 en
-     1366x768.
-
-     Les deux termes du `min()` ont chacun leur role et aucun n'est decoratif :
-     `vw` empeche le debordement horizontal sur un ecran etroit, `vh` empeche le
-     debordement VERTICAL sur un ecran court. C'est ce second terme qui protege
-     le 1366x768, ou le cadre ne fait que 676 px de haut une fois l'en-tete
-     deduit. Une valeur fixe casserait l'un ou l'autre.
-
-     La lucarne n'a rien a rattraper : `.heros-o` est dimensionne en `em`, donc
-     l'anneau, la fenetre et les deux moities du mot grandissent tous du meme
-     facteur. Verifie a 1366x768 et 1920x1080 : centre de l'anneau et centre de
-     la lucarne confondus au pixel. */
-  .heros-contour,
-  .heros-ligne-mot {
-    /* 🔄 LE TERME EN VH DESCEND DE 10 A 9,3 LE 15/08, et c'est le prix a payer
-       pour que le « o » soit centre. Depuis que les rangees sont egales
-       (`minmax(0, 1fr)`), elles n'absorbent plus le repliement de la derniere
-       ligne : a 10vh, celle-ci debordait du cadre de 66 px en 1920x1080 et s'y
-       faisait couper.
-
-       Le budget se calcule : deux rangees de 3 lignes a 1,15 d'interligne, plus
-       la rangee de l'anneau (0,574em + 0,6em de marge), doivent tenir dans la
-       hauteur du cadre moins la marge verticale. La marge est passee de
-       `py-24` a `py-12` pour rendre 96 px.
-
-       9,3vh a d'abord ete essaye : il tenait partout SAUF en 1920x1080, ou il
-       restait 27 px de trop. La valeur a ete redescendue a 8,6vh, verifiee sur
-       cinq tailles d'ecran. Le cadre etant passe en 16/9 il est aussi plus
-       ETROIT qu'avant, donc la phrase se replie davantage : les deux reglages
-       se tiennent, on ne peut pas toucher l'un sans reverifier l'autre.
-
-       7 % de moins qu'avant : la phrase occupe toujours l'ecran, ce que Saibo
-       avait demande le 13/08. */
-    font-size: clamp(2.25rem, min(8.6vh, 7.6vw), 7rem);
-    font-weight: 600;
-    letter-spacing: -0.015em;
-  }
-
-  /* L'anneau est le seul element en flux : il suffit de le centrer. Sa rangee
-     ne fait donc que la hauteur du « o », et « esp » / « ir » debordent sur les
-     lignes voisines — d'ou la marge, qui rend au mot l'air d'une vraie ligne. */
-  .heros-ligne-mot {
-    display: flex;
-    justify-content: center;
-    margin: 0.3em 0;
-    line-height: 1;
-  }
-
-  /* La boite du « o » complet — trait compris. Tout le reste du mot s'accroche
-     dessus. */
-  /* Redessine pour une police geometrique : le « o » d'Outfit est presque
-     circulaire et son trait est d'epaisseur constante, la ou celui d'une police
-     a empattements etait ovale et module. */
-  /* LE DIAMETRE EST MESURE SUR LA POLICE, PAS CHOISI. Releve au canvas sur
-     Poppins 600 a 108 px : un vrai « o » occupe 61 px au-dessus de la ligne de
-     base et 1 px en dessous, soit 62 px — 0,574em. L'anneau valait 0,52em, il
-     etait donc plus petit que la lettre qu'il remplace, ce qui se voyait. */
-  .heros-o {
-    position: relative;
-    display: block;
-    width: 0.574em;
-    height: 0.574em;
-  }
-
-  /* Le trait dore, d'epaisseur constante comme dans une police geometrique.
-     Pose apres la lucarne dans le balisage, donc peint par-dessus la video :
-     la video occupe le contre-poincon, le trait fait la lettre. */
-  .heros-anneau {
+  /* Meme couple que les boutons du heros : aplat brun, signe creme, 8,61:1
+     entre les deux. Le filet creme lui rend son contour sur une image sombre. */
+  .film-son {
     position: absolute;
-    inset: 0;
-    border: 0.085em solid currentColor;
-    border-radius: 50%;
-  }
-
-  .heros-lucarne {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    border-radius: 50%;
-  }
-
-  .heros-video {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    /* Plus grand que l'ecran : de quoi rester couvrant meme si le mot n'est
-       pas exactement au centre du cadre sur une fenetre courte.
-
-       `max-width: none` n'est pas cosmetique : la feuille de base de Tailwind
-       pose `max-width: 100%` sur tout `video`, ce qui ramenait cette largeur a
-       celle de la lucarne — 19 px — avant que l'anneau ne la multiplie par 53.
-       La video s'affichait alors en bande verticale. Mesure a l'appui :
-       `width` calculee a 18,84 px pour un `130vw` demande. */
-    max-width: none;
-    /* LA RESERVE EST MESUREE, ET J'AI DU LA REAPPRENDRE. Elle valait 130 % ;
-       je l'ai ramenee a 100 % le 15/08 en RAISONNANT — « le mot est centre,
-       donc la reserve ne sert plus qu'a rogner » — et c'etait faux. Saibo a
-       vu la trame reapparaitre sur les bords au defilement.
-
-       Ce que la mesure dit, a 1600x900 : le cadre va de y=92 a y=900, mais le
-       centre du « o » tombe a 441 quand celui du cadre est a 496. Le mot est
-       55 px PLUS HAUT que le centre du cadre — l'en-tete de 5,75rem decale le
-       cadre vers le bas, pas la phrase. Or la video est centree sur le « o »,
-       pas sur le cadre : a 100vh il manquait donc 9 px en bas.
-
-       ET CE DECALAGE GRANDIT AVEC L'ECRAN : 55 px de haut a 900, 163 px a
-       1080. Le compenser par le calcul supposerait de corriger une valeur
-       exprimee en pixels d'ecran dans un repere qui, lui, est mis a l'echelle
-       par `--s` pendant toute l'animation — donc une correction qui devrait
-       varier a chaque image. Trop fragile pour ce que ca rapporte.
-
-       On dimensionne donc la reserve sur le PIRE CAS MESURE. A 1920x1080 :
-       cadre de 988 px, decalage de 163 px, il faut donc 988 + 2 x 163 = 1314,
-       soit 121,7vh. On prend 135vh, et 115vw pour la largeur — qui, elle, n'a
-       jamais manque de rien. Verifie en 1366x768, 1600x900 et 1920x1080 : le
-       cadre est couvert des quatre cotes dans les trois cas. */
-    /* LES MEMES EXPRESSIONS QUE LE CADRE, mot pour mot : les deux etant en
-       16/9, ils coincident au pixel. `--entete` est declaree sur `.heros-cadre`
-       et heritee jusqu'ici ; la valeur de repli sert sous 1024 px, ou l'ecran
-       d'intro n'existe pas.
-
-       `contain` plutot que `cover` : a dimensions egales les deux donnent le
-       meme resultat, mais `contain` garantit qu'aucun rognage ne reapparaitra
-       si un jour la source cesse d'etre exactement en 16/9. */
-    width: min(100vw, calc(100vh * 16 / 9));
-    height: min(56.25vw, 100vh);
-    object-fit: contain;
-    transform: translate(-50%, -50%) scale(calc(1 / var(--s)));
-  }
-
-  /* Les deux moities du mot sont posees de part et d'autre du « o », et non
-     dans le flux : elles suivent donc l'anneau quand il grandit. Le calage
-     vertical met leur ligne de base sur le bas de l'anneau, comme le ferait
-     une vraie lettre. */
-  /* LE CALAGE EST CALCULE, et il a fallu deux essais pour cesser de le regler
-     a l'oeil. Mesures au canvas sur Poppins 600 : la ligne de base tombe a
-     0,852em du haut de la boite du mot (line-height 1), et le « o » deborde
-     sous elle de 0,0093em.
-
-     Pour que la ligne de base du mot coincide avec le bas de l'anneau moins ce
-     debord :  bas de boite = bas d'anneau + (1 - 0,852 - 0,0093) = 0,139em.
-
-     A -0,02em, l'anneau se retrouvait 13 px trop bas — c'est ce que Saibo
-     voyait. A -0,24em (valeur d'origine) il l'etait de 26 px. */
-  .heros-avant-mot,
-  .heros-apres-mot {
-    position: absolute;
-    bottom: -0.139em;
-    line-height: 1;
-    white-space: nowrap;
-  }
-  .heros-avant-mot {
-    right: calc(100% + 0.02em);
-  }
-  .heros-apres-mot {
-    left: calc(100% + 0.02em);
-  }
-
-  /* L'anneau du repere de defilement. Il est au creme depuis que l'ecran est
-     redevenu sombre — meme regle que le mot. Le trait reste volontairement
-     transparent a moitie : a pleine opacite, un cercle de 3,25 rem pese autant
-     que le mot « espoir » et se met a lui disputer l'oeil. La fleche, elle,
-     garde le creme plein, sinon le signe devient illisible sur le feuillage. */
-  /* La pastille est PLEINE depuis le 15/08 : Saibo l'a demandee en brun a
-     fleche blanche, parce que le trait a moitie transparent d'avant laissait
-     mal voir la fleche. Fond brun du logo, fleche creme : 8,61:1 entre les
-     deux, la fleche est nette.
-
-     ⚠️ LE FILET CREME N'EST PAS UN AJOUT DECORATIF. Le brun du logo mesure
-     1,02:1 sur le vert fonce : le disque seul se confondrait avec le fond et
-     on ne verrait qu'une fleche flottante — soit un « cercle avec fleche » sans
-     cercle. Le filet redonne son contour a la pastille, et lui seul. */
-  /* LE RAIL. Un trait de 1 px qui nait et meurt en fondu, donc sans bout franc
-     nulle part — c'est ce degrade qui fait la difference entre un filet pose et
-     un filet qui appartient a l'image. */
-  .heros-rail {
-    position: relative;
-    display: block;
-    width: 1px;
-    height: 4.5rem;
-    overflow: hidden;
-    background: linear-gradient(
-      to bottom,
-      transparent,
-      color-mix(in srgb, var(--color-paper) 34%, transparent) 20%,
-      color-mix(in srgb, var(--color-paper) 34%, transparent) 80%,
-      transparent
-    );
-  }
-
-  /* La goutte. Elle est plus large que le rail (3 px contre 1) et sa tete est
-     pleine quand sa queue s'efface : c'est ce qui donne la trainee, et c'est
-     pour ca qu'elle se lit comme une descente et pas comme un point qui saute. */
-  .heros-goutte {
-    position: absolute;
-    left: -1px;
-    top: -1.15rem;
-    width: 3px;
-    height: 1.15rem;
-    border-radius: 2px;
-    background: linear-gradient(to bottom, transparent, var(--color-paper));
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .heros-goutte {
-      animation: heros-descend 2.7s cubic-bezier(0.65, 0, 0.35, 1) infinite;
-    }
-  }
-
-  /* Sans mouvement, la goutte se pose au tiers du rail : le signe reste lisible
-     comme une descente, il ne disparait pas. */
-  @media (prefers-reduced-motion: reduce) {
-    .heros-goutte {
-      top: 1.5rem;
-    }
-  }
-
-  /* LE BOUTON DE SON. Meme couple que la pastille de defilement d'avant et
-     que les boutons du heros : aplat brun, signe creme, 8,61:1 entre les deux.
-     Le filet creme est la pour la meme raison que sur la pastille — le brun
-     mesure 1,02:1 sur le vert, sans filet le disque n'aurait pas de contour. */
-  .heros-son {
+    right: 1.25rem;
+    bottom: 1.25rem;
     display: grid;
     place-items: center;
     width: 2.75rem;
@@ -1200,716 +789,82 @@ const partenaires = [
     border-radius: 50%;
     color: var(--color-paper);
     cursor: pointer;
-    transition: background-color 0.16s, transform 0.16s;
+    transition: background-color 0.16s;
   }
-  .heros-son:hover {
+  .film-son:hover {
     background-color: var(--color-accent-2);
   }
-  @media (prefers-reduced-motion: no-preference) {
-    .heros-son:hover {
-      transform: scale(1.08);
-    }
-  }
-  .heros-son:focus-visible {
+  .film-son:focus-visible {
     outline: 2px solid var(--color-paper);
     outline-offset: 3px;
   }
-  .heros-son svg {
+  .film-son svg {
     width: 1.25rem;
     height: 1.25rem;
   }
 
-  /* L'etat par defaut est MUET : on montre la barre, on cache les ondes.
-     `aria-pressed` porte l'etat, et le CSS le suit — une seule source de
-     verite, pas deux. */
-  .heros-son .heros-son-ondes {
+  /* L'etat par defaut est MUET : la barre se voit, les ondes non. */
+  .film-son .film-son-ondes {
     display: none;
   }
-  .heros-son[aria-pressed='true'] .heros-son-barre {
+  .film-son[aria-pressed='true'] .film-son-barre {
     display: none;
   }
-  .heros-son[aria-pressed='true'] .heros-son-ondes {
+  .film-son[aria-pressed='true'] .film-son-ondes {
     display: block;
   }
-
-  @keyframes heros-descend {
-    0% {
-      top: -1.15rem;
-      opacity: 0;
-    }
-    18% {
-      opacity: 1;
-    }
-    72% {
-      opacity: 1;
-    }
-    100% {
-      top: 4.5rem;
-      opacity: 0;
-    }
-  }
-
-  @supports (animation-timeline: scroll()) {
-    @media (min-width: 1024px) {
-      /* La piste est plus haute que l'ecran : c'est cette difference — ici
-         80vh — qui donne sa duree au moment ou le cadre reste colle en haut. */
-      /* 🔑 LA PISTE REMONTE SOUS LA BARRE, et c'est ce qui fait tenir tout le
-         reste. Tant qu'elle commencait APRES la barre, l'ecran d'intro debutait
-         a y = 105 px : un film de 100vh de haut y depassait forcement du bas de
-         la fenetre. La marge negative le ramene a y = 0, la barre flotte
-         par-dessus (elle est deja en `sticky` avec un `z-index` superieur), et
-         le film occupe exactement la fenetre.
-
-         6,5625rem = 105 px, la hauteur mesuree de la barre au-dela de 1024 px :
-         logo de 4,5rem + 2 x 1rem de marge + 1 px de filet. Elle est verifiee
-         au navigateur, pas supposee. */
-      .heros-piste {
-        display: block;
-        height: 180vh;
-        margin-top: -6.5625rem;
-      }
-
-      /* L'en-tete se pose PAR-DESSUS cet ecran depuis le 11/08 : il n'occupe
-         plus de bande, le cadre reprend donc toute la hauteur. */
-      /* L'en-tete est de nouveau une bande opaque : le cadre lui laisse sa
-         place au lieu de passer dessous. */
-      /* 🔄 LE CADRE PREND LA FORME DE LA VIDEO — arbitrage de Saibo le 15/08 :
-         « je ne veux pas de video rognee, elle doit prendre la taille exacte de
-         la section ». Le cadre etait plein ecran, la video s'y inscrivait en
-         `cover` et se faisait donc rogner. C'est l'inverse maintenant : le
-         cadre est en 16/9, comme la source (1440x810), et la video le remplit
-         exactement — zero pixel perdu, zero pixel coupe.
-
-         AUSSI GRAND QUE POSSIBLE, DANS LES DEUX LIMITES. Il prend toute la
-         largeur tant que la hauteur le permet ; au-dela, c'est la hauteur qui
-         commande et il devient moins large que l'ecran. Il reste donc une bande
-         de fond, en haut et en bas sur un ecran etroit, sur les cotes sur un
-         ecran large — c'est la contrepartie assumee du « zero rognage ». */
-      /* 🔄 PLEINE LARGEUR, ET LA BARRE PASSE PAR-DESSUS — arbitrage de Saibo le
-         15/08 au soir. C'est le dispositif de farmafrica.org, cette fois repris
-         en entier : chez eux aussi la barre flotte sur la video.
-
-         LA CONTRAINTE EST ARITHMETIQUE, elle ne se negocie pas. Une video
-         pleine largeur en 16/9 sur un ecran 1920x1080 fait EXACTEMENT 1080 px
-         de haut, soit toute la fenetre. Tant que la barre occupait ses 92 px,
-         il fallait 1172 px pour 1080 disponibles : pleine largeur et video
-         entiere ne pouvaient pas coexister. En passant `top` a 0 et en faisant
-         flotter la barre, les deux redeviennent possibles.
-
-         `min(56.25vw, 100vh)` : pleine largeur tant que la hauteur suit. Sur un
-         ecran plus large que 16/9 (21/9 par exemple) c'est la hauteur qui
-         commande et le cadre cesse d'etre pleine largeur — sans quoi le bas du
-         film sortirait de la fenetre. */
-      .heros-cadre {
-        position: sticky;
-        top: 0;
-        height: min(56.25vw, 100vh);
-        width: min(100vw, calc(100vh * 16 / 9));
-        margin-inline: auto;
-      }
-
-      /* LE ZOOM. Le mot grandit, et comme la lucarne est dans l'anneau, elle
-         grandit avec lui jusqu'a remplir l'ecran : on finit sur la video. Un
-         facteur 130 suffit largement — le « o » fait 37 px de large au depart,
-         soit 4 800 px a l'arrivee. */
-      .heros-o {
-        transform: scale(var(--s));
-        animation: mot-zoom linear both;
-        animation-timeline: scroll(root block);
-        animation-range: 0 62vh;
-      }
-
-      /* Le trait du « o » s'epaissit en meme temps que la lettre — c'est ce que
-         fait un vrai zoom — puis s'efface avant de barrer l'ecran. Les deux
-         moities du mot partent avec lui : passe cette taille, « esp » et « ir »
-         sont deja hors cadre. */
-      .heros-anneau,
-      .heros-avant-mot,
-      .heros-apres-mot {
-        animation: intro-efface linear both;
-        animation-timeline: scroll(root block);
-        animation-range: 6vh 28vh;
-      }
-
-      .heros-contour {
-        animation: intro-efface linear both;
-        animation-timeline: scroll(root block);
-        animation-range: 2vh 20vh;
-      }
-
-      .heros-fleche {
-        animation: intro-efface linear both;
-        animation-timeline: scroll(root block);
-        animation-range: 0 18vh;
-      }
-
-      /* Le heros n'est plus la premiere chose a l'ecran : son geste passe du
-         chargement au defilement. Sinon il aurait fini de jouer bien avant
-         qu'on arrive dessus — exactement le defaut qui rendait l'animation
-         invisible. `auto` est la duree qu'exige une animation pilotee par le
-         defilement ; le decalage entre lignes se rejoue en decalant les
-         plages, les `animation-delay` n'ayant plus cours ici. */
-      .heros-photo,
-      .heros-panneau > *,
-      .heros-accent {
-        animation-timeline: view();
-        animation-duration: auto;
-      }
-      .heros-photo {
-        animation-range: entry 0% entry 55%;
-      }
-      .heros-panneau > *:nth-child(1) {
-        animation-range: entry 15% entry 55%;
-      }
-      .heros-panneau > *:nth-child(2) {
-        animation-range: entry 22% entry 62%;
-      }
-      .heros-panneau > *:nth-child(3) {
-        animation-range: entry 29% entry 69%;
-      }
-      .heros-panneau > *:nth-child(4) {
-        animation-range: entry 36% entry 76%;
-      }
-      .heros-accent {
-        animation-range: entry 45% entry 85%;
-      }
-    }
-  }
-
-  /* `--s` doit etre declaree pour etre animable — un nombre, pas une chaine —
-     et heritee, car c'est la video qui la relit pour se contre-mettre a
-     l'echelle. */
-  @property --s {
-    syntax: "<number>";
-    inherits: true;
-    initial-value: 1;
-  }
-
-  @keyframes mot-zoom {
-    to {
-      --s: 130;
-    }
-  }
-
-  @keyframes intro-efface {
-    to {
-      opacity: 0;
-    }
-  }
-
-  /* ---------------------------------------------------------------------------
-  /* ---------------------------------------------------------------------------
-     LE DECOR DE L'ECRAN D'INTRO — il vit dans le canvas, pas ici.
-
-     Le feuillage de farmafrica.org (13/08, `0b09b06` puis `4788cd8`) a ete
-     retire le 15/08 : le champ tramé porte l'ecran seul. Les deux commits
-     restent dans l'historique, le trace de la feuille est donc recuperable tel
-     quel si on veut le faire revenir.
-
-     Tout le decor est desormais peint par le script en bas de fichier, sur
-     `.trame`. Le seul CSS qui le concerne est la regle `.trame` posee plus
-     haut, a cote de `.heros-cadre` — parce que c'est la que se lit le couple
-     « aplat de repli / trame par-dessus ».
-     --------------------------------------------------------------------------- */
 </style>
 
-<!-- ===========================================================================
-     LE CHAMP TRAME — quatre photos du Consortium rendues en grille de points.
-
-     La chaine de traitement suit la specification relevee le 29/07 sur la
-     galerie de Nick Saraev (`clairvo-designs.netlify.app`, `/prompts/03-dither
-     -engine.md`), volontairement en CANVAS 2D et pas en WebGL. Elle est
-     *source-agnostique* : elle accepte une image fixe aussi bien qu'une video.
-     Ici ce sont des images fixes — c'est ce qui rend le decor gratuit et
-     honnete, puisqu'il montre leur terrain reel.
-
-     QUATRE CONDITIONS, et le script s'arrete a la premiere qui manque :
-
-     1. le canvas existe sur la page ;
-     2. et 3. l'ecran d'intro est REELLEMENT AFFICHE. Les deux tests sont la
-        copie exacte du `@supports` et du `@media` qui l'allument dans la
-        feuille de style. Sans eux, un Firefox de bureau — qui ne sait pas
-        rattacher une animation au defilement, et pour qui l'ecran d'intro
-        n'existe donc pas — telechargerait 176 Ko de photos pour un decor
-        invisible. C'est aussi ce qui protege le telephone : sous 1024 px
-        l'ecran d'intro n'est pas affiche, donc RIEN NE SE TELECHARGE. Le
-        public de ce site est majoritairement mobile et en donnees payantes ;
-     4. le contexte 2D est disponible.
-
-     ELLE A ETE RETOURNEE PUIS REMISE A L'ENDROIT, LE MEME JOUR, et l'aller-
-     retour vaut d'etre garde ici. Le 15/08 l'ecran est passe en clair — points
-     sombres sur creme — pour que le mot « espoir » puisse porter le vrai brun
-     du logo. Saibo a demande a revenir au fond sombre : c'est le dispositif de
-     farmafrica, et c'est ce qu'il veut voir. On est donc revenu aux points
-     CLAIRS sur vert fonce. Ce qui a ete garde de la version claire : la
-     superellipse et sa rampe large, qui corrigeaient un vrai defaut.
-
-     LE CONTRASTE DU TEXTE EST MESURE, PAS ESPERE. La phrase est en creme
-     `#f4f6f1`, de luminance relative 0,915. Pour tenir 4,5:1, ce qu'il y a
-     dessous doit rester sous 0,164 de luminance. D'ou la palette, calculee et
-     non choisie a l'oeil :
-
-       fond    `#165a2d`  L 0,077  ->  7,61:1
-       brun    `#683c10`  L 0,062  ->  8,61:1   (le brun du logo)
-       vert m. `#106b2e`  L 0,108  ->  6,10:1
-       feuille `#0f7a33`  L 0,143  ->  5,01:1   <- le plus clair, et c'est la borne
-
-     Le vert du logo `#0b983a` est ECARTE de la trame : mesure a 3,47:1, il
-     tombe sous le seuil des qu'une hampe de lettre se pose sur un point. Les
-     deux encres les plus claires (`#3f9e5f`, `#8fc4a2`) ne sortent QUE hors de
-     la boite du texte — c'est le role de `SUR_DU_TEXTE`, qui vaut 4.
-
-     ET LES POINTS S'AMENUISENT VERS LE CENTRE. Un facteur d'attenuation reduit
-     leur rayon a 40 % au centre du cadre et le rend a 100 % sur les bords.
-     Deux raisons, et les deux comptent : la phrase gagne de l'air exactement la
-     ou elle se lit, et le champ prend une profondeur de mise au point. C'est le
-     meme geste que le motif de pousses de la maquette du 01/08, qui effacait
-     ses rangees basses la ou passait le texte.
-
-     TROIS DETAILS D'IMPLEMENTATION, sans lesquels le rendu s'effondre :
-
-     - Les cellules sont GROUPEES PAR COULEUR avant d'etre tracees. Trois
-       chemins par image au lieu de milliers de changements de `fillStyle`.
-     - Les auto-niveaux sont calcules sur les 2e et 98e centiles de TOUTE la
-       serie, une seule fois. Les recalculer image par image ferait pulser la
-       luminosite a chaque fondu.
-     - Le fondu interpole les NIVEAUX DE GRIS avant quantification, pas deux
-       rendus en opacite. Superposer deux grilles de points donnerait un moire.
-
-     ~11 IMAGES PAR SECONDE, ET C'EST VOULU. Le saccade fait le cachet — c'est
-     le point que Nick Saraev souligne, et c'est aussi ce que faisait la
-     maquette du 01/08 a 20 img/s. Un rendu fluide couterait plus cher et
-     rendrait moins bien.
-
-     Sans JavaScript, sans ces photos, ou si le systeme demande moins
-     d'animation : il reste l'aplat vert de `.heros-cadre`, et une image fixe
-     dans le dernier cas. Rien ne casse.
-     =========================================================================== -->
+<!-- Le film ne se telecharge que si on descend jusqu'a lui. `IntersectionObserver`
+     avec une marge de 300 px : le fichier commence a arriver juste avant que la
+     section n'entre a l'ecran, donc sans attente visible, et jamais pour un
+     visiteur qui reste en haut de page. -->
 <script is:inline>
   (() => {
-    const cv = document.querySelector('.trame');
-    if (!cv) return;
-    if (!CSS.supports('animation-timeline', 'scroll()')) return;
-    if (!matchMedia('(min-width: 1024px)').matches) return;
+    const cadre = document.querySelector('.film');
+    if (!cadre) return;
+    const video = cadre.querySelector('.film-video');
+    const bouton = cadre.querySelector('.film-son');
+    if (!video) return;
 
-    const ctx = cv.getContext('2d', { alpha: false });
-    if (!ctx) return;
-
-    /* L'ecran d'intro existe vraiment : la video peut aller chercher ses
-       octets. Avant ce point, elle n'a pas d'adresse — voir le commentaire
-       pose sur la balise. */
-    const video = document.querySelector('.heros-video');
-    if (video && video.dataset.src) {
-      video.poster = video.dataset.poster;
-      video.src = video.dataset.src;
+    const allumer = () => {
+      if (video.dataset.src) {
+        video.poster = video.dataset.poster;
+        video.src = video.dataset.src;
+        delete video.dataset.src;
+      }
       video.play().catch(() => {
-        /* Lecture refusee par le navigateur : le poster reste affiche, et
-           l'ecran garde son sens. Rien a rattraper. */
+        /* Lecture refusee : le poster reste, et la section garde son sens. */
       });
+    };
 
-      /* LA BARRE FLOTTE SUR LE FILM tant que l'ecran d'intro couvre le haut de
-         la fenetre. La classe est posee ici et non dans le layout : elle ne doit
-         valoir que sur l'accueil, et seulement la ou l'ecran d'intro existe
-         reellement — ce script porte deja ces garde-fous.
-
-         L'ecouteur ne fait que retenir un etat ; c'est `requestAnimationFrame`
-         qui touche au DOM, une seule fois par image. */
-      const entete = document.querySelector('.entete');
-      const piste = document.querySelector('.heros-piste');
-      if (entete && piste) {
-        let enAttente = 0;
-        const suivre = () => {
-          enAttente = 0;
-          const r = piste.getBoundingClientRect();
-          entete.classList.toggle(
-            'sur-film',
-            r.top <= 0 && r.bottom > entete.offsetHeight
-          );
-        };
-        const planifier = () => {
-          if (!enAttente) enAttente = requestAnimationFrame(suivre);
-        };
-        suivre();
-        addEventListener('scroll', planifier, { passive: true });
-        addEventListener('resize', planifier, { passive: true });
-      }
-
-      /* Le bouton de son. Il n'existe que si la video existe : sans elle il
-         n'aurait rien a commander. */
-      const bouton = document.querySelector('.heros-son');
-      if (bouton) {
-        const etiquette = bouton.querySelector('.sr-only');
-        bouton.addEventListener('click', () => {
-          video.muted = !video.muted;
-          const actif = !video.muted;
-          bouton.setAttribute('aria-pressed', actif ? 'true' : 'false');
-          etiquette.textContent = actif
-            ? 'Couper le son de la vidéo'
-            : 'Activer le son de la vidéo';
-          /* Un navigateur peut avoir mis la lecture en pause en attendant un
-             geste : le clic en est un, on en profite pour relancer. */
-          if (video.paused) video.play().catch(() => {});
-        });
-      }
+    if (typeof IntersectionObserver === 'function') {
+      const oeil = new IntersectionObserver(
+        (entrees) => {
+          for (const e of entrees) {
+            if (!e.isIntersecting) continue;
+            allumer();
+            oeil.disconnect();
+          }
+        },
+        { rootMargin: '300px' }
+      );
+      oeil.observe(cadre);
+    } else {
+      allumer();
     }
 
-    const SOURCES = [
-      '/photos/champ-recolte-trame.webp',
-      '/photos/formation-femmes-trame.webp',
-      '/photos/remise-poussins-trame.webp',
-      '/photos/champ-equipe-trame.webp',
-    ];
-
-    const FOND = '#165a2d';
-    /* Cinq encres, du plus sombre au plus clair. Mesures dans l'en-tete. Les
-       DEUX DERNIERES sont sous le seuil de 4,5:1 : elles ne sont autorisees que
-       hors de l'ellipse du texte, et `SUR_DU_TEXTE` est la borne qui le garde. */
-    const ENCRES = ['#683c10', '#106b2e', '#0f7a33', '#3f9e5f', '#8fc4a2'];
-    /* HUIT niveaux de quantification, contre six au premier jet. Le niveau 0 ne
-       trace rien : c'est le fond nu qui fait le noir.
-
-       LE RAYON PORTE PLUS DE NUANCES QUE LA COULEUR, et c'est ce qui permet de
-       gagner en lisibilite sans toucher au contraste : deux niveaux peuvent
-       partager une encre et ne differer que par la taille du point. Un point
-       est soit de sa couleur soit absent — sa TAILLE ne change donc jamais le
-       pire cas de contraste, alors qu'une encre plus claire, si. C'est le
-       levier qu'on pousse quand le client demande de mieux reconnaitre les
-       personnes (demande du 15/08). */
-    const NIVEAUX = 8;
-    const ENCRE_DE = [0, 0, 0, 1, 1, 2, 3, 4];
-    const RAYON_DE = [0, 0.26, 0.4, 0.52, 0.64, 0.74, 0.85, 0.95];
-    /* Le niveau le plus clair tolere la ou passe la phrase. Descendu de 5 a 4
-       le 15/08 : le mot d'accent est passe du creme au SABLE, bien plus sombre,
-       et c'est lui desormais qui fixe la borne. Sable sur `#106b2e` (niveau 4) :
-       3,66:1 — au-dessus du seuil de 3:1 des grands textes. Sur `#0f7a33`
-       (niveau 5) il serait tombe a 3,00:1, soit tout juste sur le fil. */
-    const SUR_DU_TEXTE = 4;
-
-    const CELL = 8; /* pixelSize, dans la plage 6-14 de la spec. Descendu de 9 a
-                       8 le 15/08 : environ 27 % de cellules en plus, donc des
-                       silhouettes qui se lisent. */
-    const DUREE = 7600; /* ms par photo, fondu compris */
-    const FONDU = 2800; /* ms de fondu vers la suivante */
-    const PAS = 1000 / 11; /* ~11 images par seconde */
-
-    /* Matrice de Bayer 8x8, normalisee. C'est elle qui decide, pour chaque
-       cellule, si on arrondit le niveau vers le haut ou vers le bas — le motif
-       ordonne qu'on voit dans un tramage d'epoque. */
-    const BAYER = [
-      0, 32, 8, 40, 2, 34, 10, 42, 48, 16, 56, 24, 50, 18, 58, 26, 12, 44, 4, 36,
-      14, 46, 6, 38, 60, 28, 52, 20, 62, 30, 54, 22, 3, 35, 11, 43, 1, 33, 9, 41,
-      51, 19, 59, 27, 49, 17, 57, 25, 15, 47, 7, 39, 13, 45, 5, 37, 63, 31, 55,
-      23, 61, 29, 53, 21,
-    ].map((v) => (v + 0.5) / 64);
-
-    const doux = matchMedia('(prefers-reduced-motion: reduce)');
-    const souris = matchMedia('(hover: hover) and (pointer: fine)');
-
-    let images = [];
-    let grilles = [];
-    let niv = null;
-    let att = null;
-    let tcx = 0;
-    let tcy = 0;
-    let thw = 1;
-    let thh = 1;
-    let cols = 0;
-    let rows = 0;
-    let W = 0;
-    let H = 0;
-    let bas = 0;
-    let etendue = 1;
-    let boucle = 0;
-    let derniere = -1e9;
-    let px = 0;
-    let py = 0;
-    let dx = 0;
-    let dy = 0;
-
-    /* Une photo -> une grille de luminances, une valeur par cellule. Le
-       redimensionnement est confie au navigateur : dessiner l'image dans un
-       canvas de cols x rows fait la moyenne des pixels, ce qu'on veut. */
-    const grilleDe = (img) => {
-      const off = document.createElement('canvas');
-      off.width = cols;
-      off.height = rows;
-      const octx = off.getContext('2d', { willReadFrequently: true });
-      /* Cadrage « couvrant » : on rogne le cote long plutot que de deformer. */
-      const ri = img.naturalWidth / img.naturalHeight;
-      const rc = cols / rows;
-      let sw, sh, sx, sy;
-      if (ri > rc) {
-        sh = img.naturalHeight;
-        sw = sh * rc;
-        sx = (img.naturalWidth - sw) / 2;
-        sy = 0;
-      } else {
-        sw = img.naturalWidth;
-        sh = sw / rc;
-        sx = 0;
-        sy = (img.naturalHeight - sh) / 2;
-      }
-      octx.drawImage(img, sx, sy, sw, sh, 0, 0, cols, rows);
-      const d = octx.getImageData(0, 0, cols, rows).data;
-      const g = new Float32Array(cols * rows);
-      /* Luminance Rec. 709. Appliquee aux valeurs sRGB telles quelles : c'est
-         une approximation, mais on quantifie ensuite sur 5 paliers — la
-         linearisation exacte ne changerait aucun palier visible. */
-      for (let i = 0, p = 0; i < g.length; i++, p += 4) {
-        g[i] = (0.2126 * d[p] + 0.7152 * d[p + 1] + 0.0722 * d[p + 2]) / 255;
-      }
-      return g;
-    };
-
-    /* Auto-niveaux sur TOUTE la serie, une seule fois. */
-    const calerNiveaux = () => {
-      const ech = [];
-      for (const g of grilles) for (let i = 0; i < g.length; i += 5) ech.push(g[i]);
-      ech.sort((a, b) => a - b);
-      bas = ech[Math.floor(ech.length * 0.02)];
-      const haut = ech[Math.floor(ech.length * 0.98)];
-      etendue = Math.max(0.001, haut - bas);
-    };
-
-    const mesurer = () => {
-      const r = cv.getBoundingClientRect();
-      W = Math.max(1, Math.round(r.width));
-      H = Math.max(1, Math.round(r.height));
-      /* Le rapport de pixels est plafonne a 1,5 : au-dela on paie de la surface
-         de trace pour des points de 9 px que personne ne regarde de si pres. */
-      const dpr = Math.min(devicePixelRatio || 1, 1.5);
-      cv.width = Math.round(W * dpr);
-      cv.height = Math.round(H * dpr);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      cols = Math.ceil(W / CELL) + 1;
-      rows = Math.ceil(H / CELL) + 1;
-      niv = new Uint8Array(cols * rows);
-      att = new Float32Array(cols * rows);
-      grilles = images.map(grilleDe);
-      calerNiveaux();
-      mesurerLeTexte();
-    };
-
-    /* OU EST LA PHRASE, EXACTEMENT. La zone protegee n'est pas devinee : elle
-       est relevee sur le DOM a chaque mesure. Un `max-w-4xl` centre ne couvre
-       pas la meme fraction du cadre en 1366x768 et en 1920x1080 — releve en
-       1366x768 : 66 % de la largeur, 65 % de la hauteur. Coder ces nombres en
-       dur aurait laisse passer une encre claire sous une lettre au premier
-       changement de taille de fenetre. */
-    const mesurerLeTexte = () => {
-      const cadre = cv.getBoundingClientRect();
-      const parts = document.querySelectorAll('.heros-contour, .heros-ligne-mot');
-      let g = Infinity;
-      let h = Infinity;
-      let d = -Infinity;
-      let b = -Infinity;
-      for (const p of parts) {
-        const q = p.getBoundingClientRect();
-        g = Math.min(g, q.left - cadre.left);
-        h = Math.min(h, q.top - cadre.top);
-        d = Math.max(d, q.right - cadre.left);
-        b = Math.max(b, q.bottom - cadre.top);
-      }
-      if (!isFinite(g)) {
-        /* Repli prudent : on protege tout le cadre plutot que rien. */
-        g = 0;
-        h = 0;
-        d = W;
-        b = H;
-      }
-      tcx = (g + d) / 2 / CELL;
-      tcy = (h + b) / 2 / CELL;
-      thw = Math.max(1, (d - g) / 2 / CELL);
-      thh = Math.max(1, (b - h) / 2 / CELL);
-    };
-
-    const dessiner = (t) => {
-      if (!grilles.length) return;
-      const n = grilles.length;
-
-      /* Ou en est-on dans le cycle, et de combien faut-il fondre ? */
-      let m = 0;
-      let i = 0;
-      if (doux.matches) {
-        i = 0;
-      } else {
-        const pos = ((t % (DUREE * n)) / DUREE + n) % n;
-        i = Math.floor(pos);
-        const f = pos - i;
-        const seuil = 1 - FONDU / DUREE;
-        if (f > seuil) {
-          m = (f - seuil) / (1 - seuil);
-          m = m * m * (3 - 2 * m); /* lissage, pour que le fondu ne demarre pas sec */
-        }
-      }
-      const A = grilles[i];
-      const B = grilles[(i + 1) % n];
-
-      /* La souris deplace les COORDONNEES D'ECHANTILLONNAGE, pas le rendu.
-         C'est la triche assumee de la spec : on ne recalcule aucun pixel, on
-         lit la grille un peu plus loin. Amplitude : 4 cellules. */
-      const ox = Math.round(dx * 4);
-      const oy = Math.round(dy * 4);
-
-      /* 1re passe : pour chaque cellule, a quelle distance de la phrase
-         sommes-nous, et quel niveau en resulte.
-
-         LA DISTANCE EST UNE SUPERELLIPSE, ni radiale ni rectangulaire, et les
-         deux essais ecartes expliquent pourquoi. Une distance EUCLIDIENNE vaut
-         1,41 dans les coins de la boite du texte : elle y laisserait la phrase
-         en zone « libre ». Une distance RECTANGULAIRE (`Math.max`) corrige ca,
-         mais elle a dessine un rectangle pale parfaitement visible autour du
-         texte des que le fond est passe au clair — le defaut se voyait comme
-         un bug. La puissance 4 donne un rectangle a coins arrondis : il couvre
-         la boite du texte sans qu'aucune arete ne se lise. */
-      for (let r = 0; r < rows; r++) {
-        const sr = Math.min(rows - 1, Math.max(0, r + oy));
-        const ey = Math.abs(r - tcy) / thh;
-        const ey4 = ey * ey * ey * ey;
-        for (let c = 0; c < cols; c++) {
-          const sc = Math.min(cols - 1, Math.max(0, c + ox));
-          const k = sr * cols + sc;
-          const v = A[k] + (B[k] - A[k]) * m;
-
-          const ex = Math.abs(c - tcx) / thw;
-          const e = Math.pow(ex * ex * ex * ex + ey4, 0.25);
-          /* Rampe TRES LARGE, de 0,40 a 1,30. Elle valait 0,88-1,14 tant que le
-             fond etait sombre, ou l'ecart entre zone protegee et zone libre
-             etait faible. Sur fond clair cet ecart est brutal — la trame passe
-             de « presque rien » a « dense » — et une rampe courte le transforme
-             en contour. Etalee sur 0,90, la meme protection se lit comme une
-             mise au point. */
-          let a = (e - 0.4) / 0.9;
-          a = a < 0 ? 0 : a > 1 ? 1 : a;
-          a = a * a * (3 - 2 * a);
-          att[r * cols + c] = a;
-
-          let x = (v - bas) / etendue;
-          x = x < 0 ? 0 : x > 1 ? 1 : x;
-          /* Etalement du contraste autour du gris moyen : les auto-niveaux
-             ramenent la plage a [0,1], ce coup de pouce lui rend du modele. */
-          x = (x - 0.5) * 1.45 + 0.5;
-          x = x < 0 ? 0 : x > 1 ? 1 : x;
-          /* La phrase s'assombrit ce qu'il y a dessous. C'est ce facteur qui
-             fait la profondeur de champ — et c'est lui, pas un voile pose
-             par-dessus, qui rend le texte lisible.
-
-             LE PLANCHER N'EST PAS CHOISI A L'OEIL : 4/7 = 0,571, c'est-a-dire
-             la valeur qui fait atteindre EXACTEMENT le niveau 4 — la borne
-             `SUR_DU_TEXTE` — au plus clair de la zone du texte. Un plancher
-             plus haut ferait taper la butee et ecraserait les hautes lumieres
-             en un aplat ; plus bas, on perdrait un palier pour rien. Le
-             plafond dur qui suit reste un garde-fou, pas le mecanisme. */
-          x *= 0.571 + 0.429 * a;
-
-          const s = x * (NIVEAUX - 1);
-          const base = Math.floor(s);
-          let q = base + (s - base > BAYER[(r & 7) * 8 + (c & 7)] ? 1 : 0);
-          q = q < 0 ? 0 : q > NIVEAUX - 1 ? NIVEAUX - 1 : q;
-          /* LA GARANTIE, ET ELLE EST POSITIONNELLE. Dans la boite du texte
-             relevee sur le DOM, aucune encre sous 4,5:1 ne peut sortir — meme
-             si l'assombrissement ci-dessus etait mal regle un jour. */
-          if (e < 1.02 && q > SUR_DU_TEXTE) q = SUR_DU_TEXTE;
-          niv[r * cols + c] = q;
-        }
-      }
-
-      ctx.fillStyle = FOND;
-      ctx.fillRect(0, 0, W, H);
-
-      /* 2e passe : un chemin par encre. Trois `fillStyle` par image, pas
-         vingt-cinq mille. */
-      const demi = CELL / 2;
-      for (let e = 0; e < ENCRES.length; e++) {
-        ctx.beginPath();
-        let trace = false;
-        for (let q = 1; q < NIVEAUX; q++) {
-          if (ENCRE_DE[q] !== e) continue;
-          const rq = RAYON_DE[q] * demi;
-          for (let r = 0; r < rows; r++) {
-            const cy = r * CELL + demi;
-            for (let c = 0; c < cols; c++) {
-              if (niv[r * cols + c] !== q) continue;
-              const cx = c * CELL + demi;
-              /* Le rayon suit la meme attenuation que le ton, calculee a la
-                 passe precedente : sous la phrase les points retrecissent en
-                 plus de s'assombrir. Les deux ensemble font la mise au point. */
-              const rr = rq * (0.55 + 0.45 * att[r * cols + c]);
-              if (rr < 0.3) continue;
-              ctx.moveTo(cx + rr, cy);
-              ctx.arc(cx, cy, rr, 0, 6.2832);
-              trace = true;
-            }
-          }
-        }
-        if (trace) {
-          ctx.fillStyle = ENCRES[e];
-          ctx.fill();
-        }
-      }
-    };
-
-    const tourner = (t) => {
-      boucle = requestAnimationFrame(tourner);
-      if (t - derniere < PAS) return;
-      derniere = t;
-      /* Le deplacement rejoint la position visee par pas de 12 % : la trame
-         suit la souris sans a-coup, et sans ecouter autre chose qu'un nombre. */
-      dx += (px - dx) * 0.12;
-      dy += (py - dy) * 0.12;
-      dessiner(t);
-    };
-
-    const demarrer = () => {
-      mesurer();
-      cancelAnimationFrame(boucle);
-      if (doux.matches) {
-        dessiner(0); /* une seule image, figee */
-        return;
-      }
-      derniere = -1e9;
-      boucle = requestAnimationFrame(tourner);
-    };
-
-    /* Chargement. Si une seule photo manque a l'appel, on renonce a tout et il
-       reste l'aplat vert : mieux vaut un fond plein qu'une trame trouee. */
-    Promise.all(
-      SOURCES.map(
-        (src) =>
-          new Promise((ok, ko) => {
-            const im = new Image();
-            im.decoding = 'async';
-            im.onload = () => ok(im);
-            im.onerror = ko;
-            im.src = src;
-          })
-      )
-    )
-      .then((tout) => {
-        images = tout;
-        demarrer();
-
-        let attente;
-        addEventListener('resize', () => {
-          clearTimeout(attente);
-          attente = setTimeout(demarrer, 200);
-        });
-
-        doux.addEventListener('change', demarrer);
-
-        if (souris.matches) {
-          addEventListener(
-            'pointermove',
-            (e) => {
-              px = e.clientX / innerWidth - 0.5;
-              py = e.clientY / innerHeight - 0.5;
-            },
-            { passive: true }
-          );
-        }
-      })
-      .catch(() => {
-        /* silence volontaire : `.heros-cadre` porte deja le vert */
+    if (bouton) {
+      const etiquette = bouton.querySelector('.sr-only');
+      bouton.addEventListener('click', () => {
+        allumer();
+        video.muted = !video.muted;
+        const actif = !video.muted;
+        bouton.setAttribute('aria-pressed', actif ? 'true' : 'false');
+        etiquette.textContent = actif
+          ? 'Couper le son de la vidéo'
+          : 'Activer le son de la vidéo';
       });
+    }
   })();
 </script>
