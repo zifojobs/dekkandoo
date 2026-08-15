@@ -47,7 +47,12 @@
   --color-forest: #165a2d;  /* bandeaux profonds, titres */
   --color-forest-2: #218341;
 
-  /* LE VERT DES SUR-TITRES — c'est le vert du LOGO, seulement assombri.
+  /* LE VERT CLAIR. Il portait les sur-titres de section jusqu'au 15/08 ; ils
+     sont passes au brun ce jour-la (voir plus bas). Il reste la palette verte
+     claire du site — filets, etats de survol, petits signes — et sa mesure de
+     contraste vaut toujours.
+
+     C'est le vert du LOGO, seulement assombri.
      Il valait #4e9c6e, et deux choses n'allaient pas. (1) Sa saturation est de
      33 % quand celle du logo est de 87 % : c'etait un vert delave, cousin du
      vert de la marque sans en etre. (2) Mesure : 3,06 de rapport sur le creme,
@@ -93,7 +98,23 @@
      le fond. Les trois panneaux concernes (heros, citation de Khaly, ecran
      d'intro) sont passes au creme, et le brun y donne 8,61:1.
 
-     ⚠️ Il ne reste plus AUCUN titre sur fond vert. */
+     ⚠️ Nuance ecrite apres verification, parce que la premiere version de ce
+     commentaire disait « il ne reste plus aucun titre sur fond vert » et que
+     c'etait FAUX : les bandeaux de titre des pages interieures
+     (`EnTetePage.astro`) sont toujours en vert profond, avec leur titre en
+     creme. C'est voulu — ils annoncent une page, ils ne portent pas d'accent —
+     et c'est justement pour ca qu'aucun brun ne doit y entrer.
+
+     LE 15/08 AU SOIR, LE BRUN A PRIS UN VRAI TERRITOIRE. Saibo : « il n'y a
+     quasiment pas de brun, on a que du vert sur du blanc partout ». Compte fait
+     avant correction : 106 usages de vert contre 23 de brun. Et l'incoherence
+     etait deja dans la page — le sur-titre du HEROS etait brun, les six autres
+     sur-titres du site etaient verts.
+
+     D'ou la regle, qui est celle de leur propre affiche PRN2S repetee sur
+     chaque section : SUR-TITRE BRUN, TITRE VERT. Les grands chiffres de
+     l'impact passent au brun aussi, sinon la seule section faite de nombres
+     serait restee entierement verte. */
   --color-accent: #683c10;
   --color-accent-2: #8a5318;
 
@@ -104,17 +125,26 @@
 
   /* La police des grands titres. C'est le seul fichier que ce site telecharge,
      et il faut le dire : la regle initiale etait « zero police a telecharger ».
-     Saibo a demande le 11/08 une police plus imposante, du genre de celle de
-     farmafrica.org. Outfit est geometrique, elle tient a tres grande taille, et
-     elle est libre.
 
-     Ce que ca coute est borne : UN fichier variable de 31,5 Ko couvrant tous
-     les graisses de 400 a 800, sous-jeu latin, servi depuis notre domaine et
-     non depuis Google. `font-display: swap` fait que le texte s'affiche
-     immediatement dans la police de l'appareil et se remplace ensuite : sur un
-     reseau lent, rien n'est jamais invisible. Le texte courant, lui, ne
-     telecharge toujours rien. */
-  --font-titre: "Outfit", ui-sans-serif, system-ui, sans-serif;
+     POURQUOI POPPINS, ET PAS CELLE DE FARMAFRICA. Saibo a demande le 11/08 une
+     police du genre de farmafrica.org, puis a ecarte Outfit le 15/08. Releve
+     fait sur leur site le meme jour : farmafrica utilise `sofia-pro` et
+     `new-spirit`, deux polices Adobe Fonts SOUS LICENCE COMMERCIALE. Elles ne
+     peuvent etre ni hebergees ni servies depuis ce domaine — la question n'est
+     donc pas « veut-on la meme », c'est qu'on ne peut pas l'avoir.
+
+     Poppins est la plus proche parente libre de sofia-pro : geometrique, des
+     lettres presque circulaires, une grande hauteur d'oeil. Licence SIL OFL,
+     jointe dans `public/fonts/poppins-OFL.txt` comme elle l'exige.
+
+     UN SEUL FICHIER, ET IL EST QUATRE FOIS PLUS LEGER QU'AVANT : 7,6 Ko contre
+     31,5. Outfit etait une police VARIABLE et transportait toutes les graisses
+     de 400 a 800 ; ce site n'en emploie qu'une, la 600. On ne sert donc que
+     celle-la, sous-jeu latin, depuis notre domaine et non depuis Google.
+     `font-display: swap` fait que le texte s'affiche immediatement dans la
+     police de l'appareil et se remplace ensuite : sur un reseau lent, rien
+     n'est jamais invisible. Le texte courant, lui, ne telecharge rien. */
+  --font-titre: "Poppins", ui-sans-serif, system-ui, sans-serif;
 
   --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
     Georgia, ui-serif, serif;
@@ -125,9 +155,9 @@
 }
 
 @font-face {
-  font-family: "Outfit";
-  src: url("/fonts/outfit-latin.woff2") format("woff2");
-  font-weight: 400 800;
+  font-family: "Poppins";
+  src: url("/fonts/poppins-latin-600.woff2") format("woff2");
+  font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
