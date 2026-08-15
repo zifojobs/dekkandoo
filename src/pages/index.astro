@@ -186,31 +186,24 @@ const partenaires = [
         </p>
       </div>
 
-      {/* Le repere de defilement. C'est celui de farmafrica.org : un anneau fin
-          et une fleche, sans un mot — demande de Saibo le 11/08 en remplacement
-          du libelle « Défiler ». Un signe se lit sans etre traduit, et il ne
-          fait pas concurrence a la phrase juste au-dessus, qui est le seul
-          texte que cet ecran doit donner a lire.
+      {/* Le repere de defilement. Sans un mot — demande de Saibo le 11/08 en
+          remplacement du libelle « Défiler » : un signe se lit sans etre
+          traduit, et il ne fait pas concurrence a la phrase au-dessus.
 
-          Le trait suit la meme regle que le mot : l'ecran est redevenu sombre,
-          donc pas d'accent colore — le repere passe au creme. */}
+          🔄 LE CERCLE ET LA FLECHE SONT PARTIS LE 15/08. Saibo les a trouves
+          trop communs et a demande « quelque chose de premium ». Un cercle
+          borde une fleche, donc il fabrique un bouton — et un bouton appelle un
+          clic qui n'existe pas ici. Le rail, lui, ne dit rien d'autre que la
+          direction : un trait fin ou descend une goutte de lumiere. C'est le
+          registre des sites qui n'ont pas besoin de hausser la voix.
+
+          Zero image, zero JavaScript, et le mouvement s'arrete pour qui a
+          demande moins d'animation. */}
       <div
         class="heros-fleche absolute bottom-12 left-1/2 -translate-x-1/2"
         aria-hidden="true"
       >
-        <span class="heros-fleche-rond">
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.6"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M12 4.5v14" />
-            <path d="M5.5 12l6.5 6.5 6.5-6.5" />
-          </svg>
-        </span>
+        <span class="heros-rail"><span class="heros-goutte"></span></span>
       </div>
 
       {/* Rien n'est pose sur la video — arbitrage de Saibo le 11/08 au soir.
@@ -942,11 +935,15 @@ const partenaires = [
   /* Redessine pour une police geometrique : le « o » d'Outfit est presque
      circulaire et son trait est d'epaisseur constante, la ou celui d'une police
      a empattements etait ovale et module. */
+  /* LE DIAMETRE EST MESURE SUR LA POLICE, PAS CHOISI. Releve au canvas sur
+     Poppins 600 a 108 px : un vrai « o » occupe 61 px au-dessus de la ligne de
+     base et 1 px en dessous, soit 62 px — 0,574em. L'anneau valait 0,52em, il
+     etait donc plus petit que la lettre qu'il remplace, ce qui se voyait. */
   .heros-o {
     position: relative;
     display: block;
-    width: 0.52em;
-    height: 0.52em;
+    width: 0.574em;
+    height: 0.574em;
   }
 
   /* Le trait dore, d'epaisseur constante comme dans une police geometrique.
@@ -989,14 +986,20 @@ const partenaires = [
      dans le flux : elles suivent donc l'anneau quand il grandit. Le calage
      vertical met leur ligne de base sur le bas de l'anneau, comme le ferait
      une vraie lettre. */
-  /* Le calage vertical a ete corrige le 15/08 : a -0,24em les deux moities du
-     mot tombaient nettement sous l'anneau, et le « o » avait l'air remonte.
-     Une lettre ronde ne s'aligne pas sur la ligne de base, elle la DEPASSE
-     legerement — d'ou ce reste de 0,02em, qui est ce debord et rien d'autre. */
+  /* LE CALAGE EST CALCULE, et il a fallu deux essais pour cesser de le regler
+     a l'oeil. Mesures au canvas sur Poppins 600 : la ligne de base tombe a
+     0,852em du haut de la boite du mot (line-height 1), et le « o » deborde
+     sous elle de 0,0093em.
+
+     Pour que la ligne de base du mot coincide avec le bas de l'anneau moins ce
+     debord :  bas de boite = bas d'anneau + (1 - 0,852 - 0,0093) = 0,139em.
+
+     A -0,02em, l'anneau se retrouvait 13 px trop bas — c'est ce que Saibo
+     voyait. A -0,24em (valeur d'origine) il l'etait de 26 px. */
   .heros-avant-mot,
   .heros-apres-mot {
     position: absolute;
-    bottom: -0.02em;
+    bottom: -0.139em;
     line-height: 1;
     white-space: nowrap;
   }
@@ -1021,37 +1024,65 @@ const partenaires = [
      1,02:1 sur le vert fonce : le disque seul se confondrait avec le fond et
      on ne verrait qu'une fleche flottante — soit un « cercle avec fleche » sans
      cercle. Le filet redonne son contour a la pastille, et lui seul. */
-  .heros-fleche-rond {
-    display: grid;
-    place-items: center;
-    width: 3.25rem;
-    height: 3.25rem;
-    background-color: var(--color-accent);
-    border: 1px solid color-mix(in srgb, var(--color-paper) 55%, transparent);
-    border-radius: 50%;
-    color: var(--color-paper);
-  }
-  .heros-fleche-rond svg {
-    width: 1.3rem;
-    height: 1.3rem;
+  /* LE RAIL. Un trait de 1 px qui nait et meurt en fondu, donc sans bout franc
+     nulle part — c'est ce degrade qui fait la difference entre un filet pose et
+     un filet qui appartient a l'image. */
+  .heros-rail {
+    position: relative;
+    display: block;
+    width: 1px;
+    height: 4.5rem;
+    overflow: hidden;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      color-mix(in srgb, var(--color-paper) 34%, transparent) 20%,
+      color-mix(in srgb, var(--color-paper) 34%, transparent) 80%,
+      transparent
+    );
   }
 
-  /* La fleche respire dans l'anneau, qui ne bouge pas. C'est ce battement qui
-     dit « ca descend » ; un cercle immobile ne le dit pas. Rien ne bouge pour
-     qui a demande moins d'animation dans son systeme. */
+  /* La goutte. Elle est plus large que le rail (3 px contre 1) et sa tete est
+     pleine quand sa queue s'efface : c'est ce qui donne la trainee, et c'est
+     pour ca qu'elle se lit comme une descente et pas comme un point qui saute. */
+  .heros-goutte {
+    position: absolute;
+    left: -1px;
+    top: -1.15rem;
+    width: 3px;
+    height: 1.15rem;
+    border-radius: 2px;
+    background: linear-gradient(to bottom, transparent, var(--color-paper));
+  }
+
   @media (prefers-reduced-motion: no-preference) {
-    .heros-fleche-rond svg {
-      animation: fleche-bat 1.9s ease-in-out infinite;
+    .heros-goutte {
+      animation: heros-descend 2.7s cubic-bezier(0.65, 0, 0.35, 1) infinite;
     }
   }
 
-  @keyframes fleche-bat {
-    0%,
-    100% {
-      transform: translateY(-2px);
+  /* Sans mouvement, la goutte se pose au tiers du rail : le signe reste lisible
+     comme une descente, il ne disparait pas. */
+  @media (prefers-reduced-motion: reduce) {
+    .heros-goutte {
+      top: 1.5rem;
     }
-    50% {
-      transform: translateY(3px);
+  }
+
+  @keyframes heros-descend {
+    0% {
+      top: -1.15rem;
+      opacity: 0;
+    }
+    18% {
+      opacity: 1;
+    }
+    72% {
+      opacity: 1;
+    }
+    100% {
+      top: 4.5rem;
+      opacity: 0;
     }
   }
 
