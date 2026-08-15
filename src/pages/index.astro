@@ -203,12 +203,26 @@ const partenaires = [
     <div class="film">
       <video
         class="film-video"
-        data-src="/video/actions.mp4"
+        data-src="/video/actions.mp4?v=2"
         data-poster="/video/actions-poster.jpg"
         muted
-        loop
         playsinline
         preload="none"></video>
+
+      {/* LE FILM ENTIER, ET PLUS UN EXTRAIT — 15/08. La page ne servait que les
+          70 premieres secondes, un decoupage herite de la lucarne de l'ecran
+          d'intro, qui n'a plus lieu d'etre dans une section dediee.
+
+          `loop` est retire avec : on ne remet pas en boucle un film de cinq
+          minutes, on le laisse finir.
+
+          36 Mo, mais l'atome `moov` est en tete du fichier (`+faststart`) :
+          le lecteur demarre sur les premiers paquets au lieu d'attendre le
+          telechargement complet. Avec `preload="none"`, un visiteur qui ne
+          descend pas jusqu'ici ne telecharge toujours RIEN.
+
+          `?v=2` parce que le fichier garde son nom : sans lui, un visiteur qui
+          a l'extrait en cache continuerait de le voir. */}
 
       {/* La video demarre MUETTE, et ne peut pas etre autrement : aucun
           navigateur n'autorise une lecture automatique sonore. Le bouton rend
