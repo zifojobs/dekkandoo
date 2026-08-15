@@ -157,15 +157,38 @@ const partenaires = [
             {/* La video est dimensionnee en unites d'ecran et contre-mise a
                 l'echelle : sa taille affichee ne bouge donc JAMAIS pendant que
                 la lucarne s'ouvre. Seule la fenetre grandit, l'image ne
-                s'etire pas — ce qui compte d'autant plus que la source n'est
-                qu'en 624x352. */}
+                s'etire pas.
+
+                🔄 REMPLACEE LE 15/08 PAR LE MASTER HD. L'ancienne boucle etait
+                tiree d'un film anterieur — elle portait meme un filigrane du
+                logo — et mesurait 960x542. (Un commentaire disait ici 624x352 :
+                c'etait faux, mesure faite.) La nouvelle est coupee dans
+                `VIDEO FINALE V1.mp4`, le master 1920x1080 remis par Laye le
+                15/08, et fait 1440x810 — 50 % de definition en plus pour
+                1 096 Ko contre 867.
+
+                TROIS PLANS D'ACTION, choisis a la demande de Saibo dans la
+                premiere minute du film : le bebe pese dans la balance-seau, la
+                file de pesee, la remise aux femmes assises. Aucun carton de
+                texte n'entre dans la boucle — le film en porte a 0-4 s, vers
+                25-31 s et vers 63-67 s. */}
             <span class="heros-lucarne" aria-hidden="true">
+              {/* 🔴 NI `src` NI `poster` DANS LE BALISAGE, ET C'EST UN CORRECTIF
+                  DU 15/08. Avec `autoplay`, le navigateur va chercher le
+                  fichier MEME si l'element est en `display: none` : `autoplay`
+                  passe outre `preload="none"`. Mesure faite a 390 px avant
+                  correction : 1 247 Ko telecharges — poster compris — pour un
+                  ecran d'intro qui n'est jamais affiche sur telephone.
+
+                  Sur un public majoritairement mobile et en donnees payantes,
+                  c'est le genre de defaut qui ne se voit sur aucune capture et
+                  qui coute a chaque visite. L'adresse est donc posee par le
+                  script, apres les memes garde-fous que la trame. */}
               <video
                 class="heros-video"
-                src="/video/actions.mp4"
-                poster="/video/actions-poster.jpg"
+                data-src="/video/actions.mp4"
+                data-poster="/video/actions-poster.jpg"
                 muted
-                autoplay
                 loop
                 playsinline
                 preload="none"></video>
@@ -1292,6 +1315,19 @@ const partenaires = [
 
     const ctx = cv.getContext('2d', { alpha: false });
     if (!ctx) return;
+
+    /* L'ecran d'intro existe vraiment : la video peut aller chercher ses
+       octets. Avant ce point, elle n'a pas d'adresse — voir le commentaire
+       pose sur la balise. */
+    const video = document.querySelector('.heros-video');
+    if (video && video.dataset.src) {
+      video.poster = video.dataset.poster;
+      video.src = video.dataset.src;
+      video.play().catch(() => {
+        /* Lecture refusee par le navigateur : le poster reste affiche, et
+           l'ecran garde son sens. Rien a rattraper. */
+      });
+    }
 
     const SOURCES = [
       '/photos/champ-recolte-trame.webp',
