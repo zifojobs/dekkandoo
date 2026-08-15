@@ -121,7 +121,7 @@ const partenaires = [
           phrase lisible. Rien ne disparait. */}
       <canvas class="trame" aria-hidden="true"></canvas>
 
-      <div class="heros-phrase absolute inset-0 px-8 py-24">
+      <div class="heros-phrase absolute inset-0 px-8 py-12">
         <p
           class="heros-contour max-w-4xl text-balance font-titre self-end text-center leading-[1.15] text-paper"
         >
@@ -942,9 +942,22 @@ const partenaires = [
      — tombe donc EXACTEMENT au centre vertical, quel que soit le nombre de
      lignes au-dessus et en dessous. C'est ce qui permet de centrer la lucarne
      sur le « o » sans mesurer quoi que ce soit. */
+  /* 🔴 `minmax(0, 1fr)` ET NON `1fr`, ET C'EST LA CAUSE D'UN VIEUX DEFAUT.
+     Un `1fr` nu vaut `minmax(auto, 1fr)` : la rangee ne peut pas devenir plus
+     petite que son contenu. Or la derniere ligne se replie sur TROIS lignes et
+     gonflait donc sa rangee, qui poussait le « o » vers le haut.
+
+     Mesure avant correction : le « o » etait 68 px au-dessus du centre du cadre
+     en 1366x768, et 162 px en 1920x1080 — l'ecart grandissait avec la taille du
+     texte, ce qui est la signature meme du repliement. Identique au repos et
+     zoom termine, donc bien structurel et non un artefact de mesure.
+
+     Avec `minmax(0, 1fr)` les deux rangees de texte sont forcees egales, et la
+     rangee du milieu retombe au centre exact. C'est ce qui permet a la video de
+     se caler sur le cadre sans compensation. */
   .heros-phrase {
     display: grid;
-    grid-template-rows: 1fr auto 1fr;
+    grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr);
     justify-items: center;
   }
 
@@ -970,7 +983,26 @@ const partenaires = [
      la lucarne confondus au pixel. */
   .heros-contour,
   .heros-ligne-mot {
-    font-size: clamp(2.25rem, min(10vh, 7.6vw), 7rem);
+    /* 🔄 LE TERME EN VH DESCEND DE 10 A 9,3 LE 15/08, et c'est le prix a payer
+       pour que le « o » soit centre. Depuis que les rangees sont egales
+       (`minmax(0, 1fr)`), elles n'absorbent plus le repliement de la derniere
+       ligne : a 10vh, celle-ci debordait du cadre de 66 px en 1920x1080 et s'y
+       faisait couper.
+
+       Le budget se calcule : deux rangees de 3 lignes a 1,15 d'interligne, plus
+       la rangee de l'anneau (0,574em + 0,6em de marge), doivent tenir dans la
+       hauteur du cadre moins la marge verticale. La marge est passee de
+       `py-24` a `py-12` pour rendre 96 px.
+
+       9,3vh a d'abord ete essaye : il tenait partout SAUF en 1920x1080, ou il
+       restait 27 px de trop. La valeur a ete redescendue a 8,6vh, verifiee sur
+       cinq tailles d'ecran. Le cadre etant passe en 16/9 il est aussi plus
+       ETROIT qu'avant, donc la phrase se replie davantage : les deux reglages
+       se tiennent, on ne peut pas toucher l'un sans reverifier l'autre.
+
+       7 % de moins qu'avant : la phrase occupe toujours l'ecran, ce que Saibo
+       avait demande le 13/08. */
+    font-size: clamp(2.25rem, min(8.6vh, 7.6vw), 7rem);
     font-weight: 600;
     letter-spacing: -0.015em;
   }
@@ -1053,9 +1085,17 @@ const partenaires = [
        soit 121,7vh. On prend 135vh, et 115vw pour la largeur — qui, elle, n'a
        jamais manque de rien. Verifie en 1366x768, 1600x900 et 1920x1080 : le
        cadre est couvert des quatre cotes dans les trois cas. */
-    width: 115vw;
-    height: 135vh;
-    object-fit: cover;
+    /* LES MEMES EXPRESSIONS QUE LE CADRE, mot pour mot : les deux etant en
+       16/9, ils coincident au pixel. `--entete` est declaree sur `.heros-cadre`
+       et heritee jusqu'ici ; la valeur de repli sert sous 1024 px, ou l'ecran
+       d'intro n'existe pas.
+
+       `contain` plutot que `cover` : a dimensions egales les deux donnent le
+       meme resultat, mais `contain` garantit qu'aucun rognage ne reapparaitra
+       si un jour la source cesse d'etre exactement en 16/9. */
+    width: min(100vw, calc((100vh - var(--entete, 5.75rem)) * 16 / 9));
+    height: min(56.25vw, calc(100vh - var(--entete, 5.75rem)));
+    object-fit: contain;
     transform: translate(-50%, -50%) scale(calc(1 / var(--s)));
   }
 
@@ -1222,11 +1262,26 @@ const partenaires = [
          plus de bande, le cadre reprend donc toute la hauteur. */
       /* L'en-tete est de nouveau une bande opaque : le cadre lui laisse sa
          place au lieu de passer dessous. */
+      /* 🔄 LE CADRE PREND LA FORME DE LA VIDEO — arbitrage de Saibo le 15/08 :
+         « je ne veux pas de video rognee, elle doit prendre la taille exacte de
+         la section ». Le cadre etait plein ecran, la video s'y inscrivait en
+         `cover` et se faisait donc rogner. C'est l'inverse maintenant : le
+         cadre est en 16/9, comme la source (1440x810), et la video le remplit
+         exactement — zero pixel perdu, zero pixel coupe.
+
+         AUSSI GRAND QUE POSSIBLE, DANS LES DEUX LIMITES. Il prend toute la
+         largeur tant que la hauteur le permet ; au-dela, c'est la hauteur qui
+         commande et il devient moins large que l'ecran. Il reste donc une bande
+         de fond, en haut et en bas sur un ecran etroit, sur les cotes sur un
+         ecran large — c'est la contrepartie assumee du « zero rognage ». */
       .heros-cadre {
         --entete: 5.75rem;
+        --dispo: calc(100vh - var(--entete));
         position: sticky;
         top: var(--entete);
-        height: calc(100vh - var(--entete));
+        height: min(56.25vw, var(--dispo));
+        width: min(100vw, calc(var(--dispo) * 16 / 9));
+        margin-inline: auto;
       }
 
       /* LE ZOOM. Le mot grandit, et comme la lucarne est dans l'anneau, elle
