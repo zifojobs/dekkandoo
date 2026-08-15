@@ -230,7 +230,17 @@ body {
   align-items: center;
   gap: 1.25rem;
 }
-@media (min-width: 1024px) {
+/* 🔄 SEUIL PORTE DE 1024 A 1152 PX LE 15/08, quand la septieme rubrique est
+   arrivee. Le nombre n'est pas rond par hasard : le conteneur de l'en-tete est
+   plafonne a `max-w-6xl`, soit 1152 px, et il NE GRANDIT PLUS au-dela. Entre
+   1024 et 1151 px, les sept liens ne tiennent pas a cote de la pastille
+   d'appel — mesure faite : il leur faudrait 635 px pour 562 disponibles. C'est
+   donc le menu a trois barres qui sert jusque-la.
+
+   ⚠️ Ce seuil n'est plus celui de l'ecran d'intro, reste a 1024 px. Les deux
+   repondent a des questions differentes : ici la place dans une barre, la-bas
+   la capacite du navigateur a piloter une animation au defilement. */
+@media (min-width: 1152px) {
   .entete-bureau {
     display: flex;
   }
@@ -246,6 +256,23 @@ body {
   gap: 0.25rem 1.25rem;
   font-size: 0.9375rem;
   font-weight: 500;
+}
+
+/* SEPT RUBRIQUES DEPUIS LE 15/08, et la septieme ne rentrait pas. Mesure a
+   1366 px : les liens reclamaient 696 px pour 690 disponibles — six pixels de
+   trop, et la barre passait sur DEUX lignes, « Contact » relegue en dessous.
+
+   🔴 PREMIERE CORRECTION FAUSSE, gardee ici parce que l'erreur est instructive :
+   j'avais borne ce resserrement a `max-width: 1439px`, en croyant que la place
+   revenait sur les grands ecrans. Elle ne revient JAMAIS — le conteneur est
+   plafonne a 1152 px et sa largeur ne depend pas de celle de l'ecran. A
+   1600 px la barre repassait donc sur deux lignes. La regle vaut partout ou la
+   barre d'ordinateur existe, sans borne haute. */
+@media (min-width: 1152px) {
+  .entete-liens {
+    gap: 0.25rem 0.85rem;
+    font-size: 0.9rem;
+  }
 }
 .entete-liens a {
   display: inline-block;

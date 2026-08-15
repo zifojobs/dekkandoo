@@ -1,0 +1,303 @@
+---
+import Base from '../layouts/Base.astro';
+import EnTetePage from '../components/EnTetePage.astro';
+import { GALERIE } from '../galerie';
+
+// Les 68 photos viennent du Consortium, remises par Laye le 15/08 via
+// WeTransfer. Originaux Canon 5D Mark III et 6D, 21 a 24 Mpx, 387 Mo au total.
+//
+// 🔴 ELLES ONT ETE REENCODEES SANS AUCUNE METADONNEE, et ce n'est pas un detail
+// de poids : l'une d'elles portait des COORDONNEES GPS. Sur un projet ou le
+// dossier voisin contient des pieces d'identite et des telephones de centaines
+// de femmes, publier la position d'un village n'est pas anodin. Le script
+// `galerie_web.py` regenere tout depuis les originaux ; il ne recopie jamais
+// l'EXIF.
+//
+// Deux largeurs par photo : 520 px pour la grille, 1400 px pour l'agrandi.
+// 7,7 Mo au total, soit 116 Ko par photo pour les deux tailles reunies — et la
+// grille ne charge que les 520, en differe.
+//
+// 🔴 AUCUNE LEGENDE N'A ETE FOURNIE, et je n'en invente pas. Le texte de
+// remplacement est donc volontairement generique. C'est une vraie limite
+// d'accessibilite : il faut demander a Laye ce que montre chaque serie, ou au
+// moins par groupes. Voir la note laissee dans le spoke.
+---
+
+<Base
+  titre="Galerie"
+  description="Les photographies de terrain du Consortium Dëkkandoo : formations, remises de financement, séances de pesée et assemblées communautaires dans les six communes du département de Saint-Louis."
+>
+  <EnTetePage
+    rubrique="Galerie"
+    titre="Ce que le programme donne à voir"
+    intro="Formations, remises de financement, séances de pesée, assemblées de bénéficiaires. Ces images viennent de nos équipes sur le terrain, dans les six communes du département de Saint-Louis."
+  />
+
+  <section class="py-16 sm:py-20">
+    <div class="mx-auto max-w-6xl px-5">
+      {/* GRILLE EN COLONNES, et non en grille reguliere. Les 68 photos melangent
+          paysages, portraits et carres : une grille a cases egales les aurait
+          toutes rognees au meme format, ce qui abime les portraits en premier.
+          Les colonnes CSS laissent chaque image a son rapport, et `break-inside`
+          empeche qu'une photo soit coupee entre deux colonnes.
+
+          Chaque image porte ses `width` et `height` d'origine : le navigateur
+          reserve la place AVANT le telechargement, donc la page ne saute jamais
+          pendant le chargement — c'est ce que `src/galerie.ts` sert a fournir. */}
+      <div class="galerie">
+        {
+          GALERIE.map((p, i) => (
+            <a
+              class="galerie-case"
+              href={`/galerie/${p.nom}-1400.webp`}
+              data-index={i}
+            >
+              <img
+                src={`/galerie/${p.nom}-520.webp`}
+                width={p.l}
+                height={p.h}
+                loading="lazy"
+                decoding="async"
+                alt={`Photographie de terrain du Consortium Dëkkandoo (${i + 1} sur ${GALERIE.length})`}
+              />
+            </a>
+          ))
+        }
+      </div>
+
+      <p class="mt-10 text-sm text-ink-3">
+        {GALERIE.length} photographies. Cliquez sur une image pour l’agrandir.
+      </p>
+    </div>
+  </section>
+
+  {/* L'AGRANDISSEMENT REPOSE SUR <dialog>, et c'est le navigateur qui fait le
+      travail : la touche Echap ferme, le focus est retenu a l'interieur, le
+      reste de la page est rendu inerte. Rien de tout cela n'aurait ete gratuit
+      avec un <div> et une classe « ouvert ».
+
+      SANS JAVASCRIPT, LA GALERIE MARCHE QUAND MEME : chaque vignette est un
+      lien vers son image en 1400 px. Le script ne fait qu'intercepter le clic.
+      C'est le meme principe que le menu du site, bati sur <details>. */}
+  <dialog class="galerie-vue" aria-label="Photographie agrandie">
+    <img alt="" />
+    <button class="galerie-btn galerie-fermer" type="button">
+      <span class="sr-only">Fermer</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+        <path d="M6 6l12 12M18 6L6 18" />
+      </svg>
+    </button>
+    <button class="galerie-btn galerie-prec" type="button">
+      <span class="sr-only">Photographie précédente</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M15 5l-7 7 7 7" />
+      </svg>
+    </button>
+    <button class="galerie-btn galerie-suiv" type="button">
+      <span class="sr-only">Photographie suivante</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+    <p class="galerie-rang" aria-live="polite"></p>
+  </dialog>
+</Base>
+
+<style>
+  .galerie {
+    columns: 1;
+    column-gap: 1rem;
+  }
+  @media (min-width: 640px) {
+    .galerie {
+      columns: 2;
+    }
+  }
+  @media (min-width: 1024px) {
+    .galerie {
+      columns: 3;
+    }
+  }
+
+  .galerie-case {
+    display: block;
+    margin-bottom: 1rem;
+    /* `break-inside` seul ne suffit pas partout : `overflow: hidden` sur le lien
+       evite qu'un navigateur coupe l'image a la bascule de colonne. */
+    overflow: hidden;
+    break-inside: avoid;
+    border-radius: 0.5rem;
+    background-color: var(--color-paper-2);
+  }
+
+  .galerie-case img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Le survol reste tres sobre : sur une planche de 68 images, un effet
+     appuye transforme la page en vitrine clignotante. Un simple eclaircissement
+     suffit a dire « c'est cliquable ». */
+  @media (prefers-reduced-motion: no-preference) {
+    .galerie-case img {
+      transition: transform 0.35s ease, filter 0.35s ease;
+    }
+    .galerie-case:hover img {
+      transform: scale(1.03);
+    }
+  }
+  .galerie-case:hover img {
+    filter: brightness(1.06);
+  }
+  .galerie-case:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  /* ─── L'agrandissement ─── */
+  .galerie-vue {
+    width: min(96vw, 1400px);
+    max-width: none;
+    max-height: 94vh;
+    padding: 0;
+    border: 0;
+    border-radius: 0.5rem;
+    background: transparent;
+    overflow: visible;
+  }
+  .galerie-vue::backdrop {
+    /* Le vert du site plutot qu'un noir neutre : l'agrandissement reste dans
+       l'identite au lieu de faire visionneuse de systeme. */
+    background-color: color-mix(in srgb, var(--color-ink) 88%, var(--color-forest));
+  }
+  .galerie-vue img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 88vh;
+    object-fit: contain;
+    border-radius: 0.5rem;
+    background-color: var(--color-ink);
+  }
+
+  .galerie-btn {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    background-color: var(--color-accent);
+    border: 1px solid color-mix(in srgb, var(--color-paper) 55%, transparent);
+    border-radius: 50%;
+    color: var(--color-paper);
+    cursor: pointer;
+  }
+  .galerie-btn:hover {
+    background-color: var(--color-accent-2);
+  }
+  .galerie-btn:focus-visible {
+    outline: 2px solid var(--color-paper);
+    outline-offset: 3px;
+  }
+  .galerie-btn svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  .galerie-fermer {
+    top: -1.35rem;
+    right: -1.35rem;
+  }
+  .galerie-prec {
+    top: 50%;
+    left: -1.35rem;
+    transform: translateY(-50%);
+  }
+  .galerie-suiv {
+    top: 50%;
+    right: -1.35rem;
+    transform: translateY(-50%);
+  }
+
+  /* Sous 640 px les boutons rentrent DANS le cadre : deborder de 1,35 rem les
+     ferait sortir de l'ecran, et une fleche hors champ ne se clique pas. */
+  @media (max-width: 639px) {
+    .galerie-fermer {
+      top: 0.5rem;
+      right: 0.5rem;
+    }
+    .galerie-prec {
+      left: 0.5rem;
+    }
+    .galerie-suiv {
+      right: 0.5rem;
+    }
+  }
+
+  .galerie-rang {
+    margin-top: 0.75rem;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: color-mix(in srgb, var(--color-paper) 75%, transparent);
+  }
+</style>
+
+<script is:inline>
+  (() => {
+    const vue = document.querySelector('.galerie-vue');
+    if (!vue || typeof vue.showModal !== 'function') return;
+
+    const cases = [...document.querySelectorAll('.galerie-case')];
+    const img = vue.querySelector('img');
+    const rang = vue.querySelector('.galerie-rang');
+    let i = 0;
+    let ouvrant = null;
+
+    const montrer = (n) => {
+      i = (n + cases.length) % cases.length;
+      const a = cases[i];
+      img.src = a.getAttribute('href');
+      img.alt = a.querySelector('img').alt;
+      rang.textContent = i + 1 + ' / ' + cases.length;
+    };
+
+    cases.forEach((a, n) => {
+      a.addEventListener('click', (e) => {
+        /* On laisse passer les clics qui veulent un nouvel onglet : c'est un
+           vrai lien, il doit continuer a se comporter comme tel. */
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+        e.preventDefault();
+        ouvrant = a;
+        montrer(n);
+        vue.showModal();
+      });
+    });
+
+    vue.querySelector('.galerie-fermer').addEventListener('click', () => vue.close());
+    vue.querySelector('.galerie-prec').addEventListener('click', () => montrer(i - 1));
+    vue.querySelector('.galerie-suiv').addEventListener('click', () => montrer(i + 1));
+
+    vue.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') montrer(i - 1);
+      if (e.key === 'ArrowRight') montrer(i + 1);
+    });
+
+    /* Un clic sur le fond ferme. `<dialog>` ne distingue pas le fond du contenu
+       dans sa cible d'evenement : on compare donc les coordonnees du clic au
+       rectangle de la boite. */
+    vue.addEventListener('click', (e) => {
+      const r = vue.getBoundingClientRect();
+      const dedans =
+        e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+      if (!dedans) vue.close();
+    });
+
+    /* Le focus revient d'ou il venait : sans ca, apres fermeture, il repart en
+       haut de page et la personne au clavier a perdu sa place dans 68 images. */
+    vue.addEventListener('close', () => {
+      img.removeAttribute('src');
+      if (ouvrant) ouvrant.focus();
+    });
+  })();
+</script>

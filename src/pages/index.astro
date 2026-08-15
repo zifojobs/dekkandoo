@@ -1031,18 +1031,30 @@ const partenaires = [
        La video s'affichait alors en bande verticale. Mesure a l'appui :
        `width` calculee a 18,84 px pour un `130vw` demande. */
     max-width: none;
-    /* 🔄 RAMENE DE 130vw/130vh A 100/100 LE 15/08 : Saibo voyait la video
-       deborder. Les 130 % dataient d'une epoque ou le mot n'etait pas garanti
-       centre ; il l'est depuis que `.heros-phrase` est une grille
-       `1fr auto 1fr`, dont la rangee du milieu tombe au centre vertical exact.
-       La reserve de 30 % ne servait donc plus qu'a rogner l'image.
+    /* LA RESERVE EST MESUREE, ET J'AI DU LA REAPPRENDRE. Elle valait 130 % ;
+       je l'ai ramenee a 100 % le 15/08 en RAISONNANT — « le mot est centre,
+       donc la reserve ne sert plus qu'a rogner » — et c'etait faux. Saibo a
+       vu la trame reapparaitre sur les bords au defilement.
 
-       A 100/100 avec `cover`, un ecran 16/9 affiche la video ENTIERE, sans
-       aucune coupe : la source fait 1440x810, soit exactement 16/9. Sur un
-       ecran d'un autre rapport, `cover` rogne le strict necessaire — c'est ce
-       qu'il faut, un `contain` poserait des bandes noires. */
-    width: 100vw;
-    height: 100vh;
+       Ce que la mesure dit, a 1600x900 : le cadre va de y=92 a y=900, mais le
+       centre du « o » tombe a 441 quand celui du cadre est a 496. Le mot est
+       55 px PLUS HAUT que le centre du cadre — l'en-tete de 5,75rem decale le
+       cadre vers le bas, pas la phrase. Or la video est centree sur le « o »,
+       pas sur le cadre : a 100vh il manquait donc 9 px en bas.
+
+       ET CE DECALAGE GRANDIT AVEC L'ECRAN : 55 px de haut a 900, 163 px a
+       1080. Le compenser par le calcul supposerait de corriger une valeur
+       exprimee en pixels d'ecran dans un repere qui, lui, est mis a l'echelle
+       par `--s` pendant toute l'animation — donc une correction qui devrait
+       varier a chaque image. Trop fragile pour ce que ca rapporte.
+
+       On dimensionne donc la reserve sur le PIRE CAS MESURE. A 1920x1080 :
+       cadre de 988 px, decalage de 163 px, il faut donc 988 + 2 x 163 = 1314,
+       soit 121,7vh. On prend 135vh, et 115vw pour la largeur — qui, elle, n'a
+       jamais manque de rien. Verifie en 1366x768, 1600x900 et 1920x1080 : le
+       cadre est couvert des quatre cotes dans les trois cas. */
+    width: 115vw;
+    height: 135vh;
     object-fit: cover;
     transform: translate(-50%, -50%) scale(calc(1 / var(--s)));
   }
