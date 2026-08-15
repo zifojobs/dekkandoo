@@ -123,7 +123,7 @@ const partenaires = [
 
       <div class="heros-phrase absolute inset-0 px-8 py-24">
         <p
-          class="heros-contour max-w-4xl text-balance font-titre self-end text-center leading-[1.15] text-forest"
+          class="heros-contour max-w-4xl text-balance font-titre self-end text-center leading-[1.15] text-paper"
         >
           Et s’il existait un
         </p>
@@ -138,20 +138,17 @@ const partenaires = [
             grandit au defilement, il grandit AUTOUR de la lucarne, jamais a
             cote. L'ordre de lecture reste « esp o ir » pour un lecteur
             d'ecran. */}
-        {/* 🔴 LE MOT PORTE LE VRAI BRUN DU LOGO, `#683c10`. Il n'a pu le
-            prendre que parce que l'ecran est repasse en CLAIR le 15/08 : sur le
-            vert fonce, ce brun mesurait 1,02:1 et le mot y disparaissait. On a
-            change le fond, pas la couleur. Sur le creme il donne 8,61:1.
+        {/* 🔴 LE MOT EST EN CREME, ET CE N'EST PAS UN CHOIX DE GOUT. Le brun
+            du logo `#683c10` mesure 1,02:1 sur ce vert : il y disparaitrait.
 
-            L'ANNEAU SUIT LE MOT SANS QU'ON LUI DEMANDE : `.heros-anneau` est
-            trace en `currentColor`, il passe donc au brun avec la lettre — et
-            cette fois le trait vient du logo au lieu d'un or emprunte.
+            Cet ecran a ete essaye en CLAIR le 15/08, precisement pour que le
+            mot puisse porter ce brun — puis Saibo a demande a revenir au fond
+            sombre, qui est le dispositif de farmafrica. Le fond sombre gagne,
+            le mot reste donc creme. Le brun, lui, a garde tout le reste du
+            site : sur-titres, chiffres, heros, citation de Khaly.
 
-            ⚠️ LA TRAME EST BORNEE SOUS CE MOT. Le texte est maintenant SOMBRE
-            sur fond clair : ce sont les points sombres qui le menacent, pas les
-            clairs. `SUR_DU_TEXTE` tombe donc a 1 — sous la phrase il ne reste
-            qu'un pointille tenu, et les encres foncees sont interdites. */}
-        <p class="heros-ligne-mot font-titre text-accent">
+            L'anneau suit le mot : `.heros-anneau` est trace en `currentColor`. */}
+        <p class="heros-ligne-mot font-titre text-paper">
           <span class="heros-o">
             <span class="heros-avant-mot">esp</span>
             <span class="sr-only">o</span>
@@ -182,7 +179,7 @@ const partenaires = [
         </p>
 
         <p
-          class="heros-contour max-w-4xl text-balance font-titre self-start text-center leading-[1.15] text-forest"
+          class="heros-contour max-w-4xl text-balance font-titre self-start text-center leading-[1.15] text-paper"
         >
           pour chaque enfant du département de
           <span class="whitespace-nowrap">Saint-Louis&nbsp;?</span>
@@ -868,7 +865,7 @@ const partenaires = [
      quand meme. C'est pour cela que la couleur reste ecrite ici et pas dans le
      canvas. */
   .heros-cadre {
-    background-color: var(--color-paper);
+    background-color: var(--color-forest);
   }
 
   /* LE CANVAS DU CHAMP TRAME. Il couvre le cadre bord a bord, y compris
@@ -1015,17 +1012,22 @@ const partenaires = [
      transparent a moitie : a pleine opacite, un cercle de 3,25 rem pese autant
      que le mot « espoir » et se met a lui disputer l'oeil. La fleche, elle,
      garde le creme plein, sinon le signe devient illisible sur le feuillage. */
-  /* La pastille est PLEINE depuis le 15/08, a la demande de Saibo : le cercle
-     n'etait qu'un trait a moitie transparent, et la fleche s'y voyait mal. Fond
-     brun du logo, fleche creme — 8,61:1, le meme couple que les boutons du
-     heros. Sur le fond clair de l'ecran d'intro, un aplat brun se voit de loin
-     la ou un trait fin disparaissait. */
+  /* La pastille est PLEINE depuis le 15/08 : Saibo l'a demandee en brun a
+     fleche blanche, parce que le trait a moitie transparent d'avant laissait
+     mal voir la fleche. Fond brun du logo, fleche creme : 8,61:1 entre les
+     deux, la fleche est nette.
+
+     ⚠️ LE FILET CREME N'EST PAS UN AJOUT DECORATIF. Le brun du logo mesure
+     1,02:1 sur le vert fonce : le disque seul se confondrait avec le fond et
+     on ne verrait qu'une fleche flottante — soit un « cercle avec fleche » sans
+     cercle. Le filet redonne son contour a la pastille, et lui seul. */
   .heros-fleche-rond {
     display: grid;
     place-items: center;
     width: 3.25rem;
     height: 3.25rem;
     background-color: var(--color-accent);
+    border: 1px solid color-mix(in srgb, var(--color-paper) 55%, transparent);
     border-radius: 50%;
     color: var(--color-paper);
   }
@@ -1201,24 +1203,28 @@ const partenaires = [
         public de ce site est majoritairement mobile et en donnees payantes ;
      4. le contexte 2D est disponible.
 
-     ELLE EST RETOURNEE DEPUIS LE 15/08 : points SOMBRES sur fond creme, la ou
-     la premiere version posait des points clairs sur du vert fonce. Le fond de
-     l'ecran est passe au clair pour que le mot « espoir » puisse porter le vrai
-     brun du logo — et le retournement est un gain, pas une concession : une
-     trame sombre sur clair, c'est la trame de journal, celle ou l'oeil
-     reconnait le mieux une silhouette.
+     ELLE A ETE RETOURNEE PUIS REMISE A L'ENDROIT, LE MEME JOUR, et l'aller-
+     retour vaut d'etre garde ici. Le 15/08 l'ecran est passe en clair — points
+     sombres sur creme — pour que le mot « espoir » puisse porter le vrai brun
+     du logo. Saibo a demande a revenir au fond sombre : c'est le dispositif de
+     farmafrica, et c'est ce qu'il veut voir. On est donc revenu aux points
+     CLAIRS sur vert fonce. Ce qui a ete garde de la version claire : la
+     superellipse et sa rampe large, qui corrigeaient un vrai defaut.
 
-     LE CONTRASTE DU TEXTE EST MESURE, PAS ESPERE, et le risque a change de
-     camp. Le texte est desormais SOMBRE sur clair — vert `#165a2d` pour la
-     phrase, brun `#683c10` pour le mot. Ce qui le menace n'est plus une encre
-     claire, c'est une encre FONCEE posee sous une hampe de lettre : le vert de
-     la phrase sur le vert moyen de la trame ne ferait que 1,52:1.
+     LE CONTRASTE DU TEXTE EST MESURE, PAS ESPERE. La phrase est en creme
+     `#f4f6f1`, de luminance relative 0,915. Pour tenir 4,5:1, ce qu'il y a
+     dessous doit rester sous 0,164 de luminance. D'ou la palette, calculee et
+     non choisie a l'oeil :
 
-     D'ou la borne, qui n'est plus une teinte mais une DENSITE : sous la boite
-     du texte, `SUR_DU_TEXTE` vaut 1 et le rayon tombe a 35 %. Il n'y reste
-     qu'un pointille tenu, sur lequel un texte de titre se lit sans peine — et
-     le fond y garde sa valeur de creme, donc ses 7,61:1 pour la phrase et ses
-     8,61:1 pour le mot.
+       fond    `#165a2d`  L 0,077  ->  7,61:1
+       brun    `#683c10`  L 0,062  ->  8,61:1   (le brun du logo)
+       vert m. `#106b2e`  L 0,108  ->  6,10:1
+       feuille `#0f7a33`  L 0,143  ->  5,01:1   <- le plus clair, et c'est la borne
+
+     Le vert du logo `#0b983a` est ECARTE de la trame : mesure a 3,47:1, il
+     tombe sous le seuil des qu'une hampe de lettre se pose sur un point. Les
+     deux encres les plus claires (`#3f9e5f`, `#8fc4a2`) ne sortent QUE hors de
+     la boite du texte — c'est le role de `SUR_DU_TEXTE`, qui vaut 4.
 
      ET LES POINTS S'AMENUISENT VERS LE CENTRE. Un facteur d'attenuation reduit
      leur rayon a 40 % au centre du cadre et le rend a 100 % sur les bords.
@@ -1263,11 +1269,11 @@ const partenaires = [
       '/photos/champ-equipe-trame.webp',
     ];
 
-    const FOND = '#f4f6f1';
+    const FOND = '#165a2d';
     /* Cinq encres, du plus sombre au plus clair. Mesures dans l'en-tete. Les
        DEUX DERNIERES sont sous le seuil de 4,5:1 : elles ne sont autorisees que
        hors de l'ellipse du texte, et `SUR_DU_TEXTE` est la borne qui le garde. */
-    const ENCRES = ['#a8cdb6', '#5aa877', '#0f7a33', '#106b2e', '#683c10'];
+    const ENCRES = ['#683c10', '#106b2e', '#0f7a33', '#3f9e5f', '#8fc4a2'];
     /* HUIT niveaux de quantification, contre six au premier jet. Le niveau 0 ne
        trace rien : c'est le fond nu qui fait le noir.
 
@@ -1279,14 +1285,14 @@ const partenaires = [
        levier qu'on pousse quand le client demande de mieux reconnaitre les
        personnes (demande du 15/08). */
     const NIVEAUX = 8;
-    const ENCRE_DE = [0, 0, 0, 1, 2, 3, 4, 4];
+    const ENCRE_DE = [0, 0, 0, 1, 1, 2, 3, 4];
     const RAYON_DE = [0, 0.26, 0.4, 0.52, 0.64, 0.74, 0.85, 0.95];
     /* Le niveau le plus clair tolere la ou passe la phrase. Descendu de 5 a 4
        le 15/08 : le mot d'accent est passe du creme au SABLE, bien plus sombre,
        et c'est lui desormais qui fixe la borne. Sable sur `#106b2e` (niveau 4) :
        3,66:1 — au-dessus du seuil de 3:1 des grands textes. Sur `#0f7a33`
        (niveau 5) il serait tombe a 3,00:1, soit tout juste sur le fil. */
-    const SUR_DU_TEXTE = 1;
+    const SUR_DU_TEXTE = 4;
 
     const CELL = 8; /* pixelSize, dans la plage 6-14 de la spec. Descendu de 9 a
                        8 le 15/08 : environ 27 % de cellules en plus, donc des
@@ -1493,10 +1499,6 @@ const partenaires = [
              ramenent la plage a [0,1], ce coup de pouce lui rend du modele. */
           x = (x - 0.5) * 1.45 + 0.5;
           x = x < 0 ? 0 : x > 1 ? 1 : x;
-          /* RETOURNEMENT DU 15/08. Le fond est passe au creme : ce sont
-             maintenant des points SOMBRES qu'on pose, donc c'est l'obscurite de
-             la photo qui commande, pas sa clarte. */
-          x = 1 - x;
           /* La phrase s'assombrit ce qu'il y a dessous. C'est ce facteur qui
              fait la profondeur de champ — et c'est lui, pas un voile pose
              par-dessus, qui rend le texte lisible.
@@ -1507,7 +1509,7 @@ const partenaires = [
              plus haut ferait taper la butee et ecraserait les hautes lumieres
              en un aplat ; plus bas, on perdrait un palier pour rien. Le
              plafond dur qui suit reste un garde-fou, pas le mecanisme. */
-          x *= 0.2 + 0.8 * a;
+          x *= 0.571 + 0.429 * a;
 
           const s = x * (NIVEAUX - 1);
           const base = Math.floor(s);
@@ -1541,7 +1543,7 @@ const partenaires = [
               /* Le rayon suit la meme attenuation que le ton, calculee a la
                  passe precedente : sous la phrase les points retrecissent en
                  plus de s'assombrir. Les deux ensemble font la mise au point. */
-              const rr = rq * (0.35 + 0.65 * att[r * cols + c]);
+              const rr = rq * (0.55 + 0.45 * att[r * cols + c]);
               if (rr < 0.3) continue;
               ctx.moveTo(cx + rr, cy);
               ctx.arc(cx, cy, rr, 0, 6.2832);
