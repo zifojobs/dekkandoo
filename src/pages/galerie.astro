@@ -3,8 +3,16 @@ import Base from '../layouts/Base.astro';
 import EnTetePage from '../components/EnTetePage.astro';
 import { GALERIE } from '../galerie';
 
-// Les 68 photos viennent du Consortium, remises par Laye le 15/08 via
-// WeTransfer. Originaux Canon 5D Mark III et 6D, 21 a 24 Mpx, 387 Mo au total.
+// Les 82 photos viennent du Consortium, remises par Laye via WeTransfer en
+// deux envois : 68 le 14/08, puis 14 le 15/08. Originaux Canon 5D Mark III
+// et 6D pour l'essentiel, 21 a 24 Mpx.
+//
+// 🔴 SIX DES QUATORZE DU SECOND ENVOI SONT DES IMAGES GENEREES PAR IA. Mesure,
+// pas impression : elles portent un manifeste C2PA signe OpenAI avec
+// `digitalSourceType: trainedAlgorithmicMedia` et un filigrane invisible.
+// Signale a Saibo le 15/08, PUBLIEES SUR SA DECISION. A savoir si la question
+// revient : le fichier d'origine se denonce tout seul, n'importe qui peut lire
+// ce manifeste. Les six sont dans `img/Galerie/Fipse`, nommees `ChatGPT Image`.
 //
 // 🔴 ELLES ONT ETE REENCODEES SANS AUCUNE METADONNEE, et ce n'est pas un detail
 // de poids : l'une d'elles portait des COORDONNEES GPS. Sur un projet ou le
@@ -17,25 +25,32 @@ import { GALERIE } from '../galerie';
 // 7,7 Mo au total, soit 116 Ko par photo pour les deux tailles reunies — et la
 // grille ne charge que les 520, en differe.
 //
-// 🔴 AUCUNE LEGENDE N'A ETE FOURNIE, et je n'en invente pas. Le texte de
-// remplacement est donc volontairement generique. C'est une vraie limite
-// d'accessibilite : il faut demander a Laye ce que montre chaque serie, ou au
-// moins par groupes. Voir la note laissee dans le spoke.
+// 🔴 TOUJOURS AUCUNE LEGENDE PHOTO PAR PHOTO. Laye a nomme le 15/08 ce que
+// COUVRE le premier envoi — ceremonie de lancement, visites, enrolement des
+// beneficiaires de Ndieumbeutt, remises de fonds, activites de FAVEC — mais
+// pas quelle image va avec quoi. Ces themes vivent donc dans l'introduction,
+// ou ils sont vrais pour l'ensemble, et NON en legende sous chaque photo, ou
+// ils seraient faux cinq fois sur six. Le texte de remplacement reste
+// generique tant que le rattachement n'est pas connu.
+//
+// Le champ `lot` de `galerie.ts` distingue deja les deux envois. Il n'est pas
+// affiche : le second lot documente le FIPSE, et rien de ce programme ne parait
+// sur le site avant que Laye ait fourni ses informations (consigne du 15/08).
 ---
 
 <Base
   titre="Galerie"
-  description="Les photographies de terrain du Consortium Dëkkandoo : formations, remises de financement, séances de pesée et assemblées communautaires dans les six communes du département de Saint-Louis."
+  description="Les photographies de terrain du Consortium Dëkkandoo : cérémonie de lancement, visites, enrôlement des bénéficiaires du projet Ndieumbeutt, remises de fonds et activités de FAVEC dans les six communes du département de Saint-Louis."
 >
   <EnTetePage
     rubrique="Galerie"
     titre="Ce que le programme donne à voir"
-    intro="Formations, remises de financement, séances de pesée, assemblées de bénéficiaires. Ces images viennent de nos équipes sur le terrain, dans les six communes du département de Saint-Louis."
+    intro="Cérémonie de lancement, visites de terrain, enrôlement des bénéficiaires du projet Ndieumbeutt, remises de fonds, activités de FAVEC. Ces images viennent de nos équipes sur le terrain, dans les six communes du département de Saint-Louis."
   />
 
   <section class="py-16 sm:py-20">
     <div class="mx-auto max-w-6xl px-5">
-      {/* GRILLE EN COLONNES, et non en grille reguliere. Les 68 photos melangent
+      {/* GRILLE EN COLONNES, et non en grille reguliere. Les 82 photos melangent
           paysages, portraits et carres : une grille a cases egales les aurait
           toutes rognees au meme format, ce qui abime les portraits en premier.
           Les colonnes CSS laissent chaque image a son rapport, et `break-inside`
