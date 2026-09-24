@@ -1,0 +1,365 @@
+---
+import Base from '../layouts/Base.astro';
+import { NDIEUMBEUTT } from '../reseaux';
+
+/**
+ * Page de l'evenement — Ndieumbeutt Awards 2026 (24/09).
+ *
+ * Une page a elle, et pas un bloc de l'accueil : c'est un LIEN que Dior et
+ * Khaly vont faire circuler sur WhatsApp jusqu'au 17/12, avec sa propre carte
+ * de partage. L'accueil n'y renvoie que par un bandeau.
+ *
+ * 🔑 TOUT LE TEXTE vient du film officiel du 23/09 (chaine Ndieumbeutt, voix off
+ * transcrite le 24/09) : date, lieu, 441 / 100 / 25, programme. Rien n'y est
+ * ajoute. Seul ce film compte — la video d'annonce du 19/08 est ecartee (Saibo).
+ *
+ * Les videos restent chez YouTube (compte Vercel en plan Hobby : pas de video
+ * lourde servie d'ici). Le lecteur ne se charge qu'au clic : avant, c'est une
+ * simple image locale, donc zero octet YouTube pour qui ne lance pas le film.
+ * Sans JavaScript, le lien ouvre la video sur YouTube.
+ */
+
+const FILM = { id: 'MnsOED04VFg', titre: 'Ndieumbeutt Awards 2026 — Célébrons nos championnes !' };
+
+const titre = 'Ndieumbeutt Awards 2026 — jeudi 17 décembre, à Rao';
+const description =
+  "Première édition des Ndieumbeutt Awards, le 17 décembre 2026 au siège du Consortium Dëkkandoo, en partenariat avec E4Y : 25 femmes récompensées, les 100 meilleures bénéficiaires mises à l'honneur.";
+
+const url = new URL('/ndieumbeutt-awards/', Astro.site).href;
+const partageWhatsApp = `https://wa.me/?text=${encodeURIComponent(`Ndieumbeutt Awards 2026 — jeudi 17 décembre, à Rao. ${url}`)}`;
+const partageFacebook = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+const chaine = NDIEUMBEUTT.find((r) => r.reseau === 'youtube');
+
+const chiffres = [
+  { n: '441', l: 'femmes accompagnées et financées' },
+  { n: '100', l: 'meilleures bénéficiaires mises à l’honneur' },
+  { n: '25', l: 'femmes d’exception récompensées' },
+  { n: '4', l: 'zones : Saint-Louis, Gandiol, Gandon, Rao' },
+];
+
+const programme = [
+  {
+    t: 'La remise des prix',
+    d: "25 femmes d'exception récompensées pour leur réussite entrepreneuriale et les emplois qu'elles ont créés au sein de leur communauté.",
+  },
+  {
+    t: 'Les 100 meilleures bénéficiaires',
+    d: 'Mises à l’honneur, pour les parcours qui inspirent.',
+  },
+  {
+    t: 'La grande finale',
+    d: "De la foire de l'innovation et de la transformation des produits agroalimentaires.",
+  },
+];
+
+const schema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Event',
+  name: 'Ndieumbeutt Awards 2026',
+  description,
+  startDate: '2026-12-17',
+  eventStatus: 'https://schema.org/EventScheduled',
+  eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+  location: {
+    '@type': 'Place',
+    name: 'Siège du Consortium Dëkkandoo',
+    address: { '@type': 'PostalAddress', addressLocality: 'Rao', addressRegion: 'Saint-Louis', addressCountry: 'SN' },
+  },
+  organizer: { '@type': 'NGO', name: 'Consortium Dëkkandoo', url: new URL('/', Astro.site).href },
+  image: new URL('/partage/ndieumbeutt-awards.png', Astro.site).href,
+});
+---
+
+<Base titre={titre} description={description} image="/partage/ndieumbeutt-awards.png" schemaSupplementaire={schema}>
+  {/* L'EN-TETE — fond sombre, parce que le logo de l'evenement est dessine sur
+      du noir : l'affiche du film se pose dessous sans cassure. */}
+  <header class="awards-tete text-paper">
+    <div class="mx-auto max-w-6xl px-5 pt-14 pb-10 sm:pt-20">
+      <p class="font-mono text-xs uppercase tracking-[0.2em] text-paper/80">
+        Événement · 1<sup>re</sup> édition
+      </p>
+      <h1 class="mt-5 font-titre text-5xl font-semibold leading-[1.02] tracking-[-0.02em] sm:text-7xl">
+        Ndieumbeutt Awards <span class="whitespace-nowrap">2026</span>
+      </h1>
+      <p class="mt-6 max-w-2xl font-serif text-xl italic leading-relaxed text-paper/90 sm:text-2xl">
+        L’excellence se célèbre, l’innovation s’impose.
+      </p>
+
+      <dl class="mt-10 grid gap-6 sm:grid-cols-3">
+        <div class="awards-info">
+          <dt>Quand</dt>
+          <dd><time datetime="2026-12-17">Jeudi 17 décembre 2026</time></dd>
+        </div>
+        <div class="awards-info">
+          <dt>Où</dt>
+          <dd>Au siège du Consortium, à Rao</dd>
+        </div>
+        <div class="awards-info">
+          <dt>Avec</dt>
+          <dd>Consortium Dëkkandoo &amp; E4Y</dd>
+        </div>
+      </dl>
+
+      {/* Le compte a rebours n'existe qu'avec JavaScript (il est masque par
+          defaut) : sans lui, la date ci-dessus suffit, et on n'affiche jamais un
+          chiffre fige au jour de la construction du site. */}
+      {/* Compte a rebours continu, J:H:M:S (demande de Saibo, 24/09). ⚠️ L'heure
+          de debut n'est pas connue : il vise MINUIT le 17/12, heure du Senegal. */}
+      <div class="awards-rebours mt-12 hidden text-center" data-rebours aria-live="off">
+        <p class="font-mono text-xs uppercase tracking-[0.2em] text-paper/75">Rendez-vous dans</p>
+        <div class="mx-auto mt-4 flex max-w-2xl items-start justify-center gap-1 sm:gap-4">
+          <div class="awards-case"><b data-u="j">00</b><span>Jours</span></div>
+          <i class="awards-sep" aria-hidden="true">:</i>
+          <div class="awards-case"><b data-u="h">00</b><span>Heures</span></div>
+          <i class="awards-sep" aria-hidden="true">:</i>
+          <div class="awards-case"><b data-u="m">00</b><span>Minutes</span></div>
+          <i class="awards-sep" aria-hidden="true">:</i>
+          <div class="awards-case"><b data-u="s">00</b><span>Secondes</span></div>
+        </div>
+      </div>
+      <p class="awards-jour mt-12 hidden text-center font-titre text-3xl font-semibold sm:text-4xl" data-jour>C’est aujourd’hui !</p>
+    </div>
+
+    <div class="mx-auto max-w-5xl px-0 pb-14 sm:px-5 sm:pb-20">
+      <a
+        class="awards-video group"
+        href={`https://www.youtube.com/watch?v=${FILM.id}`}
+        data-yt={FILM.id}
+        data-titre={FILM.titre}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img src="/awards/film-affiche.jpg" alt="Le logo des Ndieumbeutt Awards 2026 — lancer la vidéo" width="1280" height="720" />
+        <span class="awards-lecture" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="currentColor" /></svg>
+        </span>
+        <span class="awards-duree">Le film · 1 min 33</span>
+      </a>
+    </div>
+  </header>
+
+  <section class="border-b border-line py-16 sm:py-20">
+    <div class="mx-auto max-w-6xl px-5">
+      <p class="font-mono text-xs uppercase tracking-[0.2em] text-accent">L’heure de célébrer</p>
+      <p class="mt-5 max-w-3xl font-serif text-2xl leading-relaxed text-forest sm:text-3xl">
+        Après avoir accompagné et financé 441 femmes des zones de Saint-Louis, Gandiol,
+        Gandon et Rao, l’heure est venue de célébrer les parcours qui inspirent.
+      </p>
+      <dl class="mt-12 grid grid-cols-2 gap-y-10 lg:grid-cols-4">
+        {
+          chiffres.map(({ n, l }) => (
+            <div class="px-2 lg:border-l lg:border-line lg:pl-6 lg:first:border-l-0 lg:first:pl-2">
+              <dt class="font-mono text-4xl text-forest sm:text-5xl">{n}</dt>
+              <dd class="mt-2 max-w-[15rem] text-sm leading-snug text-ink-2">{l}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <section class="bg-paper-2 py-16 sm:py-20">
+    <div class="mx-auto max-w-6xl px-5">
+      <p class="font-mono text-xs uppercase tracking-[0.2em] text-accent">Au programme</p>
+      <h2 class="mt-4 font-titre text-3xl font-semibold text-forest sm:text-4xl">Une journée, trois temps forts</h2>
+      <ol class="mt-10 grid gap-5 md:grid-cols-3">
+        {
+          programme.map(({ t, d }, i) => (
+            <li class="rounded-xl border border-line bg-card p-7">
+              <span class="font-mono text-sm text-accent">0{i + 1}</span>
+              <h3 class="mt-3 font-serif text-xl text-forest">{t}</h3>
+              <p class="mt-3 leading-relaxed text-ink-2">{d}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="py-14 sm:py-16">
+    <div class="mx-auto flex max-w-6xl flex-wrap items-center gap-3 px-5">
+      <span class="font-mono text-xs uppercase tracking-wider text-ink-3">Faire circuler</span>
+      <a href={partageWhatsApp} target="_blank" rel="noopener noreferrer" class="rounded-full bg-forest px-5 py-2.5 text-sm font-medium text-paper transition-colors hover:bg-forest-2">WhatsApp</a>
+      <a href={partageFacebook} target="_blank" rel="noopener noreferrer" class="rounded-full border border-line px-5 py-2.5 text-sm text-ink-2 transition-colors hover:border-forest hover:bg-forest hover:text-paper">Facebook</a>
+      <button type="button" data-copier={url} class="hidden rounded-full border border-line px-5 py-2.5 text-sm text-ink-2 transition-colors hover:border-forest hover:bg-forest hover:text-paper">Copier le lien</button>
+      {chaine && <a class="ml-auto text-sm text-accent underline-offset-4 hover:underline" href={chaine.url} target="_blank" rel="noopener noreferrer">La chaîne YouTube Ndieumbeutt →</a>}
+    </div>
+  </section>
+
+  {/* Global et non scope : le cadre du lecteur est cree au clic par le script,
+      il ne porte pas l'attribut d'Astro et ne recevrait pas un style scope.
+      Tous les selecteurs commencent par .awards-, ils ne touchent rien d'autre. */}
+  <style is:global>
+    .awards-tete {
+      /* Le vert profond du site qui descend vers le noir du logo : l'affiche du
+         film se pose sur du noir, sans liseré. */
+      background: linear-gradient(180deg, var(--color-forest) 0%, #0b2414 55%, #050805 100%);
+    }
+    .awards-info {
+      border-left: 2px solid rgb(244 246 241 / 0.35);
+      padding-left: 1rem;
+    }
+    .awards-info dt {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgb(244 246 241 / 0.7);
+    }
+    .awards-info dd {
+      margin-top: 0.35rem;
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      line-height: 1.35;
+    }
+    .awards-case {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1 1 0;
+      min-width: 0;
+      padding: 0.8rem 0.5rem 0.7rem;
+      border-radius: 0.9rem;
+      background: rgb(244 246 241 / 0.08);
+      border: 1px solid rgb(244 246 241 / 0.2);
+    }
+    .awards-case b {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      font-size: 2.4rem;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      color: var(--color-paper);
+    }
+    .awards-case span {
+      margin-top: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgb(244 246 241 / 0.7);
+    }
+    .awards-sep {
+      font-style: normal;
+      font-family: var(--font-mono);
+      font-size: 2rem;
+      line-height: 1;
+      padding-top: 0.9rem;
+      color: rgb(244 246 241 / 0.45);
+    }
+    @media (min-width: 640px) {
+      .awards-case { padding: 1.2rem 1rem 1rem; }
+      .awards-case b { font-size: 4.5rem; }
+      .awards-case span { font-size: 0.75rem; }
+      .awards-sep { font-size: 3.5rem; padding-top: 1.3rem; }
+    }
+    .awards-video {
+      position: relative;
+      display: block;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background: #000;
+    }
+    @media (min-width: 640px) {
+      .awards-video { border-radius: 0.9rem; }
+    }
+    .awards-video img,
+    .awards-video iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border: 0;
+    }
+    .awards-video img { transition: transform 0.6s ease; }
+    .awards-video:hover img { transform: scale(1.03); }
+    .awards-lecture {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 5rem;
+      height: 5rem;
+      margin: -2.5rem 0 0 -2.5rem;
+      display: grid;
+      place-items: center;
+      border-radius: 9999px;
+      background: rgb(244 246 241 / 0.94);
+      color: var(--color-forest);
+      box-shadow: 0 12px 40px rgb(0 0 0 / 0.45);
+      transition: transform 0.25s ease;
+    }
+    .awards-lecture svg { width: 2.2rem; height: 2.2rem; margin-left: 0.25rem; }
+    .awards-video:hover .awards-lecture,
+    .awards-video:focus-visible .awards-lecture { transform: scale(1.08); }
+    .awards-duree {
+      position: absolute;
+      left: 1rem;
+      bottom: 1rem;
+      padding: 0.35rem 0.8rem;
+      border-radius: 9999px;
+      background: rgb(0 0 0 / 0.6);
+      color: var(--color-paper);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+    }
+  </style>
+
+  <script is:inline>
+    // Le lecteur YouTube ne se charge qu'au clic (domaine sans cookie).
+    document.querySelectorAll('[data-yt]').forEach((lien) => {
+      lien.addEventListener('click', (e) => {
+        e.preventDefault();
+        const f = document.createElement('iframe');
+        f.src = `https://www.youtube-nocookie.com/embed/${lien.dataset.yt}?autoplay=1&rel=0`;
+        f.title = lien.dataset.titre;
+        f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+        f.allowFullscreen = true;
+        const cadre = document.createElement('div');
+        cadre.className = 'awards-video';
+        cadre.appendChild(f);
+        lien.replaceWith(cadre);
+      });
+    });
+
+    // Compte a rebours continu vers minuit le 17/12/2026, heure du Senegal (= UTC).
+    // Le jour meme : « C'est aujourd'hui ! ». Apres : rien ne s'affiche.
+    const r = document.querySelector('[data-rebours]');
+    if (r) {
+      const debut = Date.UTC(2026, 11, 17);
+      const fin = debut + 86400000;
+      const u = (k) => r.querySelector(`[data-u="${k}"]`);
+      const deux = (n) => String(n).padStart(2, '0');
+      const tic = () => {
+        const now = Date.now();
+        if (now >= debut) {
+          r.classList.add('hidden');
+          if (now < fin) document.querySelector('[data-jour]').classList.remove('hidden');
+          return false;
+        }
+        const s = Math.floor((debut - now) / 1000);
+        u('j').textContent = deux(Math.floor(s / 86400));
+        u('h').textContent = deux(Math.floor((s % 86400) / 3600));
+        u('m').textContent = deux(Math.floor((s % 3600) / 60));
+        u('s').textContent = deux(s % 60);
+        r.classList.remove('hidden');
+        return true;
+      };
+      if (tic()) {
+        const t = setInterval(() => { if (!tic()) clearInterval(t); }, 1000);
+      }
+    }
+
+    const bouton = document.querySelector('[data-copier]');
+    if (bouton && navigator.clipboard) {
+      bouton.classList.remove('hidden');
+      bouton.addEventListener('click', async () => {
+        await navigator.clipboard.writeText(bouton.dataset.copier);
+        const avant = bouton.textContent;
+        bouton.textContent = 'Lien copié';
+        setTimeout(() => (bouton.textContent = avant), 2000);
+      });
+    }
+  </script>
+</Base>
