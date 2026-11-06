@@ -21,7 +21,13 @@ import type photos from './photos.json';
 
 export type Bloc =
   | { type: 'p'; texte: string }
-  | { type: 'citation'; texte: string };
+  | { type: 'citation'; texte: string }
+  // Une video de leur chaine YouTube : vignette locale, le clic ouvre YouTube
+  // (choix de Saibo, 06/11 : pas de lecteur integre). ⚠️ Pas de cle « titre »
+  // ici : scripts/gen_partage.py lit les titres d'articles par expression reguliere.
+  | { type: 'video'; id: string; libelle: string; duree: string }
+  // Un lien vers une source exterieure (article de presse, partenaire).
+  | { type: 'lien'; texte: string; url: string };
 
 export type Actualite = {
   slug: string;
@@ -41,6 +47,49 @@ export type Actualite = {
 };
 
 export const ACTUALITES: Actualite[] = [
+  {
+    // 06/11/2026, demande de Saibo (message de Medoune a Khaly). Sources : TDR de
+    // l'amphi (LUNDI-12-10), descriptions des 2 videos de la chaine du Consortium,
+    // article de la Chaire UNESCO du 30/10. Date confirmee par Saibo : le 11/11
+    // (le TDR disait le 8, l'affiche relevee le 29/10 le 4 : depasses).
+    slug: 'amphi-rentree-nutritionnelle-rao-2026',
+    titre: 'Amphi de rentrée nutritionnelle : rendez-vous le 11 novembre à Rao',
+    date: '6 novembre 2026',
+    dateIso: '2026-11-06',
+    photo: 'amphi-rentree-nutritionnelle',
+    cadrage: 'object-[30%_50%]',
+    chapo:
+      "Le Consortium Dëkkandoo, à travers le FIPSE, réunit élèves, enseignants et partenaires à l'école élémentaire de Rao autour d'un thème : « Mangez des aliments sains pour une vie meilleure ! »",
+    corps: [
+      {
+        type: 'p',
+        texte:
+          "Le mercredi 11 novembre 2026 à 16 h, l'école élémentaire de Rao accueille l'Amphi de rentrée nutritionnelle. Le médecin-chef du district anime la rencontre : une causerie sur l'assiette équilibrée et la prévention de la malnutrition, puis des quiz, une démonstration du lavage des mains et un jeu autour des aliments.",
+      },
+      {
+        type: 'p',
+        texte:
+          "Dans la région de Saint-Louis, la malnutrition et les maladies liées au manque d'hygiène freinent la croissance des enfants et leurs résultats scolaires. L'école est le bon endroit pour installer de bonnes habitudes dès le plus jeune âge, et pour toucher les familles à travers les enfants.",
+      },
+      {
+        type: 'p',
+        texte:
+          "L'amphi s'inscrit dans le projet de renforcement de la nutrition et de la santé, que le Consortium mène avec le FIPSE (Fonds d'initiative pour la santé à l'école) dans six zones : Rao, Gandon, Gandiol, DHL, Fass et Mpal, avec l'appui de Nous Cims, de la Fondation Roi Baudouin et de Plan International.",
+      },
+      { type: 'video', id: 'SNOBdfTBlHU', libelle: "L'annonce de l'amphi", duree: '1 min 26' },
+      {
+        type: 'p',
+        texte:
+          "La Chaire UNESCO Éducations et Santé a relayé l'événement dans ses actualités le 30 octobre 2026.",
+      },
+      {
+        type: 'lien',
+        texte: "Lire l'article de la Chaire UNESCO",
+        url: 'https://chaireunesco-es.org/2026/10/30/senegal-le-consortium-dekkandoo-mobilise-les-ecoles-pour-promouvoir-la-nutrition-et-la-sante-des-enfants/',
+      },
+      { type: 'video', id: 'QGCwGzbn9Jg', libelle: "Bien manger pour mieux réussir à l'école", duree: '1 min 52' },
+    ],
+  },
   {
     slug: 'diner-de-gala-2026',
     titre: '18,75 millions FCFA remis à 75 associations de Gandon',

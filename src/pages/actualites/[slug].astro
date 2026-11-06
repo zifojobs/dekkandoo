@@ -79,6 +79,43 @@ const partageFacebook = `https://www.facebook.com/sharer/sharer.php?u=${encodeUR
             <blockquote class="border-l-2 border-accent py-1 pl-6 font-serif text-xl leading-relaxed text-forest">
               « {bloc.texte} »
             </blockquote>
+          ) : bloc.type === 'video' ? (
+            // Vignette locale + lien vers YouTube : aucun lecteur ne se charge sur
+            // le site (choix de Saibo, 06/11), la page reste legere sur mobile.
+            <a
+              href={`https://www.youtube.com/watch?v=${bloc.id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group block overflow-hidden rounded-xl border border-line bg-card"
+            >
+              <span class="relative block">
+                <img
+                  src={`/actualites/video-${bloc.id}.webp`}
+                  alt={`${bloc.libelle} — voir la vidéo sur YouTube`}
+                  width="640"
+                  height="360"
+                  loading="lazy"
+                  decoding="async"
+                  class="aspect-video w-full object-cover"
+                />
+                <span
+                  aria-hidden="true"
+                  class="absolute inset-0 m-auto flex h-16 w-16 items-center justify-center rounded-full bg-forest/90 text-paper transition-transform group-hover:scale-110"
+                >
+                  <svg viewBox="0 0 24 24" class="ml-1 h-7 w-7"><path d="M8 5.5v13l11-6.5z" fill="currentColor" /></svg>
+                </span>
+              </span>
+              <span class="flex flex-wrap items-baseline justify-between gap-2 px-5 py-4">
+                <span class="font-serif text-lg text-forest">{bloc.libelle}</span>
+                <span class="font-mono text-xs uppercase tracking-wider text-ink-3">{bloc.duree} · YouTube ↗</span>
+              </span>
+            </a>
+          ) : bloc.type === 'lien' ? (
+            <p>
+              <a href={bloc.url} target="_blank" rel="noopener noreferrer" class="font-medium text-accent hover:underline">
+                {bloc.texte} ↗
+              </a>
+            </p>
           ) : (
             <p class="leading-relaxed text-ink-2">{bloc.texte}</p>
           )

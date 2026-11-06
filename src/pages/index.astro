@@ -171,6 +171,22 @@ const partenaires = [
     </div>
   </section>
 
+  {/* BANDEAU AMPHI — 06/11. Renvoie a l'actualite (pas de video sur l'accueil,
+      choix de Saibo). Se masque seul a partir du 12/11, heure du Senegal ; sans
+      JavaScript il reste visible : a retirer du code apres l'evenement. */}
+  <a href="/actualites/amphi-rentree-nutritionnelle-rao-2026/" class="group block bg-forest text-paper" data-jusqu-au="2026-11-12">
+    <div class="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-5 py-5">
+      <span class="font-mono text-xs uppercase tracking-[0.2em] text-paper/75">Événement · 11 novembre 2026 · 16 h</span>
+      <span class="font-titre text-lg font-semibold sm:text-xl">Amphi de rentrée nutritionnelle à l’école élémentaire de Rao</span>
+      <span class="ml-auto text-sm text-paper/85 transition-transform group-hover:translate-x-1">Lire l’annonce →</span>
+    </div>
+  </a>
+  <script is:inline>
+    document.querySelectorAll('[data-jusqu-au]').forEach((b) => {
+      if (Date.now() >= Date.parse(b.dataset.jusquAu + 'T00:00:00Z')) b.remove();
+    });
+  </script>
+
   {/* BANDEAU EVENEMENT — 24/09. Un seul lien vers la page des Ndieumbeutt
       Awards : c'est elle qui porte le film et qu'on partage. A retirer apres
       le 17/12/2026. */}
@@ -539,7 +555,9 @@ const partenaires = [
 
       <div class="revele mt-12 grid gap-6 md:grid-cols-3">
         {
-          ACTUALITES.map((a) => (
+          // Les 3 plus recentes seulement : la grille fait 3 colonnes, une 4e carte
+          // resterait seule sur sa ligne. Les autres sont sur /actualites/.
+          ACTUALITES.slice(0, 3).map((a) => (
             <article class="overflow-hidden rounded-xl border border-line bg-card transition-shadow hover:shadow-lg">
               <a href={`/actualites/${a.slug}/`} class="block">
                 <Photo

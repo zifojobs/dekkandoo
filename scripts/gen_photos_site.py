@@ -43,6 +43,10 @@ PHOTOS = [
      "Bénéficiaires mises à l'honneur lors de la cérémonie, écharpes remises"),
     ("659106565_122173021466863069_4926074023701701140_n.jpg", "remise-produits",
      "Bénéficiaires du projet Ndieumbeutt lors d'une remise de produits agricoles"),
+    # 06/11/2026 : image d'annonce tiree de la video du Consortium (chaine YouTube
+    # officielle, 21/10/2026). Porte la date et le lieu ecrits par eux-memes.
+    ("amphi-rentree-nutritionnelle-2026.jpg", "amphi-rentree-nutritionnelle",
+     "Annonce de l'Amphi de rentrée nutritionnelle : le 11 novembre à l'école élémentaire de Rao, avec les logos du FIPSE et des partenaires"),
     ("khaly.jpg", "khaly",
      "Abdou Khaly Mbodj, coordonnateur global du Consortium Dëkkandoo, s'adressant à la presse"),
 ]
