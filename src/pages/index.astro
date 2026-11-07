@@ -67,72 +67,24 @@ const domaines = [
   description="Le Consortium Dëkkandoo agit dans les six communes du département de Saint-Louis pour la nutrition infantile, l'accès aux soins et l'autonomisation économique des femmes."
   organisation
 >
-  {/*
-    HEROS — dispositif emprunte a One Acre Fund (cahier de references, n.6) :
-    la photo occupe le plein cadre, mais le titre ne repose JAMAIS dessus. Il
-    vit dans un panneau vert opaque qui la chevauche.
-
-    Deux raisons, et la seconde est la vraie. (1) La lisibilite ne depend alors
-    d'aucun degrade bien regle ni de la luminosite de la photo. (2) Sur cette
-    photo precisement, les personnes occupent le centre du cadre : tout texte
-    superpose atterrirait sur un visage.
-
-    L'accent unique — « l'avenir » en or — est repris de Farm Africa, et il est
-    deja ecrit dans la maquette validee (<em> dans le H1).
-  */}
-  {/*
-    ECRAN D'INTRO — le dispositif de farmafrica.org, releve dans leur code le
-    11/08 : une phrase centree dont UN mot porte une lucarne ; au defilement le
-    mot grandit jusqu'a ce que la lucarne remplisse l'ecran, et on finit sur la
-    video. Puis le vrai heros arrive.
-
-    Ce qu'on leur emprunte : le geste. Ce qu'on ne leur emprunte pas : jQuery,
-    et une video de 3,75 Mo — plus lourde que les 22 photos de ce site reunies.
-
-    LA LUCARNE EST UN ENFANT DE L'ANNEAU, et ce n'est pas un detail de
-    structure. Une premiere version posait la video en plein cadre et l'ouvrait
-    par un cercle place au centre geometrique de l'ecran, en comptant sur le
-    fait que le mot y tombait aussi. Mesure faite : vrai en 1440x900, FAUX en
-    1366x768 — la phrase y deborde du cadre, les rangees se tassent, le mot
-    remonte de 57 px et la video apparait sous le « o ». Enfant de l'anneau,
-    les deux ne peuvent plus se desaligner, sur aucun ecran.
-  */}
-  {/* PANNEAU PASSE EN CLAIR LE 15/08, meme raison que la citation de Khaly :
-      Saibo veut le brun du logo sur le mot d'accent, et ce brun n'existe pas
-      sur un fond vert (1,02:1). On change le fond, pas la couleur. Le titre
-      rejoint le vert des six autres titres de section, et « l'avenir. » prend
-      enfin le VRAI `#683c10` — 8,61:1. */}
-  <section class="relative bg-paper text-ink">
-    <div class="lg:grid lg:min-h-[34rem] lg:grid-cols-12 lg:items-stretch">
-      {/* La photo. Sur mobile elle passe au-dessus du panneau. */}
-      <div class="heros-photo relative lg:col-span-7 lg:col-start-6 lg:row-start-1">
-        {/* object-position recale sur le haut du cadre : les visages sont au
-            tiers superieur de la photo. Avec le recadrage centre par defaut, la
-            bande courte du mobile coupait toutes les tetes — soit exactement ce
-            que la photo est la pour montrer. Sans effet sur grand ecran, ou
-            c'est la largeur qui est rognee, pas la hauteur. */}
-        <Photo
-          cle="formation-femmes"
-          tailles="(min-width: 1024px) 60vw, 100vw"
-          prioritaire
-          class="h-80 w-full object-cover object-[62%_50%] sm:h-96 lg:h-full"
-        />
-      </div>
-
-      {/* Le panneau. Il chevauche la photo a partir de `lg` grace au col-start
-          identique : les deux occupent la meme rangee de grille. */}
-      <div
-        class="heros-panneau relative bg-paper px-5 py-14 sm:px-8 lg:col-span-7 lg:col-start-1 lg:row-start-1 lg:flex lg:flex-col lg:justify-center lg:py-20 lg:pl-[max(1.25rem,calc((100vw-72rem)/2))] lg:pr-16"
-      >
+  {/* ---------------------------------------------------------------------------
+      HEROS — REFONTE 11/2026, demande de Saibo le 07/11 (« le hero doit etre
+      change »). Style de la couverture de la presentation bailleurs envoyee a
+      Khaly, le style qu'il a choisi pour les feuilles : titre brun et mot fort
+      en vert, photo dans un cadre brun aux coins en feuille, paire de feuilles
+      au bord du cadre, racines a peine dessinees en bas. Le texte ne change pas
+      (slogan valide par le client) ; seule la mise en scene change.
+      Les classes `heros-photo` et `heros-panneau` gardent l'animation d'entree
+      sur grand ecran (styles en bas de page).
+      --------------------------------------------------------------------------- */}
+  <section class="relative overflow-hidden bg-paper text-ink">
+    <div class="mx-auto grid max-w-6xl items-center gap-12 px-5 py-12 sm:py-16 lg:grid-cols-12 lg:gap-10 lg:py-20">
+      <div class="heros-panneau relative lg:col-span-6">
         <h1
-          class="mt-6 max-w-2xl font-titre text-4xl font-semibold leading-[1.06] tracking-[-0.015em] text-forest sm:text-5xl xl:text-6xl"
+          class="max-w-2xl font-titre text-4xl font-semibold leading-[1.06] tracking-[-0.015em] text-accent sm:text-5xl xl:text-6xl"
         >
           Nous nourrissons l’espoir,<br />
-          {/* Le mot d'accent prend le brun du logo le 15/08. Le crochet
-              existait depuis la maquette — c'est le <em> que le client a
-              valide — mais il etait reste de la meme couleur que le reste du
-              titre, d'ou le « tout blanc » que Saibo a releve. */}
-          Nous nourrissons <em class="heros-accent not-italic text-accent">l’avenir.</em>
+          Nous nourrissons <em class="heros-accent not-italic text-leaf">l’avenir.</em>
         </h1>
         <p class="mt-7 max-w-xl text-lg leading-relaxed text-ink-2">
           Le Consortium Dëkkandoo agit dans les six communes du département de
@@ -154,8 +106,35 @@ const domaines = [
           </a>
         </div>
       </div>
+
+      <div class="heros-photo relative lg:col-span-6">
+        <Feuilles class="-left-3 -top-10 z-10 w-20 sm:-left-8 sm:w-28" />
+        {/* Le cadre brun deborde en haut et a gauche, comme sur la diapo. */}
+        <div class="rounded-bl-[7rem] rounded-tr-[2.5rem] bg-accent pl-3 pt-3 sm:rounded-bl-[9rem] sm:pl-4 sm:pt-4">
+          <Photo
+            cle="formation-femmes"
+            tailles="(min-width: 1024px) 48vw, 100vw"
+            prioritaire
+            class="aspect-[4/3] w-full rounded-bl-[6.4rem] rounded-tr-[2rem] object-cover object-[62%_50%] sm:rounded-bl-[8.2rem] lg:aspect-[5/4]"
+          />
+        </div>
+      </div>
     </div>
 
+    {/* Les racines de la diapo : trois traits bruns a peine visibles. */}
+    <svg
+      class="pointer-events-none absolute bottom-0 left-0 hidden w-[42rem] text-accent opacity-20 sm:block"
+      viewBox="0 980 720 100"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="3"
+      stroke-linecap="round"
+      aria-hidden="true"
+    >
+      <path d="M0 1010 C 120 990 220 1040 360 1020 S 560 1050 700 1035" />
+      <path d="M60 1080 C 140 1040 260 1060 330 1030" />
+      <path d="M200 1080 C 260 1050 380 1070 470 1048" />
+    </svg>
   </section>
 
   {/* BANDEAU AMPHI — 06/11. Renvoie a l'actualite (pas de video sur l'accueil,
