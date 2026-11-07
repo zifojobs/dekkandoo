@@ -5,7 +5,6 @@ import Photo from '../components/Photo.astro';
 
 const axes = [
   {
-    rang: 'AXE 01',
     titre: 'Nutrition infantile',
     texte:
       'Suivi nutritionnel communautaire des enfants de 0 à 59 mois : pesées mensuelles, dépistage de la malnutrition aiguë modérée et sévère, causeries avec les familles et visites à domicile.',
@@ -13,7 +12,6 @@ const axes = [
       'Le suivi est assuré au plus près des ménages, par des relais qui vivent dans les mêmes quartiers que les familles accompagnées.',
   },
   {
-    rang: 'AXE 02',
     titre: 'Accès aux soins',
     texte:
       'Rapprocher les familles vulnérables des postes de santé, avec l’initiative Diapalanté Fadju et la mutuelle de santé, en appui aux Comités de Développement de Santé.',
@@ -21,7 +19,6 @@ const axes = [
       'La difficulté n’est presque jamais l’absence de structure de santé : c’est la distance, le coût et le moment où l’on décide d’y aller.',
   },
   {
-    rang: 'AXE 03',
     titre: 'Autonomisation des femmes',
     texte:
       'Financement d’activités génératrices de revenus pour les femmes de 18 à 35 ans, principalement en agriculture et en élevage, via les associations villageoises d’épargne et de crédit.',
@@ -37,14 +34,14 @@ const axes = [
 >
   <EnTetePage
     rubrique="Notre histoire"
-    titre="Le développement se construit avec les communautés"
-    intro="Dëkkandoo signifie « le voisinage », le vivre-ensemble. Ce nom dit notre méthode : les communautés ne sont pas les bénéficiaires de nos projets, elles en sont les actrices."
+    titre="Dëkkandoo, « le voisinage »"
+    intro="Le nom dit le vivre-ensemble, et la méthode : dans les six communes du département de Saint-Louis, ce sont les femmes, les relais et les associations de village qui conduisent les projets."
   />
 
   <section class="mx-auto max-w-6xl px-5 py-16">
     <div class="grid gap-12 lg:grid-cols-12">
       <div class="lg:col-span-7">
-        <h2 class="font-serif text-2xl text-forest sm:text-3xl">Un consortium, pas une organisation de plus</h2>
+        <h2 class="font-serif text-2xl text-forest sm:text-3xl">Pourquoi un consortium</h2>
         <div class="mt-6 space-y-5 leading-relaxed text-ink-2">
           <p>
             Le Consortium Dëkkandoo réunit des organisations qui travaillaient
@@ -106,10 +103,9 @@ const axes = [
 
     <div class="revele mt-16 grid gap-6 md:grid-cols-3">
       {
-        axes.map(({ rang, titre, texte, detail }) => (
+        axes.map(({ titre, texte, detail }) => (
           <article class="flex flex-col rounded-xl border border-line bg-card p-7">
-            <p class="font-mono text-xs tracking-[0.18em] text-earth-2">{rang}</p>
-            <h3 class="mt-3 font-serif text-xl text-forest">{titre}</h3>
+            <h3 class="font-serif text-xl text-forest">{titre}</h3>
             <p class="mt-3 flex-1 text-sm leading-relaxed text-ink-2">{texte}</p>
             <p class="mt-5 border-t border-line pt-5 text-sm italic leading-relaxed text-ink-3">
               {detail}

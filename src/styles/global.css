@@ -155,8 +155,14 @@
     Georgia, ui-serif, serif;
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
     "Helvetica Neue", sans-serif;
-  --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", "Segoe UI Mono", Consolas,
-    monospace;
+  /* REFONTE 11/2026 — la chasse fixe disparait du site. C'etait la police des
+     editeurs de code : sur les chiffres et les sur-titres d'une ONG, elle
+     donnait un air de tableau de bord (releve du 06/11, signe n.2). Le jeton
+     garde son nom pour ne pas toucher a chaque classe `font-mono` du site ;
+     il pointe desormais sur la police du texte. Les chiffres restent alignes
+     grace a `tabular-nums` (regle plus bas). */
+  --font-mono: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", sans-serif;
 }
 
 @font-face {
@@ -175,6 +181,12 @@ body {
   background-color: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans);
+}
+
+/* Les anciens textes en chasse fixe (chiffres, dates) gardent des chiffres de
+   meme largeur, pour rester alignes en colonne. */
+.font-mono {
+  font-variant-numeric: tabular-nums;
 }
 
 /* ---------------------------------------------------------------------------
