@@ -499,14 +499,17 @@ body {
    #f4f6f1 paper. Zero fichier telecharge.
    --------------------------------------------------------------------------- */
 .bande-tissee {
-  height: 20px;
-  background-color: var(--color-forest);
-  /* Deux rangees de triangles tete-beche : brun en haut et vert clair en bas,
-     puis l'inverse a la maille suivante. Ensemble ils dessinent les losanges
-     d'une natte ; un point creme marque le croisement de chaque maille. */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='20' viewBox='0 0 32 20'%3E%3Crect width='32' height='20' fill='%23165a2d'/%3E%3Cpath d='M0 0h16L8 10z' fill='%23683c10'/%3E%3Cpath d='M16 0h16l-8 10z' fill='%230f7a33'/%3E%3Cpath d='M0 20h16L8 10z' fill='%230f7a33'/%3E%3Cpath d='M16 20h16l-8-10z' fill='%23683c10'/%3E%3Ccircle cx='8' cy='10' r='1.6' fill='%23f4f6f1'/%3E%3Ccircle cx='24' cy='10' r='1.6' fill='%23f4f6f1'/%3E%3C/svg%3E");
-  background-repeat: repeat-x;
-  background-size: 32px 20px;
+  /* 07/11 : Saibo prefere le style de la presentation envoyee a Khaly. La
+     natte devient le RUBAN de ses diapos : brun, vert, ocre, dans les memes
+     proportions (1100 / 520 / 300 sur 1920 px). Les feuilles qui
+     l'accompagnent sont dans components/Feuilles.astro. */
+  height: 8px;
+  background: linear-gradient(
+    90deg,
+    #683c10 0 57.3%,
+    #0b7a33 57.3% 84.4%,
+    #c98a2b 84.4% 100%
+  );
 }
 
 /* ---------------------------------------------------------------------------
@@ -526,6 +529,56 @@ body {
     }
   }
 }
+/* ---------------------------------------------------------------------------
+   CARROUSEL DES LOGOS (page Partenaires, demande de Saibo le 07/11).
+   La piste contient deux copies identiques ; elle glisse de -50 %, soit
+   exactement une copie, puis repart : aucune couture visible. Pause au
+   survol. Pour qui a demande moins d'animation : rien ne bouge, la copie
+   cachee disparait et les quatre logos s'alignent au centre.
+   --------------------------------------------------------------------------- */
+.carrousel {
+  overflow: hidden;
+}
+.carrousel-piste {
+  display: flex;
+  width: max-content;
+}
+.carrousel-groupe {
+  display: flex;
+  align-items: center;
+  gap: 4.5rem;
+  padding-right: 4.5rem;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .carrousel-piste {
+    animation: carrousel-defile 38s linear infinite;
+  }
+  .carrousel:hover .carrousel-piste {
+    animation-play-state: paused;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .carrousel-piste {
+    width: auto;
+    justify-content: center;
+  }
+  .carrousel-groupe[aria-hidden='true'],
+  .carrousel-groupe li:nth-child(n + 5) {
+    display: none;
+  }
+  .carrousel-groupe {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0 1.25rem;
+    row-gap: 2rem;
+  }
+}
+@keyframes carrousel-defile {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 @keyframes recit-entre {
   from {
     opacity: 0.12;

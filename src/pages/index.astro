@@ -1,7 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
 import Photo from '../components/Photo.astro';
+import Feuilles from '../components/Feuilles.astro';
 import { ACTUALITES } from '../actualites';
+import { LOGOS } from '../logos-partenaires';
 
 // Tout le contenu de cette page vient de MAQUETTE-SITE.html (01/08), la version
 // montree au client, elle-meme tiree de FICHE-CLIENT.md et de leurs documents.
@@ -286,7 +288,8 @@ const domaines = [
       view()`). Un navigateur qui ne les connait pas, ou un visiteur qui a
       demande moins d'animation, voit les trois phrases deja en place : la page
       est complete au repos. Public mobile, donnees payantes (regle n.25). */}
-  <section id="qui" class="recit scroll-mt-24 bg-paper py-16 sm:py-24">
+  <section id="qui" class="recit relative scroll-mt-24 bg-paper py-16 sm:py-24">
+    <Feuilles class="right-4 top-6 w-20 sm:right-10 sm:w-28" />
     <div class="mx-auto grid max-w-6xl gap-10 px-5 lg:grid-cols-12 lg:gap-16">
       <div class="lg:col-span-5">
         <div class="recit-photo lg:sticky lg:top-28">
@@ -319,8 +322,8 @@ const domaines = [
     </div>
   </section>
 
-  {/* Bande de motif tisse — Village Enterprise, valide le 06/11. Un dessin de
-      natte dans les trois couleurs du logo, en CSS : 0 octet d'image. */}
+  {/* Le ruban brun-vert-ocre de la presentation envoyee a Khaly (07/11), a la
+      place de la bande tissee. En CSS : 0 octet d'image. */}
   <div class="bande-tissee" aria-hidden="true"></div>
 
   <section aria-label="Nos trois domaines d’action" class="grid md:grid-cols-3">
@@ -605,7 +608,8 @@ const domaines = [
       d'une grille de six noms. Les logos viendront avec l'accord des
       partenaires (lot 5). La section Contact de l'accueil est retiree : le pied
       de page donne deja les memes coordonnees (releve du 06/11, signe n.7). */}
-  <section id="partenaires" class="scroll-mt-24 py-16 sm:py-20">
+  <section id="partenaires" class="relative scroll-mt-24 py-16 sm:py-20">
+    <Feuilles class="right-4 top-8 w-16 sm:right-12 sm:w-24" />
     <div class="mx-auto max-w-4xl px-5">
       <h2 class="font-serif text-3xl leading-tight text-forest sm:text-4xl">Partenaires</h2>
       <p class="mt-6 text-lg leading-relaxed text-ink-2">
@@ -619,9 +623,13 @@ const domaines = [
           Deux sont sur fond blanc opaque : on leur donne une bande blanche
           plutot que de toucher au logo. */}
       <ul class="mt-10 flex flex-wrap items-center justify-center gap-x-12 gap-y-8 rounded-lg bg-white px-8 py-8 sm:justify-between">
-        <li><img src="/partenaires/plan-international.webp" alt="Plan International" width="423" height="160" loading="lazy" class="h-12 w-auto sm:h-14" /></li>
-        <li><img src="/partenaires/fondation-roi-baudouin.webp" alt="Fondation Roi Baudouin" width="363" height="160" loading="lazy" class="h-12 w-auto sm:h-14" /></li>
-        <li><img src="/partenaires/nous-cims.webp" alt="Nous Cims" width="325" height="160" loading="lazy" class="h-12 w-auto sm:h-14" /></li>
+        {
+          LOGOS.map((g) => (
+            <li>
+              <img src={g.fichier} alt={g.nom} width={g.l} height={g.h} loading="lazy" class="h-12 w-auto sm:h-14" />
+            </li>
+          ))
+        }
       </ul>
       <p class="mt-8 flex flex-wrap gap-3">
         <a

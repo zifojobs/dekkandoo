@@ -1,4 +1,6 @@
 ---
+import Feuilles from './Feuilles.astro';
+
 interface Props {
   /** Le sur-titre, en chasse fixe. Reprend le nom de la rubrique. */
   rubrique: string;
@@ -15,7 +17,8 @@ const { rubrique, titre, intro } = Astro.props;
   qu'on ait a y remettre une photo.
 */}
 <header class="bg-forest text-paper">
-  <div class="mx-auto max-w-6xl px-5 py-14 sm:py-20">
+  <div class="relative mx-auto max-w-6xl px-5 py-14 sm:py-20">
+    <Feuilles ton="sombre" class="right-5 top-8 w-20 sm:top-12 sm:w-28" />
     <p class="font-mono text-xs uppercase tracking-[0.2em] text-paper/85">{rubrique}</p>
     <h1 class="mt-5 max-w-4xl font-serif text-4xl leading-[1.1] sm:text-5xl">{titre}</h1>
     {

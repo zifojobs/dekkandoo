@@ -1,0 +1,40 @@
+---
+/**
+ * Paire de feuilles posee dans un coin — reprise de la presentation bailleurs
+ * envoyee a Khaly (presentation-bailleurs/v2/gen_slides.py : LEAF et COIN),
+ * choisie par Saibo le 07/11 a la place de la bande tissee.
+ * Meme dessin de feuille, memes angles et memes proportions que les diapos.
+ * Decoratif seulement : cache aux lecteurs d'ecran, sans effet sur les clics.
+ */
+interface Props {
+  /** Position et taille (classes Tailwind), ex. « right-6 top-6 w-28 ». */
+  class?: string;
+  /** `sombre` sur un fond vert : la feuille verte y disparaitrait. */
+  ton?: 'clair' | 'sombre';
+}
+const { class: classe = 'right-6 top-6 w-24', ton = 'clair' } = Astro.props;
+const [grande, petite] =
+  ton === 'sombre'
+    ? [{ fill: '#C98A2B', o: 0.9 }, { fill: '#f4f6f1', o: 0.55 }]
+    : [{ fill: '#0f7a33', o: 0.85 }, { fill: '#0f7a33', o: 0.5 }];
+---
+
+<svg
+  class={`pointer-events-none absolute h-auto ${classe}`}
+  viewBox="-4 -40 150 110"
+  aria-hidden="true"
+  focusable="false"
+>
+  <path
+    d="M0 0 C 16 -24 52 -30 80 -12 C 60 14 24 22 0 0 Z"
+    transform="translate(14 22) rotate(-25) scale(1.2)"
+    fill={grande.fill}
+    fill-opacity={grande.o}
+  />
+  <path
+    d="M0 0 C 16 -24 52 -30 80 -12 C 60 14 24 22 0 0 Z"
+    transform="translate(54 62) rotate(20) scale(0.75)"
+    fill={petite.fill}
+    fill-opacity={petite.o}
+  />
+</svg>

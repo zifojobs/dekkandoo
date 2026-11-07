@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import EnTetePage from '../components/EnTetePage.astro';
+import { LOGOS } from '../logos-partenaires';
 
 // Trois familles, et l'ordre raconte la chaine : l'argent arrive, la competence
 // se transmet, le terrain execute. C'est plus parlant qu'une grille de six
@@ -33,7 +34,7 @@ const familles = [
   {
     titre: 'Relais de terrain',
     texte:
-      'Ils existaient avant nous et existeront après. Notre rôle n’est pas de les remplacer, mais de leur donner les moyens de faire ce qu’ils font déjà.',
+      'Ils existaient avant nous et existeront après. Notre rôle est de leur donner les moyens de faire ce qu’ils font déjà.',
     membres: [
       {
         nom: 'Comités de Développement de Santé',
@@ -55,8 +56,30 @@ const familles = [
   <EnTetePage
     rubrique="Partenaires"
     titre="Ceux qui financent, ceux qui forment, ceux qui relaient"
-    intro="Plan International Sénégal, la Fondation Roi Baudouin et Nous Cims financent ; ESP forme les bénéficiaires ; les Comités de Développement de Santé et les associations de village portent le travail sur le terrain."
+    intro="Plan International Sénégal, la Fondation Roi Baudouin et Nous Cims financent, notamment le programme E4Y ; ESP forme les bénéficiaires ; les Comités de Développement de Santé et les associations de village portent le travail sur le terrain."
   />
+
+  {/* CARROUSEL DES LOGOS — demande de Saibo, 07/11. Une bande blanche qui
+      defile lentement, en CSS seul. La suite de logos est ecrite deux fois et
+      la piste glisse de la moitie de sa largeur : la boucle est sans couture.
+      La seconde copie est cachee aux lecteurs d'ecran. Le defilement s'arrete
+      au survol, et ne demarre pas pour qui a demande moins d'animation : les
+      logos sont alors simplement alignes. */}
+  <section class="carrousel bg-white py-10" aria-label="Logos de nos partenaires">
+    <div class="carrousel-piste">
+      {
+        [0, 1].map((copie) => (
+          <ul class="carrousel-groupe" aria-hidden={copie === 1 ? 'true' : undefined}>
+            {[...LOGOS, ...LOGOS].map((g, i) => (
+              <li>
+                <img src={g.fichier} alt={copie === 0 && i < LOGOS.length ? g.nom : ''} width={g.l} height={g.h} loading="lazy" class="h-14 w-auto sm:h-16" />
+              </li>
+            ))}
+          </ul>
+        ))
+      }
+    </div>
+  </section>
 
   <section class="mx-auto max-w-6xl space-y-14 px-5 py-16">
     {
