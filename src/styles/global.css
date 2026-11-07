@@ -489,3 +489,50 @@ body {
     transform: none;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   REFONTE 11/2026 — LA BANDE TISSEE (reference Village Enterprise, validee le
+   06/11). Un motif de natte : triangles alternes brun et vert clair sur le
+   vert profond, et un petit losange creme a chaque maille. Les trois couleurs
+   sont celles du logo, ecrites en dur dans le dessin (un SVG en data URI ne
+   lit pas les variables CSS) : #165a2d forest, #683c10 earth, #0f7a33 leaf,
+   #f4f6f1 paper. Zero fichier telecharge.
+   --------------------------------------------------------------------------- */
+.bande-tissee {
+  height: 20px;
+  background-color: var(--color-forest);
+  /* Deux rangees de triangles tete-beche : brun en haut et vert clair en bas,
+     puis l'inverse a la maille suivante. Ensemble ils dessinent les losanges
+     d'une natte ; un point creme marque le croisement de chaque maille. */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='20' viewBox='0 0 32 20'%3E%3Crect width='32' height='20' fill='%23165a2d'/%3E%3Cpath d='M0 0h16L8 10z' fill='%23683c10'/%3E%3Cpath d='M16 0h16l-8 10z' fill='%230f7a33'/%3E%3Cpath d='M0 20h16L8 10z' fill='%230f7a33'/%3E%3Cpath d='M16 20h16l-8-10z' fill='%23683c10'/%3E%3Ccircle cx='8' cy='10' r='1.6' fill='%23f4f6f1'/%3E%3Ccircle cx='24' cy='10' r='1.6' fill='%23f4f6f1'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-size: 32px 20px;
+}
+
+/* ---------------------------------------------------------------------------
+   REFONTE 11/2026 — LE RECIT AU DEFILEMENT (reference Farm Africa).
+   Chaque phrase monte et s'eclaire en entrant dans l'ecran. Animation liee au
+   defilement, sans JavaScript. L'etat de depart n'existe QUE dans
+   l'animation : un navigateur qui ne connait pas `animation-timeline`
+   (Firefox, anciens Android) affiche les phrases en place, et rien ne bouge
+   pour qui a demande moins d'animation.
+   --------------------------------------------------------------------------- */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .recit-temps {
+      animation: recit-entre linear both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 35%;
+    }
+  }
+}
+@keyframes recit-entre {
+  from {
+    opacity: 0.12;
+    transform: translateY(48px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
