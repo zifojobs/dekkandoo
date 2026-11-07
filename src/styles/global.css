@@ -579,6 +579,73 @@ body {
   }
 }
 
+/* ---------------------------------------------------------------------------
+   UN PEU DE MOUVEMENT (Saibo, 07/11) — quatre gestes discrets, tous en CSS,
+   tous coupes pour qui a demande moins d'animation. Aucun compteur anime :
+   un chiffre qui defile affiche des valeurs fausses pendant qu'il defile
+   (regle n.24 bis de la veille).
+   1. les feuilles se balancent, lentement et pas en meme temps ;
+   2. le ruban se deroule de gauche a droite en entrant dans l'ecran ;
+   3. les trois domaines montent l'un apres l'autre au defilement ;
+   4. les photos grossissent un peu au survol (classes Tailwind sur place).
+   Les gestes 2 et 3 sont lies au defilement : sans `animation-timeline`, ils
+   n'existent pas et tout est deja en place.
+   --------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  .feuille {
+    transform-box: fill-box;
+    transform-origin: 0% 60%;
+    animation: feuille-balance 7s ease-in-out infinite alternate;
+  }
+  .feuille-petite {
+    animation-duration: 5.5s;
+    animation-delay: -2s;
+  }
+}
+@keyframes feuille-balance {
+  from {
+    transform: rotate(-4deg);
+  }
+  to {
+    transform: rotate(5deg);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .bande-tissee {
+      transform-origin: left center;
+      animation: ruban-deroule linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 25%;
+    }
+    .monte {
+      animation: domaine-monte linear both;
+      animation-timeline: view();
+    }
+    .monte-1 {
+      animation-range: entry 0% entry 70%;
+    }
+    .monte-2 {
+      animation-range: entry 15% entry 85%;
+    }
+    .monte-3 {
+      animation-range: entry 30% entry 100%;
+    }
+  }
+}
+@keyframes ruban-deroule {
+  from {
+    transform: scaleX(0);
+  }
+}
+@keyframes domaine-monte {
+  from {
+    opacity: 0.2;
+    transform: translateY(60px);
+  }
+}
+
 @keyframes recit-entre {
   from {
     opacity: 0.12;

@@ -19,22 +19,30 @@ const [grande, petite] =
     : [{ fill: '#0f7a33', o: 0.85 }, { fill: '#0f7a33', o: 0.5 }];
 ---
 
+{/* Le cadre (viewBox) est calcule sur les points extremes des deux feuilles
+    apres rotation : x de 14 a 114, y de -37 a 88, plus une marge pour le
+    balancement. L'ancien cadre s'arretait a y = 70 et coupait la petite
+    feuille (signale par Saibo le 07/11). */}
 <svg
-  class={`pointer-events-none absolute h-auto ${classe}`}
-  viewBox="-4 -40 150 110"
+  class={`feuilles pointer-events-none absolute h-auto ${classe}`}
+  viewBox="4 -48 124 146"
   aria-hidden="true"
   focusable="false"
 >
-  <path
-    d="M0 0 C 16 -24 52 -30 80 -12 C 60 14 24 22 0 0 Z"
-    transform="translate(14 22) rotate(-25) scale(1.2)"
-    fill={grande.fill}
-    fill-opacity={grande.o}
-  />
-  <path
-    d="M0 0 C 16 -24 52 -30 80 -12 C 60 14 24 22 0 0 Z"
-    transform="translate(54 62) rotate(20) scale(0.75)"
-    fill={petite.fill}
-    fill-opacity={petite.o}
-  />
+  <g class="feuille feuille-grande">
+    <path
+      d="M0 0 C 16 -24 52 -30 80 -12 C 60 14 24 22 0 0 Z"
+      transform="translate(14 22) rotate(-25) scale(1.2)"
+      fill={grande.fill}
+      fill-opacity={grande.o}
+    />
+  </g>
+  <g class="feuille feuille-petite">
+    <path
+      d="M0 0 C 16 -24 52 -30 80 -12 C 60 14 24 22 0 0 Z"
+      transform="translate(54 62) rotate(20) scale(0.75)"
+      fill={petite.fill}
+      fill-opacity={petite.o}
+    />
+  </g>
 </svg>

@@ -1,0 +1,38 @@
+---
+/**
+ * Carrousel des logos partenaires — accueil et page Partenaires (Saibo, 07/11).
+ * La suite de logos est ecrite deux fois ; la piste glisse d'une copie puis
+ * repart, sans couture (styles dans global.css, section CARROUSEL).
+ * Seule la premiere serie porte des textes alternatifs : un lecteur d'ecran
+ * lit chaque partenaire une fois.
+ */
+import { LOGOS } from '../logos-partenaires';
+
+interface Props {
+  class?: string;
+}
+const { class: classe = '' } = Astro.props;
+---
+
+<div class={`carrousel bg-white py-10 ${classe}`} role="region" aria-label="Logos de nos partenaires">
+  <div class="carrousel-piste">
+    {
+      [0, 1].map((copie) => (
+        <ul class="carrousel-groupe" aria-hidden={copie === 1 ? 'true' : undefined}>
+          {[...LOGOS, ...LOGOS].map((g, i) => (
+            <li>
+              <img
+                src={g.fichier}
+                alt={copie === 0 && i < LOGOS.length ? g.nom : ''}
+                width={g.l}
+                height={g.h}
+                loading="lazy"
+                class="h-14 w-auto sm:h-16"
+              />
+            </li>
+          ))}
+        </ul>
+      ))
+    }
+  </div>
+</div>

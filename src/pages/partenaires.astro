@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import EnTetePage from '../components/EnTetePage.astro';
-import { LOGOS } from '../logos-partenaires';
+import Carrousel from '../components/Carrousel.astro';
 
 // Trois familles, et l'ordre raconte la chaine : l'argent arrive, la competence
 // se transmet, le terrain execute. C'est plus parlant qu'une grille de six
@@ -65,21 +65,7 @@ const familles = [
       La seconde copie est cachee aux lecteurs d'ecran. Le defilement s'arrete
       au survol, et ne demarre pas pour qui a demande moins d'animation : les
       logos sont alors simplement alignes. */}
-  <section class="carrousel bg-white py-10" aria-label="Logos de nos partenaires">
-    <div class="carrousel-piste">
-      {
-        [0, 1].map((copie) => (
-          <ul class="carrousel-groupe" aria-hidden={copie === 1 ? 'true' : undefined}>
-            {[...LOGOS, ...LOGOS].map((g, i) => (
-              <li>
-                <img src={g.fichier} alt={copie === 0 && i < LOGOS.length ? g.nom : ''} width={g.l} height={g.h} loading="lazy" class="h-14 w-auto sm:h-16" />
-              </li>
-            ))}
-          </ul>
-        ))
-      }
-    </div>
-  </section>
+  <Carrousel />
 
   <section class="mx-auto max-w-6xl space-y-14 px-5 py-16">
     {

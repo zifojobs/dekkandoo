@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import Photo from '../components/Photo.astro';
 import Feuilles from '../components/Feuilles.astro';
 import { ACTUALITES } from '../actualites';
-import { LOGOS } from '../logos-partenaires';
+import Carrousel from '../components/Carrousel.astro';
 
 // Tout le contenu de cette page vient de MAQUETTE-SITE.html (01/08), la version
 // montree au client, elle-meme tiree de FICHE-CLIENT.md et de leurs documents.
@@ -328,8 +328,9 @@ const domaines = [
 
   <section aria-label="Nos trois domaines d’action" class="grid md:grid-cols-3">
     {
-      domaines.map((d) => (
-        <a href={d.lien} class="group flex flex-col">
+      domaines.map((d, i) => (
+        <a href={d.lien} class={`group flex flex-col monte monte-${i + 1}`}>
+          <span class="block overflow-hidden">
           <img
             src={`/galerie/${d.photo}-1400.webp`}
             srcset={`/galerie/${d.photo}-520.webp 520w, /galerie/${d.photo}-1400.webp 1400w`}
@@ -339,8 +340,9 @@ const domaines = [
             alt={d.alt}
             loading="lazy"
             decoding="async"
-            class={`aspect-[4/3] w-full object-cover ${d.cadrage}`}
+            class={`aspect-[4/3] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 ${d.cadrage}`}
           />
+          </span>
           <div class={`flex flex-1 flex-col px-7 py-9 text-paper sm:px-9 ${d.fond}`}>
             {d.chiffre && (
               <p class="font-titre text-5xl font-semibold leading-none">{d.chiffre}</p>
@@ -426,7 +428,8 @@ const domaines = [
       </h2>
 
       <div class="revele mt-12 grid gap-14 lg:grid-cols-2">
-        <article>
+        <article class="group">
+          <span class="block overflow-hidden rounded-lg">
           <img
             src="/galerie/g03-1400.webp"
             srcset="/galerie/g03-520.webp 520w, /galerie/g03-1400.webp 1400w"
@@ -436,8 +439,9 @@ const domaines = [
             alt="Remise d’un document devant la bannière du Projet de Renforcement de la Nutrition à Saint-Louis"
             loading="lazy"
             decoding="async"
-            class="aspect-[3/2] w-full rounded-lg object-cover"
+            class="aspect-[3/2] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           />
+          </span>
           <h3 class="mt-6 font-titre text-2xl font-semibold text-forest">PRN2S</h3>
           <p class="mt-1 text-sm text-ink-3">
             Avec Plan International Sénégal · décembre 2024 → novembre 2027 · 20 sites de suivi
@@ -449,12 +453,14 @@ const domaines = [
           </p>
         </article>
 
-        <article>
+        <article class="group">
+          <span class="block overflow-hidden rounded-lg">
           <Photo
             cle="remise-produits"
             tailles="(min-width: 1024px) 45vw, 100vw"
-            class="aspect-[3/2] w-full rounded-lg object-cover"
+            class="aspect-[3/2] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           />
+          </span>
           <h3 class="mt-6 font-titre text-2xl font-semibold text-forest">Ndieumbeutt</h3>
           <p class="mt-1 text-sm text-ink-3">
             Avec la Fondation Roi Baudouin et Nous Cims · lancé en 2026 · 400 femmes de 18 à 35 ans
@@ -618,19 +624,6 @@ const domaines = [
         bénéficiaires ; les Comités de Développement de Santé et les associations
         villageoises d’épargne et de crédit portent le travail sur le terrain.
       </p>
-      {/* Les logos des trois financeurs, fichiers officiels (img/logos),
-          seulement recadres sur leur encre : ni couleur ni proportion touchee.
-          Deux sont sur fond blanc opaque : on leur donne une bande blanche
-          plutot que de toucher au logo. */}
-      <ul class="mt-10 flex flex-wrap items-center justify-center gap-x-12 gap-y-8 rounded-lg bg-white px-8 py-8 sm:justify-between">
-        {
-          LOGOS.map((g) => (
-            <li>
-              <img src={g.fichier} alt={g.nom} width={g.l} height={g.h} loading="lazy" class="h-12 w-auto sm:h-14" />
-            </li>
-          ))
-        }
-      </ul>
       <p class="mt-8 flex flex-wrap gap-3">
         <a
           href="/partenaires/"
@@ -646,6 +639,7 @@ const domaines = [
         </a>
       </p>
     </div>
+    <Carrousel class="mt-12" />
   </section>
 
 </Base>
