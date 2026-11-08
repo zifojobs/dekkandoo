@@ -68,73 +68,73 @@ const domaines = [
   organisation
 >
   {/* ---------------------------------------------------------------------------
-      HEROS — REFONTE 11/2026, demande de Saibo le 07/11 (« le hero doit etre
-      change »). Style de la couverture de la presentation bailleurs envoyee a
-      Khaly, le style qu'il a choisi pour les feuilles : titre brun et mot fort
-      en vert, photo dans un cadre brun aux coins en feuille, paire de feuilles
-      au bord du cadre, racines a peine dessinees en bas. Le texte ne change pas
-      (slogan valide par le client) ; seule la mise en scene change.
-      Les classes `heros-photo` et `heros-panneau` gardent l'animation d'entree
-      sur grand ecran (styles en bas de page).
-      --------------------------------------------------------------------------- */}
-  <section class="relative overflow-hidden bg-paper text-ink">
-    <div class="mx-auto grid max-w-6xl items-center gap-12 px-5 py-12 sm:py-16 lg:grid-cols-12 lg:gap-10 lg:py-20">
-      <div class="heros-panneau relative lg:col-span-6">
-        <h1
-          class="max-w-2xl font-titre text-4xl font-semibold leading-[1.06] tracking-[-0.015em] text-accent sm:text-5xl xl:text-6xl"
-        >
-          Nous nourrissons l’espoir,<br />
-          Nous nourrissons <em class="heros-accent not-italic text-leaf">l’avenir.</em>
-        </h1>
-        <p class="mt-7 max-w-xl text-lg leading-relaxed text-ink-2">
-          Le Consortium Dëkkandoo agit dans les six communes du département de
-          Saint-Louis pour que chaque enfant reçoive un bon départ dans la vie, et
-          que chaque femme dispose des moyens de son autonomie.
-        </p>
-        <div class="mt-9 flex flex-wrap gap-3">
-          <a
-            href="#programmes"
-            class="rounded-full bg-accent px-7 py-3 font-medium text-paper transition-colors hover:bg-accent-2"
-          >
-            Découvrir nos programmes
-          </a>
-          <a
-            href="/contact/"
-            class="rounded-full border border-line-2 px-7 py-3 font-medium text-forest transition-colors hover:border-forest hover:bg-paper-2"
-          >
-            Nous contacter
-          </a>
-        </div>
-      </div>
+      HEROS PLEIN ECRAN — 08/11/2026, demande de Saibo : « Hero plein ecran ».
+      Ni carrousel (signe de gabarit, releve du 06/11) ni montage motion design :
+      une boucle MUETTE de 15 s tiree de LEUR film (VIDEO FINALE V1.mp4, plans
+      calmes sans interview : fleuve, pesee d'un bebe, enfants, farine, femmes
+      qui portent, village vu du ciel), comme One Acre Fund et Farm Africa.
 
-      <div class="heros-photo relative lg:col-span-6">
-        <Feuilles class="-left-3 -top-10 z-10 w-20 sm:-left-8 sm:w-28" />
-        {/* Le cadre brun deborde en haut et a gauche, comme sur la diapo. */}
-        <div class="rounded-bl-[7rem] rounded-tr-[2.5rem] bg-accent pl-3 pt-3 sm:rounded-bl-[9rem] sm:pl-4 sm:pt-4">
-          <Photo
-            cle="formation-femmes"
-            tailles="(min-width: 1024px) 48vw, 100vw"
-            prioritaire
-            class="aspect-[4/3] w-full rounded-bl-[6.4rem] rounded-tr-[2rem] object-cover object-[62%_50%] sm:rounded-bl-[8.2rem] lg:aspect-[5/4]"
-          />
-        </div>
+      Le poids est tenu par trois regles :
+        · l'image d'attente (premier plan de la boucle) s'affiche TOUJOURS, tout
+          de suite ; c'est elle que voit un telephone ;
+        · la video n'est demandee qu'a partir de 768 px, si le visiteur n'a ni
+          reduit les animations ni active l'economie de donnees (decision du
+          11/08 : rien ne bouge sur le heros mobile) ;
+        · 720p (2,2 Mo) jusqu'a 1440 px de large, 1080p (4 Mo) au-dela.
+      Le titre ne change pas (slogan valide par le client). Aucun son : la video
+      est muette, la regle « aucune musique » tient d'elle-meme.
+      --------------------------------------------------------------------------- */}
+  <section class="heros relative isolate flex min-h-[calc(100svh-6rem)] items-end overflow-hidden bg-forest text-paper">
+    <img
+      src="/video/heros-affiche-1920.webp"
+      srcset="/video/heros-affiche-1080.webp 1080w, /video/heros-affiche-1920.webp 1920w"
+      sizes="100vw"
+      width="1920"
+      height="1080"
+      alt=""
+      fetchpriority="high"
+      decoding="async"
+      class="absolute inset-0 -z-20 h-full w-full object-cover"
+    />
+    <video
+      class="heros-video absolute inset-0 -z-20 h-full w-full object-cover opacity-0 transition-opacity duration-700"
+      data-src-moyen="/video/heros-720.mp4"
+      data-src-grand="/video/heros-1080.mp4"
+      muted
+      loop
+      playsinline
+      preload="none"
+      aria-hidden="true"></video>
+    {/* Voile du bas et de la gauche : le texte creme reste lisible sur
+        n'importe quel plan, le haut de l'image reste clair. */}
+    <div class="absolute inset-0 -z-10 bg-gradient-to-t from-[#0b1d12]/85 via-[#0b1d12]/35 to-transparent"></div>
+    <div class="absolute inset-0 -z-10 bg-gradient-to-r from-[#0b1d12]/55 to-transparent"></div>
+
+    <div class="heros-panneau mx-auto w-full max-w-6xl px-5 pb-14 pt-32 sm:pb-20 lg:pb-24">
+      <h1 class="max-w-5xl font-titre text-4xl font-semibold leading-[1.06] tracking-[-0.015em] sm:text-5xl lg:text-6xl xl:text-7xl">
+        Nous nourrissons l’espoir,<br />
+        Nous nourrissons <em class="heros-accent not-italic text-[#e0a94a]">l’avenir.</em>
+      </h1>
+      <p class="mt-6 max-w-xl text-lg leading-relaxed text-paper/90">
+        Le Consortium Dëkkandoo agit dans les six communes du département de
+        Saint-Louis pour que chaque enfant reçoive un bon départ dans la vie, et
+        que chaque femme dispose des moyens de son autonomie.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a
+          href="#programmes"
+          class="rounded-full bg-paper px-7 py-3 font-medium text-forest transition-colors hover:bg-paper-2"
+        >
+          Découvrir nos programmes
+        </a>
+        <a
+          href="/contact/"
+          class="rounded-full border border-paper/60 px-7 py-3 font-medium text-paper transition-colors hover:border-paper hover:bg-paper/10"
+        >
+          Nous contacter
+        </a>
       </div>
     </div>
-
-    {/* Les racines de la diapo : trois traits bruns a peine visibles. */}
-    <svg
-      class="pointer-events-none absolute bottom-0 left-0 hidden w-[42rem] text-accent opacity-20 sm:block"
-      viewBox="0 980 720 100"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="3"
-      stroke-linecap="round"
-      aria-hidden="true"
-    >
-      <path d="M0 1010 C 120 990 220 1040 360 1020 S 560 1050 700 1035" />
-      <path d="M60 1080 C 140 1040 260 1060 330 1030" />
-      <path d="M200 1080 C 260 1050 380 1070 470 1048" />
-    </svg>
   </section>
 
   {/* BANDEAU AMPHI — 06/11. Renvoie a l'actualite (pas de video sur l'accueil,
@@ -659,10 +659,6 @@ const domaines = [
      Et rien ne bouge pour qui a demande moins d'animation dans son systeme.
      --------------------------------------------------------------------------- */
   @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
-    .heros-photo {
-      animation: heros-volet 900ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
-    }
-
     .heros-panneau > * {
       animation: heros-monte 700ms ease-out backwards;
     }
@@ -682,12 +678,6 @@ const domaines = [
     /* Le dernier temps. Il demarre apres que le titre a fini de monter. */
     .heros-accent {
       animation: heros-or 700ms ease-out 900ms backwards;
-    }
-  }
-
-  @keyframes heros-volet {
-    from {
-      clip-path: inset(0 0 0 100%);
     }
   }
 
@@ -711,9 +701,12 @@ const domaines = [
      Le depart est donc le VERT du titre. Le mot commence de la meme couleur que
      le reste de la phrase et se rechauffe jusqu'au brun — c'est une revelation
      qui a du sens, et elle est lisible a chaque instant. */
+  /* 08/11 : le heros est passe sur fond sombre (video plein ecran). Le mot
+     part donc du CREME du titre, lisible a chaque instant sur le voile, et se
+     rechauffe jusqu'a l'ocre du ruban. */
   @keyframes heros-or {
     from {
-      color: var(--color-forest);
+      color: var(--color-paper);
     }
   }
 
@@ -831,6 +824,33 @@ const domaines = [
           ? 'Couper le son de la vidéo'
           : 'Activer le son de la vidéo';
       });
+    }
+  })();
+</script>
+
+<!-- Le heros : la boucle ne se demande qu'a partir de 768 px, sans reduction
+     des animations ni economie de donnees ; sinon l'image d'attente reste seule.
+     Elle apparait en fondu une fois prete, et s'arrete hors de l'ecran pour ne
+     pas tourner pour rien en bas de page. -->
+<script is:inline>
+  (() => {
+    const video = document.querySelector('.heros-video');
+    if (!video) return;
+    const economie = navigator.connection && navigator.connection.saveData;
+    const calme = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!window.matchMedia('(min-width: 768px)').matches || calme || economie) return;
+
+    video.src = window.innerWidth > 1440 ? video.dataset.srcGrand : video.dataset.srcMoyen;
+    video.addEventListener('playing', () => video.classList.remove('opacity-0'), { once: true });
+    video.play().catch(() => {
+      /* Lecture refusee : l'image d'attente reste, rien ne casse. */
+    });
+
+    if (typeof IntersectionObserver === 'function') {
+      new IntersectionObserver(([e]) => {
+        if (e.isIntersecting) video.play().catch(() => {});
+        else video.pause();
+      }).observe(video);
     }
   })();
 </script>
