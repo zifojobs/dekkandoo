@@ -41,9 +41,12 @@ const rubriques = [
   // une page de plus — c'est cette page-ci qui la porte. L'ADRESSE, ELLE, NE
   // BOUGE PAS : le lien du site circule sur WhatsApp depuis le 12/08, et casser
   // une URL deja partagee couterait plus que le confort d'une adresse assortie.
-  { url: '/qui-sommes-nous/', nom: 'Notre histoire' },
-  { url: '/programmes/', nom: 'Nos programmes' },
-  { url: '/impact/', nom: 'Notre impact' },
+  //
+  // 🔄 08/11/2026 (Saibo) : « Notre histoire », « Nos programmes » et « Notre
+  // impact » sortent du menu, regroupes sous « Accueil ». Les trois pages
+  // restent en ligne (liens deja partages, film du PRN2S) et l'accueil y mene
+  // par ses liens « En savoir plus ».
+  { url: '/', nom: 'Accueil' },
   { url: '/actualites/', nom: 'Actualités' },
   // 🆕 Galerie, demandee par Laye le 14/08. Placee ici et non en fin de menu :
   // c'est du contenu, elle appartient au voisinage des actualites, pas a celui
@@ -56,7 +59,13 @@ const rubriques = [
 // Marque la rubrique courante. `startsWith` et non egalite stricte : /actualites/
 // doit rester active pendant la lecture de /actualites/un-article/.
 const ici = Astro.url.pathname;
-const estActive = (url: string) => ici.startsWith(url);
+// « / » est le prefixe de tout : l'accueil est actif sur lui-meme et sur les
+// trois pages qu'il regroupe.
+const SOUS_ACCUEIL = ['/qui-sommes-nous/', '/programmes/', '/impact/'];
+const estActive = (url: string) =>
+  url === '/'
+    ? ici === '/' || SOUS_ACCUEIL.some((p) => ici.startsWith(p))
+    : ici.startsWith(url);
 
 // Coordonnees officielles : FICHE-CLIENT.md, section « Coordonnees officielles ».
 // C'est la seule source. Le squelette portait un numero errone (77 236 81 62).
