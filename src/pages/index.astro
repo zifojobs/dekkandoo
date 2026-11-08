@@ -98,6 +98,7 @@ const domaines = [
     />
     <video
       class="heros-video absolute inset-0 -z-20 h-full w-full object-cover opacity-0 transition-opacity duration-700"
+      data-src-telephone="/video/heros-mobile.mp4"
       data-src-moyen="/video/heros-720.mp4"
       data-src-grand="/video/heros-1080.mp4"
       muted
@@ -640,23 +641,29 @@ const domaines = [
 </style>
 
 
-<!-- Le heros : la boucle ne se demande qu'a partir de 768 px, sans reduction
-     des animations ni economie de donnees ; sinon l'image d'attente reste seule.
+<!-- Le heros : la boucle se demande sans reduction des animations, sans economie de
+     donnees ni connexion 2G ; sinon l'image d'attente reste seule. Sur telephone
+     (moins de 768 px), une version verticale 540x960 d'environ 1 Mo (Saibo, 08/11 :
+     remplace la decision du 11/08 « rien ne bouge sur mobile »).
      Elle apparait en fondu une fois prete, et s'arrete hors de l'ecran pour ne
      pas tourner pour rien en bas de page. -->
 <script is:inline>
   (() => {
     const video = document.querySelector('.heros-video');
     if (!video) return;
-    const economie = navigator.connection && navigator.connection.saveData;
+    const connexion = navigator.connection;
+    const economie = connexion && (connexion.saveData || /2g/.test(connexion.effectiveType || ''));
     const calme = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!window.matchMedia('(min-width: 768px)').matches || calme || economie) return;
+    if (calme || economie) return;
+    const telephone = !window.matchMedia('(min-width: 768px)').matches;
 
     // 08/11 (Saibo : « le chargement est lent ») : la boucle pese 2 a 4 Mo et prenait
     // toute la connexion des la premiere seconde — les photos attendaient derriere elle.
     // Elle ne se demande plus qu'une fois la page chargee ; l'image d'attente tient la place.
     const lancer = () => {
-      video.src = window.innerWidth > 1440 ? video.dataset.srcGrand : video.dataset.srcMoyen;
+      video.src = telephone
+        ? video.dataset.srcTelephone
+        : window.innerWidth > 1440 ? video.dataset.srcGrand : video.dataset.srcMoyen;
       video.addEventListener('playing', () => video.classList.remove('opacity-0'), { once: true });
       video.play().catch(() => {
         /* Lecture refusee : l'image d'attente reste, rien ne casse. */
