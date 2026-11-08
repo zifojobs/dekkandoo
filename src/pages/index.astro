@@ -652,17 +652,24 @@ const domaines = [
     const calme = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!window.matchMedia('(min-width: 768px)').matches || calme || economie) return;
 
-    video.src = window.innerWidth > 1440 ? video.dataset.srcGrand : video.dataset.srcMoyen;
-    video.addEventListener('playing', () => video.classList.remove('opacity-0'), { once: true });
-    video.play().catch(() => {
-      /* Lecture refusee : l'image d'attente reste, rien ne casse. */
-    });
+    // 08/11 (Saibo : « le chargement est lent ») : la boucle pese 2 a 4 Mo et prenait
+    // toute la connexion des la premiere seconde — les photos attendaient derriere elle.
+    // Elle ne se demande plus qu'une fois la page chargee ; l'image d'attente tient la place.
+    const lancer = () => {
+      video.src = window.innerWidth > 1440 ? video.dataset.srcGrand : video.dataset.srcMoyen;
+      video.addEventListener('playing', () => video.classList.remove('opacity-0'), { once: true });
+      video.play().catch(() => {
+        /* Lecture refusee : l'image d'attente reste, rien ne casse. */
+      });
 
-    if (typeof IntersectionObserver === 'function') {
-      new IntersectionObserver(([e]) => {
-        if (e.isIntersecting) video.play().catch(() => {});
-        else video.pause();
-      }).observe(video);
-    }
+      if (typeof IntersectionObserver === 'function') {
+        new IntersectionObserver(([e]) => {
+          if (e.isIntersecting) video.play().catch(() => {});
+          else video.pause();
+        }).observe(video);
+      }
+    };
+    if (document.readyState === 'complete') lancer();
+    else window.addEventListener('load', lancer, { once: true });
   })();
 </script>
